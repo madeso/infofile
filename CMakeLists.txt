@@ -3,4 +3,4 @@ project (infofile)
 
 include_directories(${infofile_SOURCE_DIR})
 
-add_executable(infofile-test test.cpp infofile/infofile.cpp infofile/infofile.h)
+add_executable(infofile-test test.cpp infofile/infofile.cpp infofile/infofile.h infofile/configuration.h)

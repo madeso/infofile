@@ -4,17 +4,27 @@
 #include <string>
 #include <vector>
 
+#if INFOFILE_USE_SHARED_PTR
+#include <memory>
+#endif
+
 namespace infofile {
 
 // forward declarations
 class Value;
 class Node;
 
+#if INFOFILE_USE_SHARED_PTR
+typedef std::shared_ptr<Node> NodePtr;
+#else
+typedef Node* NodePtr;
+#endif
+
 // how should strings be handled?
 typedef std::string String;
 
 // how should the list and node allocations be handled?
-typedef std::vector<Node*> List;
+typedef std::vector<NodePtr> List;
 
 class Value {
 public:
@@ -29,6 +39,7 @@ public:
 
     List children;
 private:
+    Value(const Value& other){} // don't allow copying
     String value_;
 };
 

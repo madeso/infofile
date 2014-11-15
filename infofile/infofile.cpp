@@ -29,7 +29,13 @@ void Value::set_value(const String& value) {
 
 void Value::Clear() {
     assert(this);
-    // todo: delete children
+
+#if !INFOFILE_USE_SHARED_PTR
+    for(List::iterator i=children.begin(); i!=children.end(); ++i) {
+        delete *i;
+    }
+    children.clear();
+#endif
 }
 
 ////////////////////////////////////////////////////////
