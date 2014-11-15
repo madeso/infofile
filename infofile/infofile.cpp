@@ -14,7 +14,7 @@ Value::Value(const String& value) : value_(value) {
 
 Value::~Value() {
     assert(this);
-    // todo: delete children
+    Clear();
 }
 
 const String& Value::value() const{
@@ -25,6 +25,11 @@ const String& Value::value() const{
 void Value::set_value(const String& value) {
     assert(this);
     value_ = value;
+}
+
+void Value::Clear() {
+    assert(this);
+    // todo: delete children
 }
 
 ////////////////////////////////////////////////////////
@@ -53,6 +58,12 @@ const String& Node::name() const{
 void Node::set_name(const String& name) {
     assert(this);
     name_ = name;
+}
+
+void Node::Clear() {
+    assert(this);
+    Value::Clear();
+    set_name("");
 }
 
 }

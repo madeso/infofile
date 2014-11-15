@@ -25,6 +25,8 @@ public:
     const String& value() const;
     void set_value(const String& value);
 
+    void Clear();
+
     List children;
 private:
     String value_;
@@ -39,6 +41,8 @@ public:
 
     const String& name() const;
     void set_name(const String& name);
+
+    void Clear();
 private:
     String name_;
 };
