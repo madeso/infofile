@@ -26,6 +26,9 @@ typedef std::string String;
 // how should the list and node allocations be handled?
 typedef std::vector<NodePtr> List;
 
+/** The value part of the info file.
+ * @todo come up with a better name, Root? Tree?
+ */
 class Value {
 public:
     Value();
@@ -43,6 +46,8 @@ private:
     String value_;
 };
 
+/** A Node in the info file.
+ */
 class Node : public Value {
 public:
     Node();
@@ -57,6 +62,8 @@ public:
 private:
     String name_;
 };
+
+void Parse(const String& data, Value* value);
 
 }
 
