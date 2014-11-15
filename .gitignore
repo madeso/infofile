@@ -69,3 +69,7 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+
+
+# build files
+build/*
