@@ -75,3 +75,9 @@ $RECYCLE.BIN/
 build/*
 *.autosave
 *.user
+
+# parser files, add theese later when parser is complete
+infofile/parser.h
+infofile/parser.cpp
+infofile/lexer.h
+infofile/lexer.cpp
