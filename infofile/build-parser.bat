@@ -1,3 +1,3 @@
 @cls
-@bison parser.y
-@flex lexer.l
+@win_bison parser.y
+@win_flex lexer.l
