@@ -32,3 +32,5 @@ Here is a more complicated file demonstrating all the info features:
     }
 	mykey {} // when using {} the value can be ignored
 	names [ cat dog duck ] // like {} but all keys are empty strings
+	
+For windows, a good build of flex/bison is found at http://sourceforge.net/projects/winflexbison/files/?source=navbar
