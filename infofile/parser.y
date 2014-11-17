@@ -43,7 +43,10 @@ typedef void* yyscan_t;
 %token <ident_value> IDENT
 %token UNKNOWN
 
-%type <value> children;
+%type <value> children struct_list array_value_list array_children_list
+%type <node> pair
+
+%start input
 
 %%
 
@@ -54,18 +57,16 @@ input
 struct_list
 	: pair { $$ = $1; }
 	| struct_list pair { ATTACH($$, $1, $2); }
-	|
 	;
 
 array_value_list
-	: IDENT
-	| array_value_list IDENT
+	: IDENT { $$->children.push_back( new Node("", $1 ); }
+	| array_value_list IDENT { $1->children.push_back( new Node("", $2 ); $$ = $1; }
 	;
 
 array_children_list
 	: children
 	| array_children_list children
-	|
 	;
 
 children
