@@ -1,4 +1,4 @@
-I got tired of different parsing libraries, weird specifications and strange file formats, so I made my own. This is based on the [boost info file](http://www.boost.org/doc/libs/1_56_0/doc/html/boost_propertytree/parsers.html#boost_propertytree.parsers.info_parser), hence the name, however there are minor changes and boost is not needed.
+I got tired of different parsing libraries, weird specifications and strange file formats, so I made my own and licensed it under [zlib](https://tldrlegal.com/license/zlib-libpng-license-%28zlib%29). This is based on the [boost info file](http://www.boost.org/doc/libs/1_56_0/doc/html/boost_propertytree/parsers.html#boost_propertytree.parsers.info_parser), hence the name, however there are minor changes and boost is not needed.
 
 The structure is inspired by json/xml but with a syntax inspired by C, C++ etc.
 
@@ -17,7 +17,7 @@ This is a basic info file:
 Here is a more complicated file demonstrating all the info features:
 
     // A comment
-    key1 value1   // Another comment
+    key1 value1   /* Another comment */
     key2 "value with special characters in it {};#\n\t\"\0"
     {
        subkey "value split "\
@@ -32,5 +32,19 @@ Here is a more complicated file demonstrating all the info features:
     }
 	mykey {} // when using {} the value can be ignored
 	names [ cat dog duck ] // like {} but all keys are empty strings
+
+Separators exist but are optional, the following pairs are equivalent
+
+	key value
+	key = value;
+	key := value,
+	key : value
 	
-For windows, a good build of flex/bison is found at http://sourceforge.net/projects/winflexbison/files/?source=navbar
+and since there are optional line terminators, these are also equivalent (spaces added for clarity)
+
+    key ""
+	key = "" ;
+	key = ;
+	key ;
+	
+The parser is built using flex/bison and a good windows build is found at http://sourceforge.net/projects/winflexbison/files/?source=navbar
