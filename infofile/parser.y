@@ -1,4 +1,5 @@
 %{
+#define YY_NO_UNISTD_H
 #include <cstdio>
 #include <iostream>
 #include <string>
@@ -14,6 +15,7 @@ void yyerror(const char *s);
 #ifndef YY_TYPEDEF_YY_SCANNER_T
 #define YY_TYPEDEF_YY_SCANNER_T
 typedef void* yyscan_t;
+#include <string>
 #endif
 }
 
@@ -30,9 +32,6 @@ typedef void* yyscan_t;
 %lex-param   { yyscan_t scanner }
 %parse-param { infofile::Value** expression }
 %parse-param { yyscan_t scanner }
-
-%token BEGIN_STRUCT
-%token END_STRUCT
 
 %token STRUCT_BEGIN
 %token STRUCT_END
@@ -55,13 +54,27 @@ input
 	;
 	
 struct_list
-	: pair { $$ = $1; }
-	| struct_list pair { ATTACH($$, $1, $2); }
+	: pair
+	{
+		$$ = $1;
+	}
+	| struct_list pair
+	{
+		NodePtr n($2);
+		$1->children.push_back(n);
+		$$ = $1;
+	}
 	;
 
 array_value_list
-	: IDENT { $$->children.push_back( new Node("", $1 ); }
-	| array_value_list IDENT { $1->children.push_back( new Node("", $2 ); $$ = $1; }
+	: IDENT
+	{
+		$$->children.push_back( new Node("", $1 );
+	}
+	| array_value_list IDENT
+	{
+		$1->children.push_back( new Node("", $2 ); $$ = $1;
+	}
 	;
 
 array_children_list
@@ -70,14 +83,22 @@ array_children_list
 	;
 
 children
-	: BEGIN_STRUCT struct_list END_STRUCT
-	| ARRAY_BEGIN array_value_list ARRAY_END
-	| ARRAY_BEGIN array_children_list ARRAY_END
+	: STRUCT_BEGIN struct_list STRUCT_END { $$ = $2; }
+	| ARRAY_BEGIN array_value_list ARRAY_END  { $$ = $2; }
+	| ARRAY_BEGIN array_children_list ARRAY_END  { $$ = $2; }
 	;
 
 pair
-	: IDENT[K] ASSIGN IDENT[V] SEP {  }
-	| IDENT children SEP {}
+	: IDENT[K] ASSIGN IDENT[V] SEP
+	{
+		$$ = new Node($K, $V);
+	}
+	| IDENT children SEP
+	{
+		Node* n = new Node($1);
+		n->children = *$1;
+		delete $1; $$ = n;
+	}
 	;
 
 %%
