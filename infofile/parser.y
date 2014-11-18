@@ -31,6 +31,7 @@ typedef void* yyscan_t;
 %defines "parser.h"
 
 %define api.pure
+%error-verbose
 %lex-param   { yyscan_t scanner }
 %parse-param { ::infofile::Value** expression }
 %parse-param { yyscan_t scanner }
