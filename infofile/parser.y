@@ -7,6 +7,7 @@
 #include "infofile/infofile.h"
 #include "parser.h"
 #include "lexer.h"
+#include <sstream>
 
 void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 %}
@@ -18,6 +19,8 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 	#endif
 
 	#include <string>
+	#include <vector>
+
 	#include "infofile/infofile.h"
 	#ifndef PARSER_DATA_DEFINED
 		#define PARSER_DATA_DEFINED
@@ -27,6 +30,8 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 			unsigned int line;
 			unsigned int ch;
 			unsigned int pch;
+
+			std::vector<std::string> errors;
 		};
 		void AdvanceCharacter(ParserData* data, unsigned int steps);
 		void ResetCharacter(ParserData* data);
@@ -134,13 +139,15 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error) {
 }
 
 void ReportError(ParserData* data, const std::string& msg) {
-::std::cout << data->file << "(" << data->line << ":" << data->ch << "): " << msg << "\n";
+	std::stringstream ss;
+	ss << data->file << "(" << data->line << ":" << data->ch << "): " << msg << "\n";
+	data->errors.push_back(ss.str());
 }
 
 // int yyparse(infofile::Value** expression, yyscan_t scanner);
  
 //void ::infofile::Parse(const char *expr, infofile::Value* val)
-void ::infofile::Parse(const String& data, ::infofile::Value* value)
+void ::infofile::Parse(const String& data, ::infofile::Value* value, std::vector<std::string>* errors)
 {
     ParserData expression;
 	expression.line = 1;
@@ -150,8 +157,8 @@ void ::infofile::Parse(const String& data, ::infofile::Value* value)
     YY_BUFFER_STATE state;
  
     if (yylex_init(&scanner)) {
-        // couldn't initialize
-        return;// NULL;
+		errors->push_back("Couldn't initialize parser");
+        return;
     }
 
 	::yyset_extra (&expression, scanner);
@@ -159,8 +166,9 @@ void ::infofile::Parse(const String& data, ::infofile::Value* value)
     state = yy_scan_string(data.c_str(), scanner);
  
     if (yyparse(&expression, scanner)) {
-        // error parsing
-        return; // NULL;
+        *errors = expression.errors;
+		errors->push_back("Error parsing input");
+        return;
     }
  
     yy_delete_buffer(state, scanner);
@@ -169,6 +177,7 @@ void ::infofile::Parse(const String& data, ::infofile::Value* value)
  
     *value = *expression.result;
 	delete expression.result;
+	*errors = expression.errors;
 }
 
 void AdvanceCharacter(ParserData* data, unsigned int steps)
