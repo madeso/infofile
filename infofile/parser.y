@@ -26,7 +26,10 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 			std::string file;
 			unsigned int line;
 			unsigned int ch;
+			unsigned int pch;
 		};
+		void AdvanceCharacter(ParserData* data, unsigned int steps);
+		void ResetCharacter(ParserData* data);
 	#endif
 	#define YY_EXTRA_TYPE ParserData*
 }
@@ -136,7 +139,7 @@ void ::infofile::Parse(const String& data, ::infofile::Value* value)
 {
     ParserData expression;
 	expression.line = 1;
-	expression.ch = 1;
+	ResetCharacter(&expression);
 	expression.file = "unknown";
     yyscan_t scanner;
     YY_BUFFER_STATE state;
@@ -161,4 +164,16 @@ void ::infofile::Parse(const String& data, ::infofile::Value* value)
  
     *value = *expression.result;
 	delete expression.result;
+}
+
+void AdvanceCharacter(ParserData* data, unsigned int steps)
+{
+	data->ch += data-> pch;
+	data->pch = steps;
+}
+
+void ResetCharacter(ParserData* data)
+{
+	data->ch=0;
+	data->pch = 1;
 }
