@@ -147,12 +147,12 @@ void ReportError(ParserData* data, const std::string& msg) {
 // int yyparse(infofile::Value** expression, yyscan_t scanner);
  
 //void ::infofile::Parse(const char *expr, infofile::Value* val)
-void ::infofile::Parse(const String& data, ::infofile::Value* value, std::vector<std::string>* errors)
+void ::infofile::Parse(const String& filename, const String& data, ::infofile::Value* value, std::vector<std::string>* errors)
 {
     ParserData expression;
 	expression.line = 1;
 	ResetCharacter(&expression);
-	expression.file = "unknown";
+	expression.file = filename;
     yyscan_t scanner;
     YY_BUFFER_STATE state;
  
