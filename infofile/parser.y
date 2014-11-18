@@ -114,7 +114,6 @@ pair
 
 void yyerror(::infofile::Value** expression, yyscan_t scanner, const char *error) {
 	::std::cout << "EEK, parse error!  Message: " << error << "\n";
-	exit(-1);
 }
 
 int yyparse(infofile::Value** expression, yyscan_t scanner);
