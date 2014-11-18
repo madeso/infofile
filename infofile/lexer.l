@@ -23,10 +23,10 @@ letter [a-zA-Z]
 "=" { return ASSIGN; }
 ":" { return ASSIGN; }
 ":=" { return ASSIGN; }
-{letter}({letter}|{digit})* { yylval.ident_value = new std::string(yytext); return IDENT;}
-{digit}+{letter}? { yylval.ident_value = new std::string(yytext); return IDENT;}
+{letter}({letter}|{digit})* {yylval->ident_value = new std::string(yytext); return IDENT;}
+{digit}+{letter}? { yylval->ident_value = new std::string(yytext); return IDENT;}
 [ \t] /* skip whitespace */;
-"\n" {++line_number;}
+"\n" {}
 . { printf("Unknown character [%c]\n",yytext[0]); return UNKNOWN; }
 
 %%

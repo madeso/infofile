@@ -8,21 +8,23 @@
 #include "parser.h"
 #include "lexer.h"
 
-void yyerror(const char *s);
+void yyerror(::infofile::Value** expression, yyscan_t scanner, const char *error);
 %}
 
 %code requires {
 #ifndef YY_TYPEDEF_YY_SCANNER_T
 #define YY_TYPEDEF_YY_SCANNER_T
 typedef void* yyscan_t;
-#include <string>
 #endif
+
+#include <string>
+#include "infofile/infofile.h"
 }
 
 %union {
-    std::string* ident_value;
-    infofile::Node* node;
-	infofile::Value* value;
+    ::std::string* ident_value;
+    ::infofile::Node* node;
+	::infofile::Value* value;
 }
 
 %output  "parser.cpp"
@@ -30,7 +32,7 @@ typedef void* yyscan_t;
 
 %define api.pure
 %lex-param   { yyscan_t scanner }
-%parse-param { infofile::Value** expression }
+%parse-param { ::infofile::Value** expression }
 %parse-param { yyscan_t scanner }
 
 %token STRUCT_BEGIN
@@ -60,7 +62,7 @@ struct_list
 	}
 	| struct_list pair
 	{
-		NodePtr n($2);
+		::infofile::NodePtr n($2);
 		$1->children.push_back(n);
 		$$ = $1;
 	}
@@ -69,11 +71,14 @@ struct_list
 array_value_list
 	: IDENT
 	{
-		$$->children.push_back( new Node("", $1 );
+		$$->children.push_back( new ::infofile::Node("", *$1 ) );
+		delete $1;
 	}
 	| array_value_list IDENT
 	{
-		$1->children.push_back( new Node("", $2 ); $$ = $1;
+		$1->children.push_back( new ::infofile::Node("", *$2 ) );
+		delete $2;
+		$$ = $1;
 	}
 	;
 
@@ -91,20 +96,24 @@ children
 pair
 	: IDENT[K] ASSIGN IDENT[V] SEP
 	{
-		$$ = new Node($K, $V);
+		$$ = new ::infofile::Node(*$K, *$V);
+		delete $K;
+		delete $V;
 	}
 	| IDENT children SEP
 	{
-		Node* n = new Node($1);
-		n->children = *$1;
-		delete $1; $$ = n;
+		::infofile::Node* n = new ::infofile::Node(*$1);
+		n->children = $2->children;
+		delete $1;
+		delete $2;
+		$$ = n;
 	}
 	;
 
 %%
 
-void yyerror(const char *s) {
-	cout << "EEK, parse error!  Message: " << s << endl;
+void yyerror(::infofile::Value** expression, yyscan_t scanner, const char *error) {
+	::std::cout << "EEK, parse error!  Message: " << error << "\n";
 	exit(-1);
 }
 
