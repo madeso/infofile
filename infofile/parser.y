@@ -8,7 +8,7 @@
 #include "parser.h"
 #include "lexer.h"
 
-void yyerror(::infofile::Value** expression, yyscan_t scanner, const char *error);
+void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 %}
 
 %code requires {
@@ -19,6 +19,13 @@ typedef void* yyscan_t;
 
 #include <string>
 #include "infofile/infofile.h"
+
+#ifndef PARSER_DATA_DEFINED
+#define PARSER_DATA_DEFINED
+struct ParserData {
+	::infofile::Value* result;
+};
+#endif
 }
 
 %union {
@@ -33,7 +40,7 @@ typedef void* yyscan_t;
 %define api.pure
 %error-verbose
 %lex-param   { yyscan_t scanner }
-%parse-param { ::infofile::Value** expression }
+%parse-param { ParserData* expression }
 %parse-param { yyscan_t scanner }
 
 %token STRUCT_BEGIN
@@ -53,7 +60,7 @@ typedef void* yyscan_t;
 %%
 
 input
-	: children { *expression = $1; }
+	: children { expression->result = $1; }
 	;
 	
 struct_list
@@ -113,7 +120,7 @@ pair
 
 %%
 
-void yyerror(::infofile::Value** expression, yyscan_t scanner, const char *error) {
+void yyerror(ParserData* expression, yyscan_t scanner, const char *error) {
 	::std::cout << "EEK, parse error!  Message: " << error << "\n";
 }
 
@@ -122,7 +129,7 @@ int yyparse(infofile::Value** expression, yyscan_t scanner);
 //void ::infofile::Parse(const char *expr, infofile::Value* val)
 void ::infofile::Parse(const String& data, ::infofile::Value* value)
 {
-    infofile::Value* expression;
+    ParserData expression;
     yyscan_t scanner;
     YY_BUFFER_STATE state;
  
@@ -142,6 +149,6 @@ void ::infofile::Parse(const String& data, ::infofile::Value* value)
  
     yylex_destroy(scanner);
  
-    *value = *expression;
-	delete expression;
+    *value = *expression.result;
+	delete expression.result;
 }
