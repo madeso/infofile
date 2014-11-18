@@ -25,6 +25,7 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 			::infofile::Value* result;
 			std::string file;
 			unsigned int line;
+			unsigned int ch;
 		};
 	#endif
 	#define YY_EXTRA_TYPE ParserData*
@@ -125,7 +126,7 @@ pair
 %%
 
 void yyerror(ParserData* expression, yyscan_t scanner, const char *error) {
-	::std::cout << expression->file << "(" << expression->line << "): " << error << "\n";
+	::std::cout << expression->file << "(" << expression->line << ":" << expression->ch << "): " << error << "\n";
 }
 
 // int yyparse(infofile::Value** expression, yyscan_t scanner);
@@ -135,6 +136,7 @@ void ::infofile::Parse(const String& data, ::infofile::Value* value)
 {
     ParserData expression;
 	expression.line = 1;
+	expression.ch = 1;
 	expression.file = "unknown";
     yyscan_t scanner;
     YY_BUFFER_STATE state;
