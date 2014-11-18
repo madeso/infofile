@@ -119,7 +119,8 @@ void yyerror(::infofile::Value** expression, yyscan_t scanner, const char *error
 
 int yyparse(infofile::Value** expression, yyscan_t scanner);
  
-infofile::Value* Parse(const char *expr)
+//void ::infofile::Parse(const char *expr, infofile::Value* val)
+void ::infofile::Parse(const String& data, ::infofile::Value* value)
 {
     infofile::Value* expression;
     yyscan_t scanner;
@@ -127,19 +128,20 @@ infofile::Value* Parse(const char *expr)
  
     if (yylex_init(&scanner)) {
         // couldn't initialize
-        return NULL;
+        return;// NULL;
     }
  
-    state = yy_scan_string(expr, scanner);
+    state = yy_scan_string(data.c_str(), scanner);
  
     if (yyparse(&expression, scanner)) {
         // error parsing
-        return NULL;
+        return; // NULL;
     }
  
     yy_delete_buffer(state, scanner);
  
     yylex_destroy(scanner);
  
-    return expression;
+    *value = *expression;
+	delete expression;
 }
