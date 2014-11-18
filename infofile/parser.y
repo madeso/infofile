@@ -12,20 +12,22 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 %}
 
 %code requires {
-#ifndef YY_TYPEDEF_YY_SCANNER_T
-#define YY_TYPEDEF_YY_SCANNER_T
-typedef void* yyscan_t;
-#endif
+	#ifndef YY_TYPEDEF_YY_SCANNER_T
+		#define YY_TYPEDEF_YY_SCANNER_T
+		typedef void* yyscan_t;
+	#endif
 
-#include <string>
-#include "infofile/infofile.h"
-
-#ifndef PARSER_DATA_DEFINED
-#define PARSER_DATA_DEFINED
-struct ParserData {
-	::infofile::Value* result;
-};
-#endif
+	#include <string>
+	#include "infofile/infofile.h"
+	#ifndef PARSER_DATA_DEFINED
+		#define PARSER_DATA_DEFINED
+		struct ParserData {
+			::infofile::Value* result;
+			std::string file;
+			unsigned int line;
+		};
+	#endif
+	#define YY_EXTRA_TYPE ParserData*
 }
 
 %union {
@@ -39,6 +41,8 @@ struct ParserData {
 
 %define api.pure
 %error-verbose
+%pure-parser
+
 %lex-param   { yyscan_t scanner }
 %parse-param { ParserData* expression }
 %parse-param { yyscan_t scanner }
@@ -121,15 +125,17 @@ pair
 %%
 
 void yyerror(ParserData* expression, yyscan_t scanner, const char *error) {
-	::std::cout << "EEK, parse error!  Message: " << error << "\n";
+	::std::cout << expression->file << "(" << expression->line << "): " << error << "\n";
 }
 
-int yyparse(infofile::Value** expression, yyscan_t scanner);
+// int yyparse(infofile::Value** expression, yyscan_t scanner);
  
 //void ::infofile::Parse(const char *expr, infofile::Value* val)
 void ::infofile::Parse(const String& data, ::infofile::Value* value)
 {
     ParserData expression;
+	expression.line = 1;
+	expression.file = "unknown";
     yyscan_t scanner;
     YY_BUFFER_STATE state;
  
@@ -137,6 +143,8 @@ void ::infofile::Parse(const String& data, ::infofile::Value* value)
         // couldn't initialize
         return;// NULL;
     }
+
+	::yyset_extra (&expression, scanner);
  
     state = yy_scan_string(data.c_str(), scanner);
  

@@ -1,7 +1,6 @@
 %{
 #include "parser.h"
 #include <string>
-
 %}
 
 digit [0-9]
@@ -26,7 +25,7 @@ letter [a-zA-Z]
 {letter}({letter}|{digit})* {yylval->ident_value = new std::string(yytext); return IDENT;}
 {digit}+{letter}? { yylval->ident_value = new std::string(yytext); return IDENT;}
 [ \t] /* skip whitespace */;
-"\n" {}
+"\n" { ++yyextra->line; }
 . { printf("Unknown character [%c]\n",yytext[0]); return UNKNOWN; }
 
 %%
