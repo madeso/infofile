@@ -30,6 +30,7 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 		};
 		void AdvanceCharacter(ParserData* data, unsigned int steps);
 		void ResetCharacter(ParserData* data);
+		void ReportError(ParserData* data, const std::string& msg);
 	#endif
 	#define YY_EXTRA_TYPE ParserData*
 }
@@ -129,7 +130,11 @@ pair
 %%
 
 void yyerror(ParserData* expression, yyscan_t scanner, const char *error) {
-	::std::cout << expression->file << "(" << expression->line << ":" << expression->ch << "): " << error << "\n";
+	ReportError(expression, error);
+}
+
+void ReportError(ParserData* data, const std::string& msg) {
+::std::cout << data->file << "(" << data->line << ":" << data->ch << "): " << msg << "\n";
 }
 
 // int yyparse(infofile::Value** expression, yyscan_t scanner);

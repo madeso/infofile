@@ -1,6 +1,7 @@
 %{
 #include "parser.h"
 #include <string>
+#include <sstream>
 %}
 
 digit [0-9]
@@ -26,7 +27,7 @@ letter [a-zA-Z]
 {digit}+{letter}? { yylval->ident_value = new std::string(yytext); AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext)); return IDENT;}
 [ \t] { AdvanceCharacter(yyextra, 1); };
 "\n" { ++yyextra->line; ResetCharacter(yyextra); }
-. { AdvanceCharacter(yyextra, 1); printf("Unknown character [%c]\n",yytext[0]); return UNKNOWN; }
+. { AdvanceCharacter(yyextra, 1); std::stringstream ss; char c = yytext[0]; int i = c; ss << "Unknown character [" << c << "(" << i << ")]"; ReportError(yyextra, ss.str()); return UNKNOWN; }
 
 %%
 
