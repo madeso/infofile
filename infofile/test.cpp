@@ -21,5 +21,8 @@ namespace test
 		EXPECT_EQ("value", val->children[0]->value());
 
 		delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
 	}
 }

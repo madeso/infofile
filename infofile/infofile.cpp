@@ -4,13 +4,20 @@
 
 namespace infofile {
 
+namespace {
+	int active_node = 0;
+	int active_value = 0;
+}
+
 Value::Value() {
     assert(this);
+	++active_value;
 }
 
 Value::~Value() {
     assert(this);
     Clear();
+	--active_value;
 }
 
 void Value::Clear() {
@@ -24,22 +31,32 @@ void Value::Clear() {
 	children.clear();
 }
 
+#ifdef _DEBUG
+int Value::ActiveCount() {
+	return active_value;
+}
+#endif
+
 ////////////////////////////////////////////////////////
 
 Node::Node(){
     assert(this);
+	++active_node;
 }
 
 Node::Node(const String& name) : name_(name), value_(""), children(0) {
 	assert(this);
+	++active_node;
 }
 
 Node::Node(const String& name, const String& value) : name_(name), value_(value), children(0) {
     assert(this);
+	++active_node;
 }
 
 Node::~Node(){
     assert(this);
+	--active_node;
 }
 
 const String& Node::name() const{
@@ -70,5 +87,11 @@ void Node::Clear() {
     set_name("");
 	set_value("");
 }
+
+#ifdef _DEBUG
+int Node::ActiveCount() {
+	return active_node;
+}
+#endif
 
 }

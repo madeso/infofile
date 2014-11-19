@@ -37,6 +37,11 @@ public:
 	void Clear();
 
     List children;
+
+#ifdef _DEBUG
+	static int ActiveCount();
+#endif
+
 private:
     Value(const Value& other){} // don't allow copying
 };
@@ -59,6 +64,11 @@ public:
 	Value* children;
 
     void Clear();
+
+#ifdef _DEBUG
+	static int ActiveCount();
+#endif
+
 private:
 	String name_;
 	String value_;
