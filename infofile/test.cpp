@@ -6,4 +6,5 @@ void main() {
 	std::vector<std::string> errors;
 	infofile::Value val;
 	infofile::Parse("inline", "@data { key=value; }", &val, &errors);
+	std::cout << "Compile errors: " << errors.size() << "\n";
 }
