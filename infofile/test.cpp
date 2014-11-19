@@ -12,7 +12,7 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		infofile::Value val;
-		infofile::Parse("inline", "key=value;", &val, &errors);
+		infofile::Parse("inline", "{key=value;}", &val, &errors);
 
 		EXPECT_EQ(0, errors.size());
 		EXPECT_EQ("", val.value());
