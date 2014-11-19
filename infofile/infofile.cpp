@@ -2,14 +2,20 @@
 
 #include <cassert>
 
+#include <iostream>
+
+#define DEBUGCPP(x) std::cout << x << " "
+
 namespace infofile {
 
 Value::Value() {
     assert(this);
+	DEBUGCPP("value()");
 }
 
 Value::Value(const String& value) : value_(value) {
     assert(this);
+	DEBUGCPP("value(" << value << ")");
 }
 
 Value::~Value() {
@@ -25,6 +31,7 @@ const String& Value::value() const{
 void Value::set_value(const String& value) {
     assert(this);
     value_ = value;
+	DEBUGCPP("set_value(" << value << ")");
 }
 
 void Value::Clear() {
@@ -41,15 +48,18 @@ void Value::Clear() {
 ////////////////////////////////////////////////////////
 
 Node::Node(){
+	DEBUGCPP("node()");
     assert(this);
 }
 
 Node::Node(const String& name) : name_(name) {
-    assert(this);
+	assert(this);
+	DEBUGCPP("node(" << name << ")");
 }
 
 Node::Node(const String& name, const String& value) : Value(value), name_(name) {
     assert(this);
+	DEBUGCPP("node(" << name << ", " << value<< ")");
 }
 
 Node::~Node(){
@@ -64,6 +74,7 @@ const String& Node::name() const{
 void Node::set_name(const String& name) {
     assert(this);
     name_ = name;
+	DEBUGCPP("set_name(" << name << ")");
 }
 
 void Node::Clear() {
