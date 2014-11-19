@@ -15,6 +15,7 @@ namespace test
 		infofile::Parse("inline", "key=value;", &val, &errors);
 
 		EXPECT_EQ(0, errors.size());
+		EXPECT_EQ("", val.value());
 		ASSERT_EQ(1, val.children.size());
 
 		EXPECT_EQ("key", val.children[0]->name());
