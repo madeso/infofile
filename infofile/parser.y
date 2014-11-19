@@ -117,8 +117,14 @@ children
 	| ARRAY_BEGIN array_children_list ARRAY_END  { $$ = $2; }
 	;
 
+optional_assign
+	:
+	| ASSIGN
+	;
+	
+
 pair
-	: IDENT[K] ASSIGN IDENT[V] SEP
+	: IDENT[K] optional_assign IDENT[V] SEP
 	{
 		$$ = new ::infofile::Node(*$K, *$V);
 		delete $K;
