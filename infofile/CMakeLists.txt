@@ -13,7 +13,12 @@ ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
 include_directories(${GOOGLEMOCK_GTEST_INCLUDE_DIRS})
 include_directories(${GOOGLEMOCK_INCLUDE_DIRS})
 
-add_executable(infofile-test lexer.l parser.y test.cpp infofile.cpp infofile.h main.cpp configuration.h ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS})
+set(SRC infofile-test lexer.l parser.y test.cpp infofile.cpp infofile.h main.cpp configuration.h)
+
+add_executable(${SRC} ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS})
+
+source_group("" FILES ${SRC})
+source_group("generated" FILES ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS})
 
 target_link_libraries(infofile-test ${GOOGLEMOCK_LIBRARIES})
 add_custom_command(TARGET infofile-test POST_BUILD
