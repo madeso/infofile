@@ -4,8 +4,6 @@
 
 #include <iostream>
 
-#define DEBUGCPP(x) std::cout << x << " "
-
 namespace infofile {
 
 Value::Value() {
@@ -31,18 +29,15 @@ void Value::Clear() {
 ////////////////////////////////////////////////////////
 
 Node::Node(){
-	DEBUGCPP("node()");
     assert(this);
 }
 
 Node::Node(const String& name) : name_(name), value_(""), children(0) {
 	assert(this);
-	DEBUGCPP("node(" << name << ")");
 }
 
 Node::Node(const String& name, const String& value) : name_(name), value_(value), children(0) {
     assert(this);
-	DEBUGCPP("node(" << name << ", " << value<< ")");
 }
 
 Node::~Node(){
@@ -57,7 +52,6 @@ const String& Node::name() const{
 void Node::set_name(const String& name) {
     assert(this);
     name_ = name;
-	DEBUGCPP("set_name(" << name << ")");
 }
 
 const String& Node::value() const{
@@ -68,7 +62,6 @@ const String& Node::value() const{
 void Node::set_value(const String& value) {
 	assert(this);
 	value_ = value;
-	DEBUGCPP("set_value(" << value << ")");
 }
 
 void Node::Clear() {
