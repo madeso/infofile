@@ -121,10 +121,15 @@ optional_assign
 	:
 	| ASSIGN
 	;
+
+optional_sep
+	:
+	| SEP
+	;
 	
 
 pair
-	: IDENT[K] optional_assign IDENT[V] SEP
+	: IDENT[K] optional_assign IDENT[V] optional_sep
 	{
 		$$ = new ::infofile::Node(*$K, *$V);
 		delete $K;
