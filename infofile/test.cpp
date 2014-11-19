@@ -19,5 +19,7 @@ namespace test
 
 		EXPECT_EQ("key", val->children[0]->name());
 		EXPECT_EQ("value", val->children[0]->value());
+
+		delete val;
 	}
 }
