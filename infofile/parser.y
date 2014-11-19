@@ -142,6 +142,14 @@ pair
 		delete $K;
 		$$ = n;
 	}
+	| IDENT[K] optional_assign IDENT[V] children[C] SEP
+	{
+		::infofile::Node* n = new ::infofile::Node(*$K, *$V);
+		n->children = $C;
+		delete $K;
+		delete $V;
+		$$ = n;
+	}
 	;
 
 %%
