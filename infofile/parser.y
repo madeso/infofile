@@ -135,11 +135,11 @@ pair
 		delete $K;
 		delete $V;
 	}
-	| IDENT children SEP
+	| IDENT[K] children[C] SEP
 	{
-		::infofile::Node* n = new ::infofile::Node(*$1);
-		n->children = $2;
-		delete $1;
+		::infofile::Node* n = new ::infofile::Node(*$K);
+		n->children = $C;
+		delete $K;
 		$$ = n;
 	}
 	;
