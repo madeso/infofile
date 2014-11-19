@@ -64,7 +64,7 @@ private:
 	String value_;
 };
 
-void Parse(const String& filename, const String& data, Value* value, std::vector<std::string>* errors);
+Value* Parse(const String& filename, const String& data, std::vector<std::string>* errors);
 
 }
 

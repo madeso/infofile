@@ -35,12 +35,12 @@ Node::Node(){
     assert(this);
 }
 
-Node::Node(const String& name) : name_(name), value_("") {
+Node::Node(const String& name) : name_(name), value_(""), children(0) {
 	assert(this);
 	DEBUGCPP("node(" << name << ")");
 }
 
-Node::Node(const String& name, const String& value) : name_(name), value_(value) {
+Node::Node(const String& name, const String& value) : name_(name), value_(value), children(0) {
     assert(this);
 	DEBUGCPP("node(" << name << ", " << value<< ")");
 }

@@ -80,7 +80,9 @@ input
 struct_list
 	: pair
 	{
-		$$->children.push_back($1);
+		$$ = new infofile::Value();
+		::infofile::NodePtr n($1);
+		$$->children.push_back(n);
 	}
 	| struct_list pair
 	{
@@ -145,8 +147,7 @@ void ReportError(ParserData* data, const std::string& msg) {
 
 // int yyparse(infofile::Value** expression, yyscan_t scanner);
  
-//void ::infofile::Parse(const char *expr, infofile::Value* val)
-void ::infofile::Parse(const String& filename, const String& data, ::infofile::Value* value, std::vector<std::string>* errors)
+::infofile::Value* ::infofile::Parse(const String& filename, const String& data, std::vector<std::string>* errors)
 {
     ParserData expression;
 	expression.line = 1;
@@ -157,7 +158,7 @@ void ::infofile::Parse(const String& filename, const String& data, ::infofile::V
  
     if (yylex_init(&scanner)) {
 		errors->push_back("Couldn't initialize parser");
-        return;
+        return 0;
     }
 
 	::yyset_extra (&expression, scanner);
@@ -167,16 +168,16 @@ void ::infofile::Parse(const String& filename, const String& data, ::infofile::V
     if (yyparse(&expression, scanner)) {
         *errors = expression.errors;
 		errors->push_back("Error parsing input");
-        return;
+        return 0;
     }
  
     yy_delete_buffer(state, scanner);
  
     yylex_destroy(scanner);
  
-    *value = *expression.result;
-	delete expression.result;
 	*errors = expression.errors;
+
+	return expression.result;
 }
 
 void AdvanceCharacter(ParserData* data, unsigned int steps)
