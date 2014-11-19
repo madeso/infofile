@@ -32,23 +32,18 @@ typedef std::vector<NodePtr> List;
 class Value {
 public:
     Value();
-    explicit Value(const String& value);
     ~Value();
 
-    const String& value() const;
-    void set_value(const String& value);
-
-    void Clear();
+	void Clear();
 
     List children;
 private:
     Value(const Value& other){} // don't allow copying
-    String value_;
 };
 
 /** A Node in the info file.
  */
-class Node : public Value {
+class Node {
 public:
     Node();
     explicit Node(const String& name);
@@ -58,9 +53,15 @@ public:
     const String& name() const;
     void set_name(const String& name);
 
+	const String& value() const;
+    void set_value(const String& value);
+
+	Value* children;
+
     void Clear();
 private:
-    String name_;
+	String name_;
+	String value_;
 };
 
 void Parse(const String& filename, const String& data, Value* value, std::vector<std::string>* errors);

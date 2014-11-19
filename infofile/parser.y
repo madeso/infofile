@@ -80,7 +80,7 @@ input
 struct_list
 	: pair
 	{
-		$$ = $1;
+		$$->children.push_back($1);
 	}
 	| struct_list pair
 	{
@@ -125,9 +125,8 @@ pair
 	| IDENT children SEP
 	{
 		::infofile::Node* n = new ::infofile::Node(*$1);
-		n->children = $2->children;
+		n->children = $2;
 		delete $1;
-		delete $2;
 		$$ = n;
 	}
 	;

@@ -10,28 +10,11 @@ namespace infofile {
 
 Value::Value() {
     assert(this);
-	DEBUGCPP("value()");
-}
-
-Value::Value(const String& value) : value_(value) {
-    assert(this);
-	DEBUGCPP("value(" << value << ")");
 }
 
 Value::~Value() {
     assert(this);
     Clear();
-}
-
-const String& Value::value() const{
-    assert(this);
-    return value_;
-}
-
-void Value::set_value(const String& value) {
-    assert(this);
-    value_ = value;
-	DEBUGCPP("set_value(" << value << ")");
 }
 
 void Value::Clear() {
@@ -41,8 +24,8 @@ void Value::Clear() {
     for(List::iterator i=children.begin(); i!=children.end(); ++i) {
         delete *i;
     }
-    children.clear();
 #endif
+	children.clear();
 }
 
 ////////////////////////////////////////////////////////
@@ -52,12 +35,12 @@ Node::Node(){
     assert(this);
 }
 
-Node::Node(const String& name) : name_(name) {
+Node::Node(const String& name) : name_(name), value_("") {
 	assert(this);
 	DEBUGCPP("node(" << name << ")");
 }
 
-Node::Node(const String& name, const String& value) : Value(value), name_(name) {
+Node::Node(const String& name, const String& value) : name_(name), value_(value) {
     assert(this);
 	DEBUGCPP("node(" << name << ", " << value<< ")");
 }
@@ -77,10 +60,24 @@ void Node::set_name(const String& name) {
 	DEBUGCPP("set_name(" << name << ")");
 }
 
+const String& Node::value() const{
+	assert(this);
+	return value_;
+}
+
+void Node::set_value(const String& value) {
+	assert(this);
+	value_ = value;
+	DEBUGCPP("set_value(" << value << ")");
+}
+
 void Node::Clear() {
     assert(this);
-    Value::Clear();
+	if (children) {
+		children->Clear();
+	}
     set_name("");
+	set_value("");
 }
 
 }
