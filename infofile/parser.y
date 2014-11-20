@@ -95,12 +95,15 @@ struct_list
 array_value_list
 	: IDENT
 	{
-		$$->children.push_back( new ::infofile::Node("", *$1 ) );
+		$$ = new infofile::Value();
+		::infofile::NodePtr n(new ::infofile::Node("", *$1 ));
+		$$->children.push_back(n);
 		delete $1;
 	}
 	| array_value_list IDENT
 	{
-		$1->children.push_back( new ::infofile::Node("", *$2 ) );
+		::infofile::NodePtr n(new ::infofile::Node("", *$2 ));
+		$1->children.push_back( n );
 		delete $2;
 		$$ = $1;
 	}
