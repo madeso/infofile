@@ -95,8 +95,8 @@ namespace test
 		EXPECT_EQ("", val->children[0]->name());
 		EXPECT_EQ("value", val->children[0]->value());
 
-		EXPECT_EQ("", val->children[0]->name());
-		EXPECT_EQ("v", val->children[0]->value());
+		EXPECT_EQ("", val->children[1]->name());
+		EXPECT_EQ("v", val->children[1]->value());
 
 		delete val;
 
