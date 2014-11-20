@@ -14,7 +14,7 @@ namespace test
 		infofile::Value* val = infofile::Parse("inline", "{key=value;}", &errors);
 
 		EXPECT_EQ(0, errors.size());
-		//ASSERT_NE(NULL, val);
+		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
 		EXPECT_EQ("key", val->children[0]->name());
@@ -32,7 +32,7 @@ namespace test
 		infofile::Value* val = infofile::Parse("inline", "{key value;}", &errors);
 
 		EXPECT_EQ(0, errors.size());
-		//ASSERT_NE(NULL, val);
+		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
 		EXPECT_EQ("key", val->children[0]->name());
@@ -50,7 +50,7 @@ namespace test
 		infofile::Value* val = infofile::Parse("inline", "{key value}", &errors);
 
 		EXPECT_EQ(0, errors.size());
-		//ASSERT_NE(NULL, val);
+		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
 		EXPECT_EQ("key", val->children[0]->name());
@@ -68,7 +68,7 @@ namespace test
 		infofile::Value* val = infofile::Parse("inline", "{key value k v}", &errors);
 
 		EXPECT_EQ(0, errors.size());
-		//ASSERT_NE(NULL, val);
+		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(2, val->children.size());
 
 		EXPECT_EQ("key", val->children[0]->name());
@@ -89,7 +89,7 @@ namespace test
 		infofile::Value* val = infofile::Parse("inline", "[value v]", &errors);
 
 		EXPECT_EQ(0, errors.size());
-		//ASSERT_NE(NULL, val);
+		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(2, val->children.size());
 
 		EXPECT_EQ("", val->children[0]->name());
@@ -110,12 +110,15 @@ namespace test
 		infofile::Value* val = infofile::Parse("inline", "[{key value}]", &errors);
 
 		EXPECT_EQ(0, errors.size());
-		//ASSERT_NE(NULL, val);
+		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
+		EXPECT_TRUE(val->children[0] != NULL);
 		Node* n = val->children[0];
+
 		EXPECT_EQ("", n->name());
 		EXPECT_EQ("", n->value());
+		EXPECT_TRUE(n->children != NULL);
 		Value* v = n->children;
 		ASSERT_EQ(1, v->children.size());
 
