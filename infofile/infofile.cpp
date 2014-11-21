@@ -49,7 +49,8 @@ Node::Node(const String& name) : name_(name), value_(""), children(0) {
 	++active_node;
 }
 
-Node::Node(const String& name, const String& value) : name_(name), value_(value), children(0) {
+Node::Node(const String& name, const String& value) : name_(name)
+		, value_(value), children(0) {
     assert(this);
 	++active_node;
 }
