@@ -57,6 +57,8 @@ Node::Node(const String& name, const String& value) : name_(name), value_(value)
 Node::~Node(){
     assert(this);
 	--active_node;
+	if (children) delete children;
+	children = 0;
 }
 
 const String& Node::name() const{
