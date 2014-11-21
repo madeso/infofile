@@ -63,6 +63,7 @@ UnescapedData UnEscapeString(const std::string& str) {
 			case '\\': c = '\\'; break;
 			case 'n': c = '\n'; break;
 			case 't': c = '\t'; break;
+			case '\"': c = '\"'; break;
 				// all other escapes
 			default:
 				std::stringstream ss;
