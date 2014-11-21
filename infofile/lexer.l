@@ -14,6 +14,8 @@ struct UnescapedData {
 
 UnescapedData UnEscapeString(const std::string& str);
 
+// string regex from here http://stackoverflow.com/a/2039820
+
 %}
 
 digit [0-9]
