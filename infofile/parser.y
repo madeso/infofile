@@ -111,7 +111,19 @@ array_value_list
 
 array_children_list
 	: children
+	{
+		::infofile::NodePtr n(new ::infofile::Node("", ""));
+		n->children= $1;
+		$$ = new infofile::Value();
+		$$->children.push_back( n );
+	}
 	| array_children_list children
+	{
+		::infofile::NodePtr n(new ::infofile::Node("", ""));
+		n->children = $2;
+		$1->children.push_back( n );
+		$$ = $1;
+	}
 	;
 
 children
