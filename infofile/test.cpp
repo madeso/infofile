@@ -366,4 +366,35 @@ namespace test
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
 	}
+
+	GTEST(test_newline_in_verbatim_string_error)
+	{
+		std::vector<std::string> errors;
+		std::string src = "{line @\"hello\nworld\"}";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		const unsigned int ZERO = 0;
+		EXPECT_GT(errors.size(), ZERO);
+		EXPECT_TRUE(val == NULL);
+
+		if (val) delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+	GTEST(test_newline_in_verbatim_char_error)
+	{
+		std::vector<std::string> errors;
+		std::string src = "{line @'hello\nworld'}";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		const unsigned int ZERO = 0;
+		EXPECT_GT(errors.size(), ZERO);
+		EXPECT_TRUE(val == NULL);
+
+		if (val) delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
 }
