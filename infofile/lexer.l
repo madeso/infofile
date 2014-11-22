@@ -29,15 +29,42 @@ letter [a-zA-Z]
 
 %%
 
-"{" { AdvanceCharacter(yyextra, 1); return STRUCT_BEGIN; }
-"}" { AdvanceCharacter(yyextra, 1); return STRUCT_END; }
-"[" { AdvanceCharacter(yyextra, 1); return ARRAY_BEGIN; }
-"]" { AdvanceCharacter(yyextra, 1); return ARRAY_END; }
-"," { AdvanceCharacter(yyextra, 1); return SEP; }
-";" { AdvanceCharacter(yyextra, 1); return SEP; }
-"=" { AdvanceCharacter(yyextra, 1); return ASSIGN; }
-":" { AdvanceCharacter(yyextra, 1); return ASSIGN; }
-":=" { AdvanceCharacter(yyextra, 2); return ASSIGN; }
+"{" {	AdvanceCharacter(yyextra, 1);
+		return STRUCT_BEGIN;
+	}
+
+"}" {	AdvanceCharacter(yyextra, 1);
+		return STRUCT_END;
+	}
+
+"[" {	AdvanceCharacter(yyextra, 1);
+		return ARRAY_BEGIN;
+	}
+
+"]" {	AdvanceCharacter(yyextra, 1);
+		return ARRAY_END;
+	}
+
+"," {	AdvanceCharacter(yyextra, 1);
+		return SEP;
+	}
+
+";" {	AdvanceCharacter(yyextra, 1);
+		return SEP;
+	}
+
+"=" {	AdvanceCharacter(yyextra, 1);
+		return ASSIGN;
+	}
+
+":" {	AdvanceCharacter(yyextra, 1);
+		return ASSIGN;
+	}
+
+":=" {	AdvanceCharacter(yyextra, 2);
+		return ASSIGN;
+	}
+
 {letter}({letter}|{digit})* {yylval->ident_value = new std::string(yytext); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
 
 	/* string regex based on code found here http://stackoverflow.com/a/2039820 */
