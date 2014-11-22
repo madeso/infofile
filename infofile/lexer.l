@@ -16,7 +16,6 @@ UnescapedData UnEscapeString(const std::string& str);
 
 std::string ReplaceString(std::string subject, const std::string& search,
                           const std::string& replace);
-// string regex from here http://stackoverflow.com/a/2039820
 
 %}
 
@@ -40,6 +39,8 @@ letter [a-zA-Z]
 ":" { AdvanceCharacter(yyextra, 1); return ASSIGN; }
 ":=" { AdvanceCharacter(yyextra, 2); return ASSIGN; }
 {letter}({letter}|{digit})* {yylval->ident_value = new std::string(yytext); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
+
+	/* string regex based on code found here http://stackoverflow.com/a/2039820 */
 \"(\\.|[^(\\"|\n)])*\" {UnescapedData data = UnEscapeString(yytext); for(VectorString::const_iterator it=data.errors.begin(); it!=data.errors.end(); ++it){ReportError(yyextra, *it);} yylval->ident_value = new std::string(data.str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
 @\"(\"\"|[^("|\n)])*\" {std::string str = yytext; str = str.substr(2, str.size()-3); str = ReplaceString(str, "\"\"", "\""); yylval->ident_value = new std::string(str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
 @'(''|[^('|\n)])*' {std::string str = yytext; str = str.substr(2, str.size()-3); str = ReplaceString(str, "''", "'"); yylval->ident_value = new std::string(str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
