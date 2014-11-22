@@ -282,7 +282,7 @@ namespace test
 	GTEST(test_verbatim_char_double_quotes)
 	{
 		std::vector<std::string> errors;
-		std::string src = "{line @'''Ahoy!' cried the captain.';}";
+		std::string src = "{line @'''Ahoy!'' cried the captain.';}";
 		infofile::Value* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
