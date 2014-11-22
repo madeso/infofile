@@ -191,13 +191,30 @@ namespace test
 		std::vector<std::string> errors;
 		infofile::Value* val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\a.txt\";}", &errors);
 
-		// EXPECT_EQ(0, errors.size());
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
 		EXPECT_EQ("path", val->children[0]->name());
 		EXPECT_EQ("c:\\Docs\\Source\\a.txt", val->children[0]->value());
+
+		delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+
+	GTEST(test_verbatim_string_tricky)
+	{
+		std::vector<std::string> errors;
+		infofile::Value* val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\\";}", &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ("path", val->children[0]->name());
+		EXPECT_EQ("c:\\Docs\\Source\\", val->children[0]->value());
 
 		delete val;
 
