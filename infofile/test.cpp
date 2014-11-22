@@ -14,7 +14,7 @@ namespace test
 		std::vector<std::string> errors;
 		infofile::Value* val = infofile::Parse("inline", "{key=value;}", &errors);
 
-		EXPECT_EQ(0, errors.size());
+		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
@@ -32,7 +32,7 @@ namespace test
 		std::vector<std::string> errors;
 		infofile::Value* val = infofile::Parse("inline", "{key value;}", &errors);
 
-		EXPECT_EQ(0, errors.size());
+		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
@@ -50,7 +50,7 @@ namespace test
 		std::vector<std::string> errors;
 		infofile::Value* val = infofile::Parse("inline", "{key value}", &errors);
 
-		EXPECT_EQ(0, errors.size());
+		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
@@ -68,7 +68,7 @@ namespace test
 		std::vector<std::string> errors;
 		infofile::Value* val = infofile::Parse("inline", "{key value k v}", &errors);
 
-		EXPECT_EQ(0, errors.size());
+		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(2, val->children.size());
 
@@ -89,7 +89,7 @@ namespace test
 		std::vector<std::string> errors;
 		infofile::Value* val = infofile::Parse("inline", "[value v]", &errors);
 
-		EXPECT_EQ(0, errors.size());
+		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(2, val->children.size());
 
@@ -110,7 +110,7 @@ namespace test
 		std::vector<std::string> errors;
 		infofile::Value* val = infofile::Parse("inline", "[{key value}]", &errors);
 
-		EXPECT_EQ(0, errors.size());
+		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
@@ -137,7 +137,7 @@ namespace test
 		std::vector<std::string> errors;
 		infofile::Value* val = infofile::Parse("inline", "{\"'key'\"=\"value\";}", &errors);
 
-		EXPECT_EQ(0, errors.size());
+		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
@@ -155,7 +155,7 @@ namespace test
 		std::vector<std::string> errors;
 		infofile::Value* val = infofile::Parse("inline", "{\"key\\n\\t\"=\"value\\\"\";}", &errors);
 
-		EXPECT_EQ(0, errors.size());
+		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
@@ -173,7 +173,7 @@ namespace test
 		std::vector<std::string> errors;
 		infofile::Value* val = infofile::Parse("inline", "{'\"key\"'='value is nice';}", &errors);
 
-		EXPECT_EQ(0, errors.size());
+		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
