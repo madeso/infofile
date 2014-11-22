@@ -14,6 +14,8 @@ struct UnescapedData {
 
 UnescapedData UnEscapeString(const std::string& str);
 
+std::string ReplaceString(std::string subject, const std::string& search,
+                          const std::string& replace);
 // string regex from here http://stackoverflow.com/a/2039820
 
 %}
@@ -39,7 +41,7 @@ letter [a-zA-Z]
 ":=" { AdvanceCharacter(yyextra, 2); return ASSIGN; }
 {letter}({letter}|{digit})* {yylval->ident_value = new std::string(yytext); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
 \"(\\.|[^\\"])*\" {UnescapedData data = UnEscapeString(yytext); for(VectorString::const_iterator it=data.errors.begin(); it!=data.errors.end(); ++it){ReportError(yyextra, *it);} yylval->ident_value = new std::string(data.str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
-@\"[^"]*\" {std::string str = yytext; str = str.substr(2, str.size()-3); yylval->ident_value = new std::string(str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
+@\"(\"\"|[^"])*\" {std::string str = yytext; str = str.substr(2, str.size()-3); str = ReplaceString(str, "\"\"", "\""); yylval->ident_value = new std::string(str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
 '(\\.|[^\\'])*' {UnescapedData data = UnEscapeString(yytext); for(VectorString::const_iterator it=data.errors.begin(); it!=data.errors.end(); ++it){ReportError(yyextra, *it);} yylval->ident_value = new std::string(data.str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
 {digit}+{letter}? { yylval->ident_value = new std::string(yytext); AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext)); return IDENT;}
 [ \t] { AdvanceCharacter(yyextra, 1); };
@@ -82,4 +84,15 @@ UnescapedData UnEscapeString(const std::string& str) {
 
 	ret.str = res;
 	return ret;
+}
+
+// http://stackoverflow.com/a/14678800
+std::string ReplaceString(std::string subject, const std::string& search,
+                          const std::string& replace) {
+    size_t pos = 0;
+    while ((pos = subject.find(search, pos)) != std::string::npos) {
+         subject.replace(pos, search.length(), replace);
+         pos += replace.length();
+    }
+    return subject;
 }
