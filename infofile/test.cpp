@@ -240,4 +240,61 @@ namespace test
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
 	}
+
+	//
+
+	GTEST(test_verbatim_char)
+	{
+		std::vector<std::string> errors;
+		infofile::Value* val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\a.txt';}", &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ("path", val->children[0]->name());
+		EXPECT_EQ("c:\\Docs\\Source\\a.txt", val->children[0]->value());
+
+		delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+
+	GTEST(test_verbatim_char_tricky)
+	{
+		std::vector<std::string> errors;
+		infofile::Value* val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\\';}", &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ("path", val->children[0]->name());
+		EXPECT_EQ("c:\\Docs\\Source\\", val->children[0]->value());
+
+		delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+
+	GTEST(test_verbatim_char_double_quotes)
+	{
+		std::vector<std::string> errors;
+		std::string src = "{line @'''Ahoy!' cried the captain.';}";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ("line", val->children[0]->name());
+		EXPECT_EQ("'Ahoy!' cried the captain.", val->children[0]->value());
+
+		delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
 }
