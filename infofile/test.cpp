@@ -221,4 +221,22 @@ namespace test
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
 	}
+
+	GTEST(test_verbatim_double_quotes)
+	{
+		std::vector<std::string> errors;
+		infofile::Value* val = infofile::Parse("inline", "{line @\"\"\"Ahoy!\"\" cried the captain.\";}", &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ("line", val->children[0]->name());
+		EXPECT_EQ("\"Ahoy!\" cried the captain.", val->children[0]->value());
+
+		delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
 }
