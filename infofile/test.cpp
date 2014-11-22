@@ -328,9 +328,40 @@ namespace test
 		ASSERT_EQ(1, val->children.size());
 
 		EXPECT_EQ("line", val->children[0]->name());
-		EXPECT_EQ("this\nis\na\nloing\nstring\tright?", val->children[0]->value());
+		EXPECT_EQ("this\nis\na\nlong\nstring\tright?", val->children[0]->value());
 
 		delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+
+	GTEST(test_newline_in_string_error)
+	{
+		std::vector<std::string> errors;
+		std::string src = "{line \"hello\nworld\"}";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		const unsigned int ZERO = 0;
+		EXPECT_GT(errors.size(), ZERO);
+		EXPECT_TRUE(val == NULL);
+		
+		if(val) delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+	GTEST(test_newline_in_char_error)
+	{
+		std::vector<std::string> errors;
+		std::string src = "{line 'hello\nworld'}";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		const unsigned int ZERO = 0;
+		EXPECT_GT(errors.size(), ZERO);
+		EXPECT_TRUE(val == NULL);
+
+		if (val) delete val;
 
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
