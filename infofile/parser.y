@@ -25,6 +25,7 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 	#ifndef PARSER_DATA_DEFINED
 		#define PARSER_DATA_DEFINED
 		struct ParserData {
+			yyscan_t* scanner;
 			::infofile::Value* result;
 			std::string file;
 			unsigned int line;
@@ -188,6 +189,7 @@ void ReportError(ParserData* data, const std::string& msg) {
 	ResetCharacter(&expression);
 	expression.file = filename;
     yyscan_t scanner;
+	expression.scanner = &scanner;
     YY_BUFFER_STATE state;
  
     if (yylex_init(&scanner)) {

@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iostream>
 #include <vector>
+#include <cassert>
 
 typedef std::vector<std::string> VectorString;
 
@@ -29,54 +30,238 @@ letter [a-zA-Z]
 
 %%
 
-"{" {	AdvanceCharacter(yyextra, 1);
-		return STRUCT_BEGIN;
-	}
+"{" {
+	AdvanceCharacter(yyextra, 1);
+	return STRUCT_BEGIN;
+}
 
-"}" {	AdvanceCharacter(yyextra, 1);
-		return STRUCT_END;
-	}
+"}" {
+	AdvanceCharacter(yyextra, 1);
+	return STRUCT_END;
+}
 
-"[" {	AdvanceCharacter(yyextra, 1);
-		return ARRAY_BEGIN;
-	}
+"[" {
+	AdvanceCharacter(yyextra, 1);
+	return ARRAY_BEGIN;
+}
 
-"]" {	AdvanceCharacter(yyextra, 1);
-		return ARRAY_END;
-	}
+"]" {
+	AdvanceCharacter(yyextra, 1);
+	return ARRAY_END;
+}
 
-"," {	AdvanceCharacter(yyextra, 1);
-		return SEP;
-	}
+"," {
+	AdvanceCharacter(yyextra, 1);
+	return SEP;
+}
 
-";" {	AdvanceCharacter(yyextra, 1);
-		return SEP;
-	}
+";" {
+	AdvanceCharacter(yyextra, 1);
+	return SEP;
+}
 
-"=" {	AdvanceCharacter(yyextra, 1);
-		return ASSIGN;
-	}
+"=" {
+	AdvanceCharacter(yyextra, 1);
+	return ASSIGN;
+}
 
-":" {	AdvanceCharacter(yyextra, 1);
-		return ASSIGN;
-	}
+":" {
+	AdvanceCharacter(yyextra, 1);
+	return ASSIGN;
+}
 
-":=" {	AdvanceCharacter(yyextra, 2);
-		return ASSIGN;
-	}
+":=" {
+	AdvanceCharacter(yyextra, 2);
+	return ASSIGN;
+}
 
-{letter}({letter}|{digit})* {yylval->ident_value = new std::string(yytext); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
+{letter}({letter}|{digit})* {
+	yylval->ident_value = new std::string(yytext);
+	AdvanceCharacter(yyextra, strlen(yytext));
+	return IDENT;
+}
 
 	/* string regex based on code found here http://stackoverflow.com/a/2039820 */
-\"(\\.|[^(\\"|\n)])*\" {UnescapedData data = UnEscapeString(yytext); for(VectorString::const_iterator it=data.errors.begin(); it!=data.errors.end(); ++it){ReportError(yyextra, *it);} yylval->ident_value = new std::string(data.str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
-@\"(\"\"|[^("|\n)])*\" {std::string str = yytext; str = str.substr(2, str.size()-3); str = ReplaceString(str, "\"\"", "\""); yylval->ident_value = new std::string(str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
-@'(''|[^('|\n)])*' {std::string str = yytext; str = str.substr(2, str.size()-3); str = ReplaceString(str, "''", "'"); yylval->ident_value = new std::string(str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
-\"\"\"[^"""]*\"\"\" {std::string str = yytext; str = str.substr(3, str.size()-6); yylval->ident_value = new std::string(str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
-'(\\.|[^(\\'|\n)])*' {UnescapedData data = UnEscapeString(yytext); for(VectorString::const_iterator it=data.errors.begin(); it!=data.errors.end(); ++it){ReportError(yyextra, *it);} yylval->ident_value = new std::string(data.str); AdvanceCharacter(yyextra, strlen(yytext)); return IDENT;}
-{digit}+{letter}? { yylval->ident_value = new std::string(yytext); AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext)); return IDENT;}
-[ \t] { AdvanceCharacter(yyextra, 1); };
-"\n" { ++yyextra->line; ResetCharacter(yyextra); }
-. { AdvanceCharacter(yyextra, 1); std::stringstream ss; char c = yytext[0]; int i = c; ss << "Unknown character [" << c << "(" << i << ")]"; ReportError(yyextra, ss.str()); return UNKNOWN; }
+\"(\\.|[^(\\"|\n)])*\" {
+	UnescapedData data = UnEscapeString(yytext);
+	for(VectorString::const_iterator it=data.errors.begin(); it!=data.errors.end(); ++it)
+	{
+		ReportError(yyextra, *it);
+	}
+	yylval->ident_value = new std::string(data.str);
+	AdvanceCharacter(yyextra, strlen(yytext));
+	return IDENT;
+}
+
+@\"(\"\"|[^("|\n)])*\" {
+	std::string str = yytext;
+	str = str.substr(2, str.size()-3);
+	str = ReplaceString(str, "\"\"", "\"");
+	yylval->ident_value = new std::string(str);
+	AdvanceCharacter(yyextra, strlen(yytext));
+	return IDENT;
+}
+
+@'(''|[^('|\n)])*' {
+	std::string str = yytext;
+	str = str.substr(2, str.size()-3);
+	str = ReplaceString(str, "''", "'");
+	yylval->ident_value = new std::string(str);
+	AdvanceCharacter(yyextra, strlen(yytext));
+	return IDENT;
+}
+
+\"\"\"[^"""]*\"\"\" {
+	std::string str = yytext;
+	str = str.substr(3, str.size()-6);
+	yylval->ident_value = new std::string(str);
+	AdvanceCharacter(yyextra, strlen(yytext));
+	return IDENT;
+}
+
+'(\\.|[^(\\'|\n)])*' {
+	UnescapedData data = UnEscapeString(yytext);
+	for(VectorString::const_iterator it=data.errors.begin(); it!=data.errors.end(); ++it)
+	{
+		ReportError(yyextra, *it);
+	}
+	yylval->ident_value = new std::string(data.str);
+	AdvanceCharacter(yyextra, strlen(yytext));
+	return IDENT;
+}
+
+{digit}+{letter}? {
+	yylval->ident_value = new std::string(yytext);
+	AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext));
+	return IDENT;
+}
+
+	/* heredoc parsing */
+"<<" {
+	int c;
+	std::string name;
+	int nameindex = -1;
+	std::string data;
+	std::string potential;
+	int mystate = 0;
+	bool done = false;
+	bool eof = false;
+	while(done==false) {
+		if( done==false ) {
+			c=yyinput(*yyextra->scanner);
+		}
+		if( c == 0 ) {
+			done = true;
+			eof = true;
+		}
+		if( c == EOF ) {
+			done = true;
+			eof = true;
+		}
+		if( done == false ) {
+			switch(mystate) {
+			case 0: // detect name
+				if( c == ' ' || c == '\n' || c == '\t' ) {
+					if( name.length() <= 0 ) {
+						ReportError(yyextra, "EOF name is empty");
+					}
+					mystate = 1;
+					unput(c);
+				}
+				else {
+					name += c;
+				}
+				break;
+			case 1: // name detected, ignore until newline
+				if( c == '\n' ) {
+					mystate = 2;
+				}
+				else {
+					// ignore
+				}
+				break;
+			case 2: // parse heredoc
+				if( nameindex == -1 && c == '\n' ) {
+					nameindex = 0;
+				}
+				else if( nameindex >= 0 && name[nameindex] == c) {
+					potential += c;
+					++nameindex;
+					// static cast here to avoid compiler warning
+					// this is probably safe as nameindex must be postive here
+					assert(nameindex >= 0);
+					if( static_cast<unsigned int>(nameindex) >= name.size() ) {
+						// if the new index is beyond the string we have matched end string/name
+						// can can continue to the last part and ignoring the end characters
+						mystate = 3;
+					}
+				}
+				else {
+					if( nameindex >= 0 ) {
+						data += "\n";
+						data += potential;
+						potential = "";
+						nameindex = -1;
+					}
+					if( c == '\n' ) {
+						nameindex = 0;
+					}
+					else {
+						data += c;
+					}
+				}
+				break;
+			case 3:
+				if( c == '\n' ) {
+					mystate = 4;
+				}
+				else {
+					// ignore
+				}
+				break;
+			case 4:
+				assert(0 && "shouldn't be here");
+				break;
+			}
+		}
+
+		if( mystate > 3) {
+			done = true;
+		}
+	}
+	if( mystate < 4 ) {
+		if( eof ) {
+			ReportError(yyextra, "Found EOF before heredoc end");
+		}
+	}
+	yylval->ident_value = new std::string(data);
+	if( eof ) {
+		// adding 0 and EOF so that rest can fail without crashing
+		// EOF only asserted
+		unput(0);
+		unput(EOF);
+	}
+	return IDENT;
+}
+
+[ \t] {
+	AdvanceCharacter(yyextra, 1);
+}
+
+"\n" {
+	++yyextra->line;
+	ResetCharacter(yyextra);
+}
+
+. {
+	AdvanceCharacter(yyextra, 1);
+	std::stringstream ss;
+	char c = yytext[0];
+	int i = c;
+	ss << "Unknown character [" << c << "(" << i << ")]";
+	ReportError(yyextra, ss.str());
+	return UNKNOWN;
+}
 
 %%
 
