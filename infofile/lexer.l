@@ -99,6 +99,16 @@ letter [a-zA-Z]
 	return ASSIGN;
 }
 
+"+" {
+	AdvanceCharacter(yyextra, 1);
+	return COMBINE;
+}
+
+"\\" {
+	AdvanceCharacter(yyextra, 1);
+	return COMBINE;
+}
+
 	/* single line comment, ignore everything until the newline */
 \/\/[^\n]* {}
 

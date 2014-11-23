@@ -67,10 +67,12 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 %token SEP
 %token ASSIGN
 %token <ident_value> IDENT
+%token COMBINE
 %token UNKNOWN
 
 %type <value> children struct_list array_value_list array_children_list
 %type <node> pair
+%type <ident_value> idents
 
 %start input
 
@@ -78,6 +80,28 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 
 input
 	: children { expression->result = $1; }
+	;
+
+idents
+	: IDENT
+	{
+		$$ = $1;
+	}
+	| idents COMBINE IDENT
+	{
+		if( $1 && $3 ) {
+			*$1 += *$3;
+		}
+		else {
+			delete $1;
+			$1 = NULL;
+		}
+		if( $3 ) {
+			delete $3;
+			$3 = NULL;
+		}
+		$$ = $1;
+	}
 	;
 	
 struct_list
@@ -106,7 +130,7 @@ struct_list
 	;
 
 array_value_list
-	: IDENT
+	: idents
 	{
 		if( $1 ) {
 			$$ = new infofile::Value();
@@ -118,7 +142,7 @@ array_value_list
 			$$ = NULL;
 		}
 	}
-	| array_value_list IDENT
+	| array_value_list idents
 	{
 		if( $1 && $2 ) {
 			::infofile::NodePtr n(new ::infofile::Node("", *$2 ));
@@ -173,7 +197,7 @@ optional_sep
 	
 
 pair
-	: IDENT[K] optional_assign IDENT[V] optional_sep
+	: idents[K] optional_assign idents[V] optional_sep
 	{
 		if( $K && $V) {
 			$$ = new ::infofile::Node(*$K, *$V);
@@ -184,7 +208,7 @@ pair
 		if( $K ) delete $K;
 		if( $V ) delete $V;
 	}
-	| IDENT[K] children[C] SEP
+	| idents[K] children[C] SEP
 	{
 		::infofile::Node* n = NULL;
 		if( $K && $C ) {
@@ -197,7 +221,7 @@ pair
 		if( $K ) delete $K;
 		$$ = n;
 	}
-	| IDENT[K] optional_assign IDENT[V] children[C] SEP
+	| idents[K] optional_assign idents[V] children[C] SEP
 	{
 		::infofile::Node* n = NULL;
 		if( $K && $V && $C ) {
