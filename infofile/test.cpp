@@ -419,4 +419,36 @@ namespace test
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
 	}
+	GTEST(test_heredoc_error_eof)
+	{
+		std::vector<std::string> errors;
+
+		std::string src = "{line <<EOF dog\nHello world EOF\ncat\nEOF dog=cat}";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		const unsigned int ZERO = 0;
+		EXPECT_GT(errors.size(), ZERO);
+		EXPECT_TRUE(val == NULL);
+
+		if (val) delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+	GTEST(test_heredoc_error_noname)
+	{
+		std::vector<std::string> errors;
+
+		std::string src = "{line <<EOF\ndog\nHello world EOF\ncat\nEOF dog=cat}";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		const unsigned int ZERO = 0;
+		EXPECT_GT(errors.size(), ZERO);
+		EXPECT_TRUE(val == NULL);
+
+		if (val) delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
 }
