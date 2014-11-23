@@ -33,14 +33,18 @@ letter [a-zA-Z]
 %%
 
 	/* multiline parsing */
-"/*" {
+"/""*"+ {
 	BEGIN(comment);
 	++yyextra->multiline_comment;
 }
-<comment>[^*]* {
+<comment>"/""*"+ {
+	BEGIN(comment);
+	++yyextra->multiline_comment;
+}
+<comment>[^*/]* {
 	/* eat anything that's not a '*' */
 }
-<comment>"*"+[^*/]* {
+<comment>"*"+[^*\/]* {
 	/* eat up '*'s not followed by '/'s */
 }
 <comment>"*"+"/" {
