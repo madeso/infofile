@@ -234,13 +234,15 @@ letter [a-zA-Z]
 			ReportError(yyextra, "Found EOF before heredoc end");
 		}
 	}
-	yylval->ident_value = new std::string(data);
 	if( eof ) {
 		// adding 0 and EOF so that rest can fail without crashing
 		// EOF only asserted
 		unput(0);
 		unput(EOF);
+		yylval->ident_value = 0;
+		return IDENT;
 	}
+	yylval->ident_value = new std::string(data);
 	return IDENT;
 }
 

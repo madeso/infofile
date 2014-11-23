@@ -41,6 +41,7 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 	#define YY_EXTRA_TYPE ParserData*
 }
 
+	/* any variable might be NULL, if so delete input and let NULL flow through */
 %union {
     ::std::string* ident_value;
     ::infofile::Node* node;
@@ -81,14 +82,24 @@ input
 struct_list
 	: pair
 	{
-		$$ = new infofile::Value();
-		::infofile::NodePtr n($1);
-		$$->children.push_back(n);
+		if( $1 ) {
+			$$ = new infofile::Value();
+			::infofile::NodePtr n($1);
+			$$->children.push_back(n);
+		}
+		else {
+			$$ = NULL;
+		}
 	}
 	| struct_list pair
 	{
-		::infofile::NodePtr n($2);
-		$1->children.push_back(n);
+		if( $1 && $2 ) {
+			::infofile::NodePtr n($2);
+			$1->children.push_back(n);
+		}
+		else {
+			if( $2 ) delete $2;
+		}
 		$$ = $1;
 	}
 	;
@@ -96,16 +107,25 @@ struct_list
 array_value_list
 	: IDENT
 	{
-		$$ = new infofile::Value();
-		::infofile::NodePtr n(new ::infofile::Node("", *$1 ));
-		$$->children.push_back(n);
-		delete $1;
+		if( $1 ) {
+			$$ = new infofile::Value();
+			::infofile::NodePtr n(new ::infofile::Node("", *$1 ));
+			$$->children.push_back(n);
+			delete $1;
+		}
+		else {
+			$$ = NULL;
+		}
 	}
 	| array_value_list IDENT
 	{
-		::infofile::NodePtr n(new ::infofile::Node("", *$2 ));
-		$1->children.push_back( n );
-		delete $2;
+		if( $1 && $2 ) {
+			::infofile::NodePtr n(new ::infofile::Node("", *$2 ));
+			$1->children.push_back( n );
+		}
+		if( $2 ) {
+			delete $2;
+		}
 		$$ = $1;
 	}
 	;
@@ -113,16 +133,23 @@ array_value_list
 array_children_list
 	: children
 	{
-		::infofile::NodePtr n(new ::infofile::Node("", ""));
-		n->children= $1;
-		$$ = new infofile::Value();
-		$$->children.push_back( n );
+		if( $1 ) {
+			::infofile::NodePtr n(new ::infofile::Node("", ""));
+			n->children= $1;
+			$$ = new infofile::Value();
+			$$->children.push_back( n );
+		}
+		else {
+			$$ = NULL;
+		}
 	}
 	| array_children_list children
 	{
-		::infofile::NodePtr n(new ::infofile::Node("", ""));
-		n->children = $2;
-		$1->children.push_back( n );
+		if( $1 && $2 ) {
+			::infofile::NodePtr n(new ::infofile::Node("", ""));
+			n->children = $2;
+			$1->children.push_back( n );
+		}
 		$$ = $1;
 	}
 	;
@@ -147,23 +174,40 @@ optional_sep
 pair
 	: IDENT[K] optional_assign IDENT[V] optional_sep
 	{
-		$$ = new ::infofile::Node(*$K, *$V);
-		delete $K;
-		delete $V;
+		if( $K && $V) {
+			$$ = new ::infofile::Node(*$K, *$V);
+		}
+		else {
+			$$ = NULL;
+		}
+		if( $K ) delete $K;
+		if( $V ) delete $V;
 	}
 	| IDENT[K] children[C] SEP
 	{
-		::infofile::Node* n = new ::infofile::Node(*$K);
-		n->children = $C;
-		delete $K;
+		::infofile::Node* n = NULL;
+		if( $K && $C ) {
+			n = new ::infofile::Node(*$K);
+			n->children = $C;
+		}
+		else {
+			if( $C ) delete $C;
+		}
+		if( $K ) delete $K;
 		$$ = n;
 	}
 	| IDENT[K] optional_assign IDENT[V] children[C] SEP
 	{
-		::infofile::Node* n = new ::infofile::Node(*$K, *$V);
-		n->children = $C;
-		delete $K;
-		delete $V;
+		::infofile::Node* n = NULL;
+		if( $K && $V && $C ) {
+			n = new ::infofile::Node(*$K, *$V);
+			n->children = $C;
+		}
+		else {
+			if( $C ) delete $C;
+		}
+		if( $K ) delete $K;
+		if( $V ) delete $V;
 		$$ = n;
 	}
 	;
