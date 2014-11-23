@@ -401,7 +401,10 @@ namespace test
 	GTEST(test_here_doc)
 	{
 		std::vector<std::string> errors;
-		std::string src = "{line <<EOF dog\nHello world EOF\ncat\nEOF dog=cat}";
+		// when heredoc ends they ignore everything to the newline, therefore
+		// we need the extra newline or the source will not parse and complain
+		// about a EOF error
+		std::string src = "{line <<EOF dog\nHello world EOF\ncat\nEOF dog=cat\n}";
 		infofile::Value* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
