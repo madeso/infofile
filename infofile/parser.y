@@ -31,6 +31,7 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 			unsigned int line;
 			unsigned int ch;
 			unsigned int pch;
+			unsigned int multiline_comment;
 
 			std::vector<std::string> errors;
 		};
@@ -232,6 +233,7 @@ void ReportError(ParserData* data, const std::string& msg) {
 	expression.line = 1;
 	ResetCharacter(&expression);
 	expression.file = filename;
+	expression.multiline_comment = 0;
     yyscan_t scanner;
 	expression.scanner = &scanner;
     YY_BUFFER_STATE state;

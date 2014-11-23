@@ -28,7 +28,27 @@ letter [a-zA-Z]
 %option reentrant noyywrap never-interactive nounistd
 %option bison-bridge
 
+%x comment
+
 %%
+
+	/* multiline parsing */
+"/*" {
+	BEGIN(comment);
+	++yyextra->multiline_comment;
+}
+<comment>[^*]* {
+	/* eat anything that's not a '*' */
+}
+<comment>"*"+[^*/]* {
+	/* eat up '*'s not followed by '/'s */
+}
+<comment>"*"+"/" {
+	--yyextra->multiline_comment;
+	if( yyextra->multiline_comment == 0 ) {
+		BEGIN(INITIAL);
+	}
+}
 
 "{" {
 	AdvanceCharacter(yyextra, 1);
