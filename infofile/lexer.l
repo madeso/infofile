@@ -75,6 +75,9 @@ letter [a-zA-Z]
 	return ASSIGN;
 }
 
+	/* single line comment, ignore everything until the newline */
+\/\/[^\n]* {}
+
 {letter}({letter}|{digit})* {
 	yylval->ident_value = new std::string(yytext);
 	AdvanceCharacter(yyextra, strlen(yytext));
