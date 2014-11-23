@@ -451,4 +451,23 @@ namespace test
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
 	}
+
+	GTEST(test_singleline_comment)
+	{
+		std::vector<std::string> errors;
+		std::string src = "{// this is a comment\nline dog}";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ("line", val->children[0]->name());
+		EXPECT_EQ("dog", val->children[0]->value());
+
+		delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
 }
