@@ -80,6 +80,7 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 
 input
 	: children { expression->result = $1; }
+	| struct_list { expression->result = $1; }
 	;
 
 idents
