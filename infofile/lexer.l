@@ -21,6 +21,7 @@ std::string ReplaceString(std::string subject, const std::string& search,
 %}
 
 digit [0-9]
+number [0-9]
 letter [a-zA-Z]
 
 %option outfile="lexer.cpp"  header-file="lexer.h"
@@ -167,7 +168,13 @@ letter [a-zA-Z]
 	return IDENT;
 }
 
-{digit}+{letter}? {
+{digit}+.{digit}+[fF]? {
+	yylval->ident_value = new std::string(yytext);
+	AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext));
+	return IDENT;
+}
+
+{digit}+[fF]? {
 	yylval->ident_value = new std::string(yytext);
 	AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext));
 	return IDENT;

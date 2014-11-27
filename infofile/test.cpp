@@ -600,6 +600,9 @@ namespace test
 		EXPECT_EQ(0, Value::ActiveCount());
 	}
 
+	/*
+	Will have to investigate if we want to specify numbers this way, as it
+	// seems that parsing might be harder if we do
 	GTEST(test_double_start_with_dot)
 	{
 		std::vector<std::string> errors;
@@ -616,6 +619,7 @@ namespace test
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
 	}
+	*/
 
 	GTEST(test_float)
 	{
