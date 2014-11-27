@@ -566,6 +566,91 @@ namespace test
 		EXPECT_EQ(0, Value::ActiveCount());
 	}
 
+	GTEST(test_number_basic)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ 12 ]";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ("12", val->children[0]->value());
+
+		delete val;
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+
+	GTEST(test_number_double)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ 25.6 ]";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ("25.6", val->children[0]->value());
+
+		delete val;
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+
+	GTEST(test_double_start_with_dot)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ .42 ]";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ(".42", val->children[0]->value());
+
+		delete val;
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+
+	GTEST(test_float)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ 35f ]";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ("35f", val->children[0]->value());
+
+		delete val;
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+
+	GTEST(test_float_with_decimalpoint)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ 12.3f ]";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ("12.3f", val->children[0]->value());
+
+		delete val;
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+
 	/*
 	// todo: implement unicode escape characters
 	// taken from here https://github.com/dropbox/json11/blob/master/test.cpp
