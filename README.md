@@ -1,4 +1,4 @@
-I got tired of different parsing libraries, weird specifications and strange file formats, so I made my own and licensed it under [zlib](https://tldrlegal.com/license/zlib-libpng-license-%28zlib%29). This is based on the [boost info file](http://www.boost.org/doc/libs/1_56_0/doc/html/boost_propertytree/parsers.html#boost_propertytree.parsers.info_parser), hence the name, however there are minor changes and boost is not needed.
+I got tired of different parsing libraries, weird specifications and strange file formats, so I made my own ([obligatory xkcd](http://xkcd.com/927/)) and licensed it under [zlib](https://tldrlegal.com/license/zlib-libpng-license-%28zlib%29). This is based on the [boost info file](http://www.boost.org/doc/libs/1_56_0/doc/html/boost_propertytree/parsers.html#boost_propertytree.parsers.info_parser), hence the name, however there are minor changes and boost is not needed.
 
 The structure is inspired by json/xml but with a syntax inspired by C, C++ etc.
 
