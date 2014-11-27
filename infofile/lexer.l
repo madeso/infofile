@@ -168,13 +168,7 @@ letter [a-zA-Z]
 	return IDENT;
 }
 
-{digit}+.{digit}+[fF]? {
-	yylval->ident_value = new std::string(yytext);
-	AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext));
-	return IDENT;
-}
-
-{digit}+[fF]? {
+{number}+(.{number}+)?[fF]? {
 	yylval->ident_value = new std::string(yytext);
 	AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext));
 	return IDENT;
