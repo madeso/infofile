@@ -565,4 +565,25 @@ namespace test
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
 	}
+
+	/*
+	// todo: implement unicode escape characters
+	// taken from here https://github.com/dropbox/json11/blob/master/test.cpp
+	GTEST(test_unicode_escape)
+	{
+		const std::string src =
+			R"([ "blah\ud83d\udca9blah\ud83dblah\udca9blah\u0000blah\u1234" ])";
+		const char utf8[] = "blah" "\xf0\x9f\x92\xa9" "blah" "\xed\xa0\xbd" "blah"
+			"\xed\xb2\xa9" "blah" "\0" "blah" "\xe1\x88\xb4";
+		std::vector<std::string> errors;
+		infofile::Value* uni = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(uni != NULL);
+		ASSERT_EQ(1, uni->children.size());
+
+		EXPECT_TRUE(uni->children[0]->value().size() == (sizeof utf8) - 1);
+		EXPECT_TRUE(memcmp(uni->children[0]->value().data(), utf8, sizeof utf8) == 0);
+	}
+	*/
 }
