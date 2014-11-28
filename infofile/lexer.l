@@ -117,6 +117,13 @@ number [0-9]
 	return IDENT;
 }
 
+	/* css color */
+#[0-9a-fA-F]{6} {
+	yylval->ident_value = new std::string(yytext);
+	AdvanceCharacter(yyextra, strlen(yytext));
+	return IDENT;
+}
+
 	/* string regex based on code found here http://stackoverflow.com/a/2039820 */
 \"(\\.|[^(\\"|\n)])*\" {
 	UnescapedData data = UnEscapeString(yytext);
