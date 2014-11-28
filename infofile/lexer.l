@@ -111,6 +111,7 @@ number [0-9]
 	/* single line comment, ignore everything until the newline */
 \/\/[^\n]* {}
 
+	/* standard ident */
 [a-zA-Z][a-zA-Z0-9.@]* {
 	yylval->ident_value = new std::string(yytext);
 	AdvanceCharacter(yyextra, strlen(yytext));
@@ -136,6 +137,7 @@ number [0-9]
 	return IDENT;
 }
 
+	/* c# verbatim string */
 @\"(\"\"|[^("|\n)])*\" {
 	std::string str = yytext;
 	str = str.substr(2, str.size()-3);
@@ -145,6 +147,7 @@ number [0-9]
 	return IDENT;
 }
 
+	/* C# verbatim string, python string syntax */
 @'(''|[^('|\n)])*' {
 	std::string str = yytext;
 	str = str.substr(2, str.size()-3);
@@ -154,6 +157,8 @@ number [0-9]
 	return IDENT;
 }
 
+
+	/* multiline string, 3 quotes to start and to end */
 \"\"\"[^"""]*\"\"\" {
 	std::string str = yytext;
 	str = str.substr(3, str.size()-6);
@@ -162,6 +167,7 @@ number [0-9]
 	return IDENT;
 }
 
+	/* python like string with single quotes */
 '(\\.|[^(\\'|\n)])*' {
 	UnescapedData data = UnEscapeString(yytext);
 	for(VectorString::const_iterator it=data.errors.begin(); it!=data.errors.end(); ++it)
@@ -173,6 +179,7 @@ number [0-9]
 	return IDENT;
 }
 
+	/* regular number, both float and ints */
 {number}+(.{number}+)?[fF]? {
 	yylval->ident_value = new std::string(yytext);
 	AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext));
