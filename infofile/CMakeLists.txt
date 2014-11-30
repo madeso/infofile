@@ -18,6 +18,7 @@ set(SRC lexer.l parser.y infofile.cpp infofile.h configuration.h)
 add_executable(infofile-test ${SRC} test.cpp main.cpp ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS})
 
 source_group("" FILES ${SRC} main.cpp test.cpp cmdline.cpp)
+source_group("flex/bison" FILES lexer.l parser.y)
 source_group("generated" FILES ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS})
 
 target_link_libraries(infofile-test ${GOOGLEMOCK_LIBRARIES})
