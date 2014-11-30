@@ -25,5 +25,8 @@ target_link_libraries(infofile-test ${GOOGLEMOCK_LIBRARIES})
 add_custom_command(TARGET infofile-test POST_BUILD
 	COMMAND infofile-test
 	WORKING_DIRECTORY ${${infofile_SOURCE_DIR}})
-
+	
 add_executable(infofile-cmdline ${SRC} cmdline.cpp ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS})
+add_custom_command(TARGET infofile-cmdline POST_BUILD
+	COMMAND infofile-cmdline ${infofile_SOURCE_DIR}/examples/basic.c
+	WORKING_DIRECTORY ${${infofile_SOURCE_DIR}})
