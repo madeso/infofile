@@ -721,7 +721,9 @@ namespace test
 		EXPECT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->children.size());
 
-		EXPECT_EQ("hello\0world", val->children[0]->value());
+		EXPECT_EQ(11, val->children[0]->value().size());
+		EXPECT_TRUE(0==memcmp("hello\0world", val->children[0]->value().data(), 11));
+		EXPECT_EQ(std::string("hello\0world", 11), val->children[0]->value());
 
 		delete val;
 
