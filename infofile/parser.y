@@ -182,6 +182,7 @@ array_children_list
 
 children
 	: STRUCT_BEGIN struct_list STRUCT_END { $$ = $2; }
+	| STRUCT_BEGIN STRUCT_END { $$ = new infofile::Value(); }
 	| ARRAY_BEGIN array_value_list ARRAY_END  { $$ = $2; }
 	| ARRAY_BEGIN array_children_list ARRAY_END  { $$ = $2; }
 	;
