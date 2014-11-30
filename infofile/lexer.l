@@ -118,8 +118,15 @@ number [0-9]
 	return IDENT;
 }
 
-	/* css color */
+	/* css color long */
 #[0-9a-fA-F]{6} {
+	yylval->ident_value = new std::string(yytext);
+	AdvanceCharacter(yyextra, strlen(yytext));
+	return IDENT;
+}
+
+	/* css color short */
+#[0-9a-fA-F]{3} {
 	yylval->ident_value = new std::string(yytext);
 	AdvanceCharacter(yyextra, strlen(yytext));
 	return IDENT;
