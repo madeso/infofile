@@ -112,7 +112,7 @@ number [0-9]
 \/\/[^\n]* {}
 
 	/* standard ident */
-[a-zA-Z][a-zA-Z0-9.@]* {
+[a-zA-Z_][a-zA-Z0-9.@_]* {
 	yylval->ident_value = new std::string(yytext);
 	AdvanceCharacter(yyextra, strlen(yytext));
 	return IDENT;
