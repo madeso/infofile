@@ -53,12 +53,12 @@ The parser is built using flex/bison and a good windows build is found at http:/
 Todo:
 =======
 
-pretty printing
-writing to file
-example files
-BNF documentation
-verify newline and coloumn/character loading
-replace the std::vector
-util node functions
-unicode \escape support
-tinyxml like handle class
+* pretty printing
+* writing to file
+* example files
+* BNF documentation
+* verify newline and coloumn/character loading
+* replace the std::vector
+* util node functions
+* unicode \escape support
+* tinyxml like handle class
