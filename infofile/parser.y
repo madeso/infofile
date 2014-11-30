@@ -287,6 +287,51 @@ void ReportError(ParserData* data, const std::string& msg) {
 	return expression.result;
 }
 
+::infofile::Value* ::infofile::ReadFile(const String& filename, std::vector<std::string>* errors)
+{
+    ParserData expression;
+	expression.line = 1;
+	ResetCharacter(&expression);
+	expression.file = filename;
+	expression.multiline_comment = 0;
+    yyscan_t scanner;
+	expression.scanner = &scanner;
+    // YY_BUFFER_STATE state;
+ 
+    if (yylex_init(&scanner)) {
+		errors->push_back("Couldn't initialize parser");
+        return 0;
+    }
+
+	::yyset_extra (&expression, scanner);
+
+	FILE* f = fopen(filename.c_str(), "r");
+	if( !f ) {
+		errors->push_back("Unable to open file.");
+		return 0;
+	}
+ 
+    // YY_FLUSH_BUFFER;
+	// if(yyStringBufferActive) yy_delete_buffer(string_buffer);
+	yyrestart(f, scanner);
+ 
+    if (yyparse(&expression, scanner)) {
+        *errors = expression.errors;
+		errors->push_back("Error parsing input");
+		fclose(f);
+        return 0;
+    }
+ 
+    // yy_delete_buffer(state, scanner);
+	fclose(f);
+ 
+    yylex_destroy(scanner);
+ 
+	*errors = expression.errors;
+
+	return expression.result;
+}
+
 void AdvanceCharacter(ParserData* data, unsigned int steps)
 {
 	data->ch += data-> pch;

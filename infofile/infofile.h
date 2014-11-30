@@ -75,6 +75,7 @@ private:
 };
 
 Value* Parse(const String& filename, const String& data, std::vector<std::string>* errors);
+Value* ReadFile(const String& filename, std::vector<std::string>* errors);
 
 }
 
