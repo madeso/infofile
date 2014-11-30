@@ -55,7 +55,8 @@ Todo:
 
 * pretty printing
 * writing to file
-* example files
+* python script parsing all example files
+* remove/hide simple memory test
 * BNF documentation
 * verify newline and coloumn/character loading
 * replace the std::vector
