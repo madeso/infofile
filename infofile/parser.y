@@ -185,6 +185,7 @@ children
 	| STRUCT_BEGIN STRUCT_END { $$ = new infofile::Value(); }
 	| ARRAY_BEGIN array_value_list ARRAY_END  { $$ = $2; }
 	| ARRAY_BEGIN array_children_list ARRAY_END  { $$ = $2; }
+	| ARRAY_BEGIN ARRAY_END { $$ = new infofile::Value(); }
 	;
 
 optional_assign
