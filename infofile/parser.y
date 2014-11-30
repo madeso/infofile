@@ -246,7 +246,7 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error) {
 
 void ReportError(ParserData* data, const std::string& msg) {
 	std::stringstream ss;
-	ss << data->file << "(" << data->line << ":" << data->ch << "): " << msg << "\n";
+	ss << data->file << "(" << data->line << ":" << data->ch << "): " << msg;
 	data->errors.push_back(ss.str());
 }
 
