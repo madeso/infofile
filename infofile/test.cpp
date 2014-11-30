@@ -731,6 +731,26 @@ namespace test
 		EXPECT_EQ(0, Value::ActiveCount());
 	}
 
+	GTEST(test_empty_struct)
+	{
+		std::vector<std::string> errors;
+		std::string src = "dog {}";
+		infofile::Value* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		EXPECT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->children.size());
+
+		EXPECT_EQ("dog", val->children[0]->name());
+		EXPECT_EQ("", val->children[0]->value());
+		EXPECT_EQ(0, val->children[0]->children->children.size());
+
+		delete val;
+
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+	}
+
 	/*
 	// todo: implement unicode escape characters
 	// taken from here https://github.com/dropbox/json11/blob/master/test.cpp
