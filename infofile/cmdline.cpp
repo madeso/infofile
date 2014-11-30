@@ -5,7 +5,7 @@ int main(int argc, char **argv)
 {
 	if (argc < 2)
 	{
-		std::cout << "Missing argument\n";
+		std::cerr << "Missing argument\n";
 		return 1;
 	}
 
