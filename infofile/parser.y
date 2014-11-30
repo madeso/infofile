@@ -307,7 +307,7 @@ void ReportError(ParserData* data, const std::string& msg) {
 
 	FILE* f = fopen(filename.c_str(), "r");
 	if( !f ) {
-		errors->push_back("Unable to open file.");
+		errors->push_back("Unable to open file " + filename);
 		return 0;
 	}
  
