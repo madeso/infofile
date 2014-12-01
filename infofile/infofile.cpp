@@ -29,7 +29,7 @@ void Value::Clear() {
 	children.clear();
 }
 
-#ifdef _DEBUG
+#if INFOFILE_USE_BASIC_MEMCHECK
 int Value::ActiveCount() {
 	return active_value;
 }
@@ -89,7 +89,7 @@ void Node::Clear() {
 	set_value("");
 }
 
-#ifdef _DEBUG
+#if INFOFILE_USE_BASIC_MEMCHECK
 int Node::ActiveCount() {
 	return active_node;
 }

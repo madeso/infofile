@@ -23,8 +23,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(testparsing_opass)
@@ -41,8 +43,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(testparsing_osep)
@@ -59,8 +63,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(testparsing_twokeys)
@@ -80,8 +86,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(testparsing_array)
@@ -101,8 +109,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(testparsing_subkey)
@@ -128,8 +138,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_basic_string)
@@ -146,8 +158,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_advanced_string)
@@ -164,8 +178,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_basic_string_single)
@@ -182,8 +198,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_verbatim_string)
@@ -200,8 +218,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_verbatim_string_tricky)
@@ -218,8 +238,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_verbatim_double_quotes)
@@ -237,8 +259,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	//
@@ -257,8 +281,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_verbatim_char_tricky)
@@ -275,8 +301,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_verbatim_char_double_quotes)
@@ -294,8 +322,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_multiline_string_basic)
@@ -313,8 +343,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_multiline_string_newlines)
@@ -332,8 +364,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_newline_in_string_error)
@@ -348,8 +382,10 @@ namespace test
 		
 		if(val) delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 	GTEST(test_newline_in_char_error)
 	{
@@ -363,8 +399,10 @@ namespace test
 
 		if (val) delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_newline_in_verbatim_string_error)
@@ -379,8 +417,10 @@ namespace test
 
 		if (val) delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 	GTEST(test_newline_in_verbatim_char_error)
 	{
@@ -394,8 +434,10 @@ namespace test
 
 		if (val) delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_here_doc)
@@ -416,8 +458,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 	GTEST(test_heredoc_error_eof)
 	{
@@ -432,8 +476,10 @@ namespace test
 
 		if (val) delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 	GTEST(test_heredoc_error_noname)
 	{
@@ -448,8 +494,10 @@ namespace test
 
 		if (val) delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_singleline_comment)
@@ -467,8 +515,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_multiline_comment_simple)
@@ -486,8 +536,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_multiline_comment_complex)
@@ -505,8 +557,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_combine)
@@ -524,8 +578,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_root_struct)
@@ -543,8 +599,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_unicode_characters)
@@ -562,8 +620,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_number_basic)
@@ -579,8 +639,10 @@ namespace test
 		EXPECT_EQ("12", val->children[0]->value());
 
 		delete val;
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_number_double)
@@ -596,8 +658,10 @@ namespace test
 		EXPECT_EQ("25.6", val->children[0]->value());
 
 		delete val;
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	/*
@@ -616,8 +680,10 @@ namespace test
 		EXPECT_EQ(".42", val->children[0]->value());
 
 		delete val;
+		#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+		#endif
 	}
 	*/
 
@@ -634,8 +700,10 @@ namespace test
 		EXPECT_EQ("35f", val->children[0]->value());
 
 		delete val;
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_float_with_decimalpoint)
@@ -651,8 +719,10 @@ namespace test
 		EXPECT_EQ("12.3f", val->children[0]->value());
 
 		delete val;
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_advanced_ident)
@@ -670,8 +740,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_css_color)
@@ -689,8 +761,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_underscore)
@@ -707,8 +781,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_zero_escape)
@@ -727,8 +803,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_empty_struct)
@@ -747,8 +825,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	GTEST(test_empty_array)
@@ -767,8 +847,10 @@ namespace test
 
 		delete val;
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
 		EXPECT_EQ(0, Value::ActiveCount());
+#endif
 	}
 
 	/*
@@ -787,8 +869,10 @@ namespace test
 		EXPECT_TRUE(uni != NULL);
 		ASSERT_EQ(1, uni->children.size());
 
-		EXPECT_TRUE(uni->children[0]->value().size() == (sizeof utf8) - 1);
-		EXPECT_TRUE(memcmp(uni->children[0]->value().data(), utf8, sizeof utf8) == 0);
+		#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+		EXPECT_EQ(0, Value::ActiveCount());
+		#endif
 	}
 	*/
 }

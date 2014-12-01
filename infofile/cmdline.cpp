@@ -15,9 +15,11 @@ int main(int argc, char **argv)
 	for (std::vector<std::string>::iterator i = errors.begin(); i != errors.end(); ++i) {
 		std::cerr << *i << "\n";
 	}
-
+	
+#if INFOFILE_USE_BASIC_MEMCHECK
 	std::cout << "Parsing complete: " <<
 		infofile::Node::ActiveCount() << "/" << infofile::Value::ActiveCount();
+#endif
 
 	return 0;
 }

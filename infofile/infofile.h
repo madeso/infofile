@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "configuration.h"
+
 namespace infofile {
 
 // forward declarations
@@ -30,7 +32,7 @@ public:
 
     List children;
 
-#ifdef _DEBUG
+#if INFOFILE_USE_BASIC_MEMCHECK
 	static int ActiveCount();
 #endif
 
@@ -57,7 +59,7 @@ public:
 
     void Clear();
 
-#ifdef _DEBUG
+#if INFOFILE_USE_BASIC_MEMCHECK
 	static int ActiveCount();
 #endif
 
