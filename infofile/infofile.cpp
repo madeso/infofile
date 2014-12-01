@@ -23,11 +23,9 @@ Value::~Value() {
 void Value::Clear() {
     assert(this);
 
-#if !INFOFILE_USE_SHARED_PTR
     for(List::iterator i=children.begin(); i!=children.end(); ++i) {
         delete *i;
     }
-#endif
 	children.clear();
 }
 

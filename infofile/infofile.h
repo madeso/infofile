@@ -4,21 +4,13 @@
 #include <string>
 #include <vector>
 
-#if INFOFILE_USE_SHARED_PTR
-#include <memory>
-#endif
-
 namespace infofile {
 
 // forward declarations
 class Value;
 class Node;
 
-#if INFOFILE_USE_SHARED_PTR
-typedef std::shared_ptr<Node> NodePtr;
-#else
 typedef Node* NodePtr;
-#endif
 
 // how should strings be handled?
 typedef std::string String;
