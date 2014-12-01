@@ -10,15 +10,14 @@ int main(int argc, char **argv)
 	}
 
 	std::vector<std::string> errors;
-	infofile::Value* val = infofile::ReadFile(argv[1], &errors);
+	infofile::Node* val = infofile::ReadFile(argv[1], &errors);
 	if (val != 0) delete val;
 	for (std::vector<std::string>::iterator i = errors.begin(); i != errors.end(); ++i) {
 		std::cerr << *i << "\n";
 	}
 	
 #if INFOFILE_USE_BASIC_MEMCHECK
-	std::cout << "Parsing complete: " <<
-		infofile::Node::ActiveCount() << "/" << infofile::Value::ActiveCount();
+	std::cout << "Parsing complete: " << infofile::Node::ActiveCount();
 #endif
 
 	return 0;
