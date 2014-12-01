@@ -4,51 +4,26 @@
 
 namespace infofile {
 
+#if INFOFILE_USE_BASIC_MEMCHECK
 namespace {
 	int active_node = 0;
-	int active_value = 0;
-}
-
-Value::Value() {
-    assert(this);
-	++active_value;
-}
-
-Value::~Value() {
-    assert(this);
-    Clear();
-	--active_value;
-}
-
-void Value::Clear() {
-    assert(this);
-
-    for(List::iterator i=children.begin(); i!=children.end(); ++i) {
-        delete *i;
-    }
-	children.clear();
-}
-
-#if INFOFILE_USE_BASIC_MEMCHECK
-int Value::ActiveCount() {
-	return active_value;
 }
 #endif
 
 ////////////////////////////////////////////////////////
 
-Node::Node(){
+Node::Node() : children(NULL), next(NULL) {
     assert(this);
 	++active_node;
 }
 
-Node::Node(const String& name) : name_(name), value_(""), children(0) {
+Node::Node(const String& name) : name_(name), value_(""), children(NULL), next(NULL) {
 	assert(this);
 	++active_node;
 }
 
 Node::Node(const String& name, const String& value) : name_(name)
-		, value_(value), children(0) {
+		, value_(value), children(NULL), next(NULL) {
     assert(this);
 	++active_node;
 }
@@ -78,6 +53,45 @@ const String& Node::value() const{
 void Node::set_value(const String& value) {
 	assert(this);
 	value_ = value;
+}
+
+Node* Node::GetFirstChild() {
+	assert(this);
+	if (children == NULL) return NULL;
+	return children;
+}
+
+void Node::AddChild(Node* child) {
+	assert(this);
+	assert(child);
+	if (children == NULL) children = child;
+	else children->SetEndChild(child);
+}
+
+void Node::SetEndChild(Node* child) {
+	assert(this);
+	assert(child);
+	Node* self = this;
+	Node* n = self->next;
+	while (true) {
+		if (n == NULL) {
+			self->next = child;
+			return;
+		}
+		self = n;
+		n = self->next;
+	}
+}
+
+unsigned int Node::GetChildCount() {
+	unsigned int count = 0;
+	Node* n = next;
+	while (n) {
+		++count;
+		n = n->next;
+	}
+
+	return count;
 }
 
 void Node::Clear() {

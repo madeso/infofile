@@ -59,6 +59,5 @@ Todo:
 * BNF documentation
 * verify newline and coloumn/character loading
 * replace the std::vector
-* util node functions
 * unicode \escape support
 * tinyxml like handle class
