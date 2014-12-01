@@ -16,7 +16,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("key", val->name());
 		EXPECT_EQ("value", val->value());
@@ -36,7 +36,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("key", val->name());
 		EXPECT_EQ("value", val->value());
@@ -56,7 +56,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("key", val->name());
 		EXPECT_EQ("value", val->value());
@@ -76,7 +76,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(2, val->GetChildCount());
+		ASSERT_EQ(2, val->GetSibblingCount());
 
 		EXPECT_EQ("key", val->name());
 		EXPECT_EQ("value", val->value());
@@ -101,7 +101,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(2, val->GetChildCount());
+		ASSERT_EQ(2, val->GetSibblingCount());
 
 		EXPECT_EQ("", val->name());
 		EXPECT_EQ("value", val->value());
@@ -125,7 +125,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_TRUE(val != NULL);
 		Node* n = val;
@@ -134,7 +134,7 @@ namespace test
 		EXPECT_EQ("", n->value());
 		EXPECT_TRUE(n->children != NULL);
 		infofile::Node* v = n->children;
-		ASSERT_EQ(1, v->GetChildCount());
+		ASSERT_EQ(1, v->GetSibblingCount());
 
 		EXPECT_EQ("key", v->name());
 		EXPECT_EQ("value", v->value());
@@ -154,7 +154,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("'key'", val->name());
 		EXPECT_EQ("value", val->value());
@@ -174,7 +174,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("key\n\t", val->name());
 		EXPECT_EQ("value\"", val->value());
@@ -194,7 +194,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("\"key\"", val->name());
 		EXPECT_EQ("value is nice", val->value());
@@ -214,7 +214,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("path", val->name());
 		EXPECT_EQ("c:\\Docs\\Source\\a.txt", val->value());
@@ -234,7 +234,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("path", val->name());
 		EXPECT_EQ("c:\\Docs\\Source\\", val->value());
@@ -255,7 +255,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
 		EXPECT_EQ("\"Ahoy!\" cried the captain.", val->value());
@@ -277,7 +277,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("path", val->name());
 		EXPECT_EQ("c:\\Docs\\Source\\a.txt", val->value());
@@ -297,7 +297,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("path", val->name());
 		EXPECT_EQ("c:\\Docs\\Source\\", val->value());
@@ -318,7 +318,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
 		EXPECT_EQ("'Ahoy!' cried the captain.", val->value());
@@ -339,7 +339,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
 		EXPECT_EQ("this is a long string", val->value());
@@ -360,7 +360,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
 		EXPECT_EQ("this\nis\na\nlong\nstring\tright?", val->value());
@@ -454,7 +454,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
 		EXPECT_EQ("Hello world EOF\ncat", val->value());
@@ -511,7 +511,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
 		EXPECT_EQ("dog", val->value());
@@ -532,7 +532,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
 		EXPECT_EQ("dog", val->value());
@@ -553,7 +553,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
 		EXPECT_EQ("dog", val->value());
@@ -574,7 +574,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
 		EXPECT_EQ("dog", val->value());
@@ -595,7 +595,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
 		EXPECT_EQ("dog", val->value());
@@ -616,7 +616,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("ナ", val->name());
 		EXPECT_EQ("ㄅ", val->value());
@@ -637,7 +637,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("12", val->value());
 
@@ -656,7 +656,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("25.6", val->value());
 
@@ -698,7 +698,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("35f", val->value());
 
@@ -717,7 +717,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("12.3f", val->value());
 
@@ -736,7 +736,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("jesus.opponent", val->name());
 		EXPECT_EQ("the.dude@gmail.com", val->value());
@@ -757,7 +757,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("#000", val->name());
 		EXPECT_EQ("#12ffAA", val->value());
@@ -778,7 +778,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("hello_world", val->value());
 
@@ -798,7 +798,7 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ(11, val->value().size());
 		EXPECT_TRUE(0==memcmp("hello\0world", val->value().data(), 11));
@@ -820,11 +820,11 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("dog", val->name());
 		EXPECT_EQ("", val->value());
-		EXPECT_EQ(0, val->children->GetChildCount());
+		EXPECT_EQ(0, val->children->GetSibblingCount());
 
 		delete val;
 
@@ -842,11 +842,11 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetChildCount());
+		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("dog", val->name());
 		EXPECT_EQ("", val->value());
-		EXPECT_EQ(0, val->children->GetChildCount());
+		EXPECT_EQ(0, val->children->GetSibblingCount());
 
 		delete val;
 

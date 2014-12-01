@@ -83,7 +83,7 @@ void Node::SetEndChild(Node* child) {
 	}
 }
 
-unsigned int Node::GetChildCount() {
+unsigned int Node::GetSibblingCount() {
 	unsigned int count = 0;
 	Node* n = next;
 	while (n) {

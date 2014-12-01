@@ -32,7 +32,7 @@ public:
 	Node* GetFirstChild();
 	void AddChild(Node* child);
 	void SetEndChild(Node* child);
-	unsigned int GetChildCount();
+	unsigned int GetSibblingCount();
 
     void Clear();
 
