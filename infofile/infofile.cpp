@@ -33,8 +33,7 @@ namespace infofile {
 	Node::~Node(){
 		assert(this);
 		--active_node;
-		if (children) delete children;
-		children = 0;
+		Clear();
 	}
 
 	const String& Node::name() const{
