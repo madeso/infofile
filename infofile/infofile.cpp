@@ -84,7 +84,7 @@ void Node::SetEndChild(Node* child) {
 }
 
 unsigned int Node::GetSibblingCount() {
-	unsigned int count = 0;
+	unsigned int count = 1; // start at 1 sincew we include this in the calculation
 	Node* n = next;
 	while (n) {
 		++count;
