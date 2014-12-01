@@ -26,7 +26,7 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 		#define PARSER_DATA_DEFINED
 		struct ParserData {
 			yyscan_t* scanner;
-			::infofile::Value* result;
+			::infofile::Node* result;
 			std::string file;
 			unsigned int line;
 			unsigned int ch;
@@ -46,7 +46,7 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 %union {
     ::std::string* ident_value;
     ::infofile::Node* node;
-	::infofile::Value* value;
+	::infofile::Node* value;
 }
 
 %output  "parser.cpp"
@@ -108,20 +108,12 @@ idents
 struct_list
 	: pair
 	{
-		if( $1 ) {
-			$$ = new infofile::Value();
-			::infofile::NodePtr n($1);
-			$$->children.push_back(n);
-		}
-		else {
-			$$ = NULL;
-		}
+		$$ = $1;
 	}
 	| struct_list pair
 	{
 		if( $1 && $2 ) {
-			::infofile::NodePtr n($2);
-			$1->children.push_back(n);
+			$1->SetEndChild($2);
 		}
 		else {
 			if( $2 ) delete $2;
@@ -134,9 +126,7 @@ array_value_list
 	: idents
 	{
 		if( $1 ) {
-			$$ = new infofile::Value();
-			::infofile::NodePtr n(new ::infofile::Node("", *$1 ));
-			$$->children.push_back(n);
+			$$ = new ::infofile::Node("", *$1 );
 			delete $1;
 		}
 		else {
@@ -146,8 +136,7 @@ array_value_list
 	| array_value_list idents
 	{
 		if( $1 && $2 ) {
-			::infofile::NodePtr n(new ::infofile::Node("", *$2 ));
-			$1->children.push_back( n );
+			$1->SetEndChild(new ::infofile::Node("", *$2 ));
 		}
 		if( $2 ) {
 			delete $2;
@@ -159,22 +148,12 @@ array_value_list
 array_children_list
 	: children
 	{
-		if( $1 ) {
-			::infofile::NodePtr n(new ::infofile::Node("", ""));
-			n->children= $1;
-			$$ = new infofile::Value();
-			$$->children.push_back( n );
-		}
-		else {
-			$$ = NULL;
-		}
+		$$ = $1;
 	}
 	| array_children_list children
 	{
 		if( $1 && $2 ) {
-			::infofile::NodePtr n(new ::infofile::Node("", ""));
-			n->children = $2;
-			$1->children.push_back( n );
+			$1->SetEndChild($2);
 		}
 		$$ = $1;
 	}
@@ -182,10 +161,10 @@ array_children_list
 
 children
 	: STRUCT_BEGIN struct_list STRUCT_END { $$ = $2; }
-	| STRUCT_BEGIN STRUCT_END { $$ = new infofile::Value(); }
+	| STRUCT_BEGIN STRUCT_END { $$ = new infofile::Node(); }
 	| ARRAY_BEGIN array_value_list ARRAY_END  { $$ = $2; }
 	| ARRAY_BEGIN array_children_list ARRAY_END  { $$ = $2; }
-	| ARRAY_BEGIN ARRAY_END { $$ = new infofile::Value(); }
+	| ARRAY_BEGIN ARRAY_END { $$ = new infofile::Node(); }
 	;
 
 optional_assign
@@ -252,9 +231,8 @@ void ReportError(ParserData* data, const std::string& msg) {
 	data->errors.push_back(ss.str());
 }
 
-// int yyparse(infofile::Value** expression, yyscan_t scanner);
  
-::infofile::Value* ::infofile::Parse(const String& filename, const String& data, std::vector<std::string>* errors)
+::infofile::Node* ::infofile::Parse(const String& filename, const String& data, std::vector<std::string>* errors)
 {
     ParserData expression;
 	expression.line = 1;
@@ -289,7 +267,7 @@ void ReportError(ParserData* data, const std::string& msg) {
 	return expression.result;
 }
 
-::infofile::Value* ::infofile::ReadFile(const String& filename, std::vector<std::string>* errors)
+::infofile::Node* ::infofile::ReadFile(const String& filename, std::vector<std::string>* errors)
 {
     ParserData expression;
 	expression.line = 1;
