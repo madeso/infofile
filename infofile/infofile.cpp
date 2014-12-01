@@ -97,8 +97,15 @@ unsigned int Node::GetSibblingCount() {
 void Node::Clear() {
     assert(this);
 	if (children) {
-		children->Clear();
+		delete children;
+		children = NULL;
 	}
+	while (next) {
+		Node* t = next->next;;
+		delete next;
+		next = t;
+	}
+	next = NULL;
     set_name("");
 	set_value("");
 }
