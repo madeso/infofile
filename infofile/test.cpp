@@ -12,235 +12,238 @@ namespace test
 	GTEST(testparsing)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "{key=value;}", &errors);
+		infofile::Node* val = infofile::Parse("inline", "{key=value;}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("key", val->children[0]->name());
-		EXPECT_EQ("value", val->children[0]->value());
+		EXPECT_EQ("key", val->name());
+		EXPECT_EQ("value", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
 	GTEST(testparsing_opass)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "{key value;}", &errors);
+		infofile::Node* val = infofile::Parse("inline", "{key value;}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("key", val->children[0]->name());
-		EXPECT_EQ("value", val->children[0]->value());
+		EXPECT_EQ("key", val->name());
+		EXPECT_EQ("value", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
 	GTEST(testparsing_osep)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "{key value}", &errors);
+		infofile::Node* val = infofile::Parse("inline", "{key value}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("key", val->children[0]->name());
-		EXPECT_EQ("value", val->children[0]->value());
+		EXPECT_EQ("key", val->name());
+		EXPECT_EQ("value", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
 	GTEST(testparsing_twokeys)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "{key value k v}", &errors);
+		infofile::Node* val = infofile::Parse("inline", "{key value k v}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(2, val->children.size());
+		ASSERT_EQ(2, val->GetChildCount());
 
-		EXPECT_EQ("key", val->children[0]->name());
-		EXPECT_EQ("value", val->children[0]->value());
+		EXPECT_EQ("key", val->name());
+		EXPECT_EQ("value", val->value());
 
-		EXPECT_EQ("k", val->children[1]->name());
-		EXPECT_EQ("v", val->children[1]->value());
+		EXPECT_TRUE(val->next != NULL);
+
+		EXPECT_EQ("k", val->next->name());
+		EXPECT_EQ("v", val->next->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
 	GTEST(testparsing_array)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "[value v]", &errors);
+		infofile::Node* val = infofile::Parse("inline", "[value v]", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(2, val->children.size());
+		ASSERT_EQ(2, val->GetChildCount());
 
-		EXPECT_EQ("", val->children[0]->name());
-		EXPECT_EQ("value", val->children[0]->value());
+		EXPECT_EQ("", val->name());
+		EXPECT_EQ("value", val->value());
 
-		EXPECT_EQ("", val->children[1]->name());
-		EXPECT_EQ("v", val->children[1]->value());
+		EXPECT_TRUE(val->next != NULL);
+		EXPECT_EQ("", val->next->name());
+		EXPECT_EQ("v", val->next->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
 	GTEST(testparsing_subkey)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "[{key value}]", &errors);
+		infofile::Node* val = infofile::Parse("inline", "[{key value}]", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_TRUE(val->children[0] != NULL);
-		Node* n = val->children[0];
+		EXPECT_TRUE(val != NULL);
+		Node* n = val;
 
 		EXPECT_EQ("", n->name());
 		EXPECT_EQ("", n->value());
 		EXPECT_TRUE(n->children != NULL);
-		Value* v = n->children;
-		ASSERT_EQ(1, v->children.size());
+		infofile::Node* v = n->children;
+		ASSERT_EQ(1, v->GetChildCount());
 
-		EXPECT_EQ("key", v->children[0]->name());
-		EXPECT_EQ("value", v->children[0]->value());
+		EXPECT_EQ("key", v->name());
+		EXPECT_EQ("value", v->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
 	GTEST(test_basic_string)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "{\"'key'\"=\"value\";}", &errors);
+		infofile::Node* val = infofile::Parse("inline", "{\"'key'\"=\"value\";}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("'key'", val->children[0]->name());
-		EXPECT_EQ("value", val->children[0]->value());
+		EXPECT_EQ("'key'", val->name());
+		EXPECT_EQ("value", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
 	GTEST(test_advanced_string)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "{\"key\\n\\t\"=\"value\\\"\";}", &errors);
+		infofile::Node* val = infofile::Parse("inline", "{\"key\\n\\t\"=\"value\\\"\";}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("key\n\t", val->children[0]->name());
-		EXPECT_EQ("value\"", val->children[0]->value());
+		EXPECT_EQ("key\n\t", val->name());
+		EXPECT_EQ("value\"", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
 	GTEST(test_basic_string_single)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "{'\"key\"'='value is nice';}", &errors);
+		infofile::Node* val = infofile::Parse("inline", "{'\"key\"'='value is nice';}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("\"key\"", val->children[0]->name());
-		EXPECT_EQ("value is nice", val->children[0]->value());
+		EXPECT_EQ("\"key\"", val->name());
+		EXPECT_EQ("value is nice", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
 	GTEST(test_verbatim_string)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\a.txt\";}", &errors);
+		infofile::Node* val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\a.txt\";}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("path", val->children[0]->name());
-		EXPECT_EQ("c:\\Docs\\Source\\a.txt", val->children[0]->value());
+		EXPECT_EQ("path", val->name());
+		EXPECT_EQ("c:\\Docs\\Source\\a.txt", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
 	GTEST(test_verbatim_string_tricky)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\\";}", &errors);
+		infofile::Node* val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\\";}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("path", val->children[0]->name());
-		EXPECT_EQ("c:\\Docs\\Source\\", val->children[0]->value());
+		EXPECT_EQ("path", val->name());
+		EXPECT_EQ("c:\\Docs\\Source\\", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -248,20 +251,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "{line @\"\"\"Ahoy!\"\" cried the captain.\";}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("line", val->children[0]->name());
-		EXPECT_EQ("\"Ahoy!\" cried the captain.", val->children[0]->value());
+		EXPECT_EQ("line", val->name());
+		EXPECT_EQ("\"Ahoy!\" cried the captain.", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -270,40 +273,40 @@ namespace test
 	GTEST(test_verbatim_char)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\a.txt';}", &errors);
+		infofile::Node* val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\a.txt';}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("path", val->children[0]->name());
-		EXPECT_EQ("c:\\Docs\\Source\\a.txt", val->children[0]->value());
+		EXPECT_EQ("path", val->name());
+		EXPECT_EQ("c:\\Docs\\Source\\a.txt", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
 	GTEST(test_verbatim_char_tricky)
 	{
 		std::vector<std::string> errors;
-		infofile::Value* val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\\';}", &errors);
+		infofile::Node* val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\\';}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("path", val->children[0]->name());
-		EXPECT_EQ("c:\\Docs\\Source\\", val->children[0]->value());
+		EXPECT_EQ("path", val->name());
+		EXPECT_EQ("c:\\Docs\\Source\\", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -311,20 +314,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "{line @'''Ahoy!'' cried the captain.';}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("line", val->children[0]->name());
-		EXPECT_EQ("'Ahoy!' cried the captain.", val->children[0]->value());
+		EXPECT_EQ("line", val->name());
+		EXPECT_EQ("'Ahoy!' cried the captain.", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -332,20 +335,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "{line \"\"\"this is a long string\"\"\"}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("line", val->children[0]->name());
-		EXPECT_EQ("this is a long string", val->children[0]->value());
+		EXPECT_EQ("line", val->name());
+		EXPECT_EQ("this is a long string", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -353,20 +356,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "{line \"\"\"this\nis\na\nlong\nstring\tright?\"\"\"}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("line", val->children[0]->name());
-		EXPECT_EQ("this\nis\na\nlong\nstring\tright?", val->children[0]->value());
+		EXPECT_EQ("line", val->name());
+		EXPECT_EQ("this\nis\na\nlong\nstring\tright?", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -374,7 +377,7 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "{line \"hello\nworld\"}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		const unsigned int ZERO = 0;
 		EXPECT_GT(errors.size(), ZERO);
@@ -384,14 +387,14 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 	GTEST(test_newline_in_char_error)
 	{
 		std::vector<std::string> errors;
 		std::string src = "{line 'hello\nworld'}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		const unsigned int ZERO = 0;
 		EXPECT_GT(errors.size(), ZERO);
@@ -401,7 +404,7 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -409,7 +412,7 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "{line @\"hello\nworld\"}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		const unsigned int ZERO = 0;
 		EXPECT_GT(errors.size(), ZERO);
@@ -419,14 +422,14 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 	GTEST(test_newline_in_verbatim_char_error)
 	{
 		std::vector<std::string> errors;
 		std::string src = "{line @'hello\nworld'}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		const unsigned int ZERO = 0;
 		EXPECT_GT(errors.size(), ZERO);
@@ -436,7 +439,7 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -447,20 +450,20 @@ namespace test
 		// we need the extra newline or the source will not parse and complain
 		// about a EOF error
 		std::string src = "{line <<EOF dog\nHello world EOF\ncat\nEOF dog=cat\n}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("line", val->children[0]->name());
-		EXPECT_EQ("Hello world EOF\ncat", val->children[0]->value());
+		EXPECT_EQ("line", val->name());
+		EXPECT_EQ("Hello world EOF\ncat", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 	GTEST(test_heredoc_error_eof)
@@ -468,7 +471,7 @@ namespace test
 		std::vector<std::string> errors;
 
 		std::string src = "{line <<EOF dog\nHello world EOF\ncat\nEOF dog=cat}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		const unsigned int ZERO = 0;
 		EXPECT_GT(errors.size(), ZERO);
@@ -478,7 +481,7 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 	GTEST(test_heredoc_error_noname)
@@ -486,7 +489,7 @@ namespace test
 		std::vector<std::string> errors;
 
 		std::string src = "{line <<EOF\ndog\nHello world EOF\ncat\nEOF dog=cat}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		const unsigned int ZERO = 0;
 		EXPECT_GT(errors.size(), ZERO);
@@ -496,7 +499,7 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -504,20 +507,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "{// this is a comment\nline dog}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("line", val->children[0]->name());
-		EXPECT_EQ("dog", val->children[0]->value());
+		EXPECT_EQ("line", val->name());
+		EXPECT_EQ("dog", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -525,20 +528,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "{line /*hello\nworld*/ dog}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("line", val->children[0]->name());
-		EXPECT_EQ("dog", val->children[0]->value());
+		EXPECT_EQ("line", val->name());
+		EXPECT_EQ("dog", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -546,20 +549,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "{line /***\nhello/* cat dog */\nworld ***/ dog}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("line", val->children[0]->name());
-		EXPECT_EQ("dog", val->children[0]->value());
+		EXPECT_EQ("line", val->name());
+		EXPECT_EQ("dog", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -567,20 +570,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "{li + ne do \\ g}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("line", val->children[0]->name());
-		EXPECT_EQ("dog", val->children[0]->value());
+		EXPECT_EQ("line", val->name());
+		EXPECT_EQ("dog", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -588,20 +591,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "line dog";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("line", val->children[0]->name());
-		EXPECT_EQ("dog", val->children[0]->value());
+		EXPECT_EQ("line", val->name());
+		EXPECT_EQ("dog", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -609,20 +612,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "'ナ' 'ㄅ'";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("ナ", val->children[0]->name());
-		EXPECT_EQ("ㄅ", val->children[0]->value());
+		EXPECT_EQ("ナ", val->name());
+		EXPECT_EQ("ㄅ", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -630,18 +633,18 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "[ 12 ]";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("12", val->children[0]->value());
+		EXPECT_EQ("12", val->value());
 
 		delete val;
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -649,18 +652,18 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "[ 25.6 ]";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("25.6", val->children[0]->value());
+		EXPECT_EQ("25.6", val->value());
 
 		delete val;
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -671,18 +674,18 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "[ .42 ]";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ(".42", val->children[0]->value());
+		EXPECT_EQ(".42", val->value());
 
 		delete val;
 		#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 		#endif
 	}
 	*/
@@ -691,18 +694,18 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "[ 35f ]";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("35f", val->children[0]->value());
+		EXPECT_EQ("35f", val->value());
 
 		delete val;
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -710,18 +713,18 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "[ 12.3f ]";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("12.3f", val->children[0]->value());
+		EXPECT_EQ("12.3f", val->value());
 
 		delete val;
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -729,20 +732,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "jesus.opponent the.dude@gmail.com";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("jesus.opponent", val->children[0]->name());
-		EXPECT_EQ("the.dude@gmail.com", val->children[0]->value());
+		EXPECT_EQ("jesus.opponent", val->name());
+		EXPECT_EQ("the.dude@gmail.com", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -750,20 +753,20 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "#000 #12ffAA";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("#000", val->children[0]->name());
-		EXPECT_EQ("#12ffAA", val->children[0]->value());
+		EXPECT_EQ("#000", val->name());
+		EXPECT_EQ("#12ffAA", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -771,19 +774,19 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "[hello_world]";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("hello_world", val->children[0]->value());
+		EXPECT_EQ("hello_world", val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -791,21 +794,21 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "[\"hello\\0world\"]";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ(11, val->children[0]->value().size());
-		EXPECT_TRUE(0==memcmp("hello\0world", val->children[0]->value().data(), 11));
-		EXPECT_EQ(std::string("hello\0world", 11), val->children[0]->value());
+		EXPECT_EQ(11, val->value().size());
+		EXPECT_TRUE(0==memcmp("hello\0world", val->value().data(), 11));
+		EXPECT_EQ(std::string("hello\0world", 11), val->value());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -813,21 +816,21 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "dog {}";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("dog", val->children[0]->name());
-		EXPECT_EQ("", val->children[0]->value());
-		EXPECT_EQ(0, val->children[0]->children->children.size());
+		EXPECT_EQ("dog", val->name());
+		EXPECT_EQ("", val->value());
+		EXPECT_EQ(0, val->children->GetChildCount());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -835,21 +838,21 @@ namespace test
 	{
 		std::vector<std::string> errors;
 		std::string src = "dog []";
-		infofile::Value* val = infofile::Parse("inline", src, &errors);
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->children.size());
+		ASSERT_EQ(1, val->GetChildCount());
 
-		EXPECT_EQ("dog", val->children[0]->name());
-		EXPECT_EQ("", val->children[0]->value());
-		EXPECT_EQ(0, val->children[0]->children->children.size());
+		EXPECT_EQ("dog", val->name());
+		EXPECT_EQ("", val->value());
+		EXPECT_EQ(0, val->children->GetChildCount());
 
 		delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 #endif
 	}
 
@@ -863,15 +866,15 @@ namespace test
 		const char utf8[] = "blah" "\xf0\x9f\x92\xa9" "blah" "\xed\xa0\xbd" "blah"
 			"\xed\xb2\xa9" "blah" "\0" "blah" "\xe1\x88\xb4";
 		std::vector<std::string> errors;
-		infofile::Value* uni = infofile::Parse("inline", src, &errors);
+		infofile::Node* uni = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		EXPECT_TRUE(uni != NULL);
-		ASSERT_EQ(1, uni->children.size());
+		ASSERT_EQ(1, uni->GetChildCount());
 
 		#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		EXPECT_EQ(0, Value::ActiveCount());
+		
 		#endif
 	}
 	*/
