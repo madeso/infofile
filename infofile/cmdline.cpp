@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 		std::cerr << *i << "\n";
 	}
 	if (val != 0) {
-		std::cout << "Roots: " << val->GetSibblingCount() << "\n";
+		infofile::PrintToConsole(infofile::PrintOptions(), val);
 		delete val;
 	}
 	

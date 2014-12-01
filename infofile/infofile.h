@@ -45,6 +45,23 @@ private:
 	String value_;
 };
 
+class Printer {
+public:
+	virtual ~Printer();
+	virtual void Print(const String& str) = 0;
+};
+
+class PrintOptions {
+public:
+	PrintOptions();
+	String tab;
+	String newline;
+	String term;
+};
+
+void Print(Printer* printer, const PrintOptions& po, Node* node);
+std::string PrintToString(const PrintOptions& po, Node* node);
+void PrintToConsole(const PrintOptions& po, Node* node);
 Node* Parse(const String& filename, const String& data, std::vector<std::string>* errors);
 Node* ReadFile(const String& filename, std::vector<std::string>* errors);
 
