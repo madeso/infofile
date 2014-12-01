@@ -25,7 +25,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -45,7 +44,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -65,7 +63,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -90,7 +87,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -114,7 +110,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -143,7 +138,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -163,7 +157,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -183,7 +176,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -203,7 +195,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -223,7 +214,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -243,7 +233,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -264,7 +253,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -286,7 +274,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -306,7 +293,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -327,7 +313,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -348,7 +333,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -369,7 +353,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -387,7 +370,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 	GTEST(test_newline_in_char_error)
@@ -404,7 +386,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -422,7 +403,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 	GTEST(test_newline_in_verbatim_char_error)
@@ -439,7 +419,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -463,7 +442,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 	GTEST(test_heredoc_error_eof)
@@ -481,7 +459,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 	GTEST(test_heredoc_error_noname)
@@ -499,7 +476,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -520,7 +496,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -541,7 +516,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -562,7 +536,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -583,7 +556,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -604,7 +576,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -625,7 +596,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -644,7 +614,6 @@ namespace test
 		delete val;
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -663,7 +632,6 @@ namespace test
 		delete val;
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -685,7 +653,6 @@ namespace test
 		delete val;
 		#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 		#endif
 	}
 	*/
@@ -705,7 +672,6 @@ namespace test
 		delete val;
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -724,7 +690,6 @@ namespace test
 		delete val;
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -745,7 +710,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -766,7 +730,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -786,7 +749,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -808,7 +770,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -830,7 +791,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -852,7 +812,6 @@ namespace test
 
 #if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 #endif
 	}
 
@@ -874,7 +833,6 @@ namespace test
 
 		#if INFOFILE_USE_BASIC_MEMCHECK
 		EXPECT_EQ(0, Node::ActiveCount());
-		
 		#endif
 	}
 	*/
