@@ -16,5 +16,8 @@ int main(int argc, char **argv)
 		std::cerr << *i << "\n";
 	}
 
+	std::cout << "Parsing complete: " <<
+		infofile::Node::ActiveCount() << "/" << infofile::Value::ActiveCount();
+
 	return 0;
 }
