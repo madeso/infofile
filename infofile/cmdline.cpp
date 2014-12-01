@@ -14,7 +14,10 @@ int main(int argc, char **argv)
 	for (std::vector<std::string>::iterator i = errors.begin(); i != errors.end(); ++i) {
 		std::cerr << *i << "\n";
 	}
-	if (val != 0) delete val;
+	if (val != 0) {
+		std::cout << "Roots: " << val->GetSibblingCount() << "\n";
+		delete val;
+	}
 	
 #if INFOFILE_USE_BASIC_MEMCHECK
 	std::cout << "Parsing complete: " << infofile::Node::ActiveCount();
