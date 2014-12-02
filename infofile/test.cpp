@@ -15,7 +15,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "{key=value;}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("key", val->name());
@@ -34,7 +34,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "{key value;}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("key", val->name());
@@ -53,7 +53,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "{key value}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("key", val->name());
@@ -72,7 +72,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "{key value k v}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(2, val->GetSibblingCount());
 
 		EXPECT_EQ("key", val->name());
@@ -96,7 +96,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "[value v]", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(2, val->GetSibblingCount());
 
 		EXPECT_EQ("", val->name());
@@ -119,10 +119,10 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "[{key value}]", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		Node* n = val;
 
 		EXPECT_EQ("", n->name());
@@ -147,7 +147,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "{\"'key'\"=\"value\";}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("'key'", val->name());
@@ -166,7 +166,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "{\"key\\n\\t\"=\"value\\\"\";}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("key\n\t", val->name());
@@ -185,7 +185,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "{'\"key\"'='value is nice';}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("\"key\"", val->name());
@@ -204,7 +204,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\a.txt\";}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("path", val->name());
@@ -223,7 +223,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\\";}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("path", val->name());
@@ -243,7 +243,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
@@ -264,7 +264,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\a.txt';}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("path", val->name());
@@ -283,7 +283,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\\';}", &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("path", val->name());
@@ -303,7 +303,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
@@ -323,7 +323,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
@@ -343,7 +343,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
@@ -432,7 +432,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
@@ -486,7 +486,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
@@ -506,7 +506,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
@@ -526,7 +526,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
@@ -546,7 +546,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
@@ -566,7 +566,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("line", val->name());
@@ -586,7 +586,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("ナ", val->name());
@@ -606,7 +606,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("12", val->value());
@@ -624,7 +624,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("25.6", val->value());
@@ -645,7 +645,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetChildCount());
 
 		EXPECT_EQ(".42", val->value());
@@ -664,7 +664,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("35f", val->value());
@@ -682,7 +682,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("12.3f", val->value());
@@ -700,7 +700,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("jesus.opponent", val->name());
@@ -720,7 +720,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("#000", val->name());
@@ -740,7 +740,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("hello_world", val->value());
@@ -759,7 +759,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ(11, val->value().size());
@@ -775,12 +775,14 @@ namespace test
 
 	GTEST(test_empty_struct)
 	{
+		std::cout << "-------------------\n";
 		std::vector<std::string> errors;
 		std::string src = "dog {}";
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
+
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("dog", val->name());
@@ -801,7 +803,7 @@ namespace test
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
-		EXPECT_TRUE(val != NULL);
+		ASSERT_TRUE(val != NULL);
 		ASSERT_EQ(1, val->GetSibblingCount());
 
 		EXPECT_EQ("dog", val->name());
