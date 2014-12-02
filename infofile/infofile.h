@@ -33,6 +33,7 @@ public:
 	void AddChild(Node* child);
 	void SetEndChild(Node* child);
 	unsigned int GetSibblingCount();
+	unsigned int GetChildCount();
 
     void Clear();
 

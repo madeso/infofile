@@ -100,6 +100,11 @@ namespace infofile {
 		return count;
 	}
 
+	unsigned int Node::GetChildCount() {
+		if (children == NULL) return 0;
+		else return children->GetSibblingCount();
+	}
+
 	void Node::Clear() {
 		assert(this);
 		if (children) {
