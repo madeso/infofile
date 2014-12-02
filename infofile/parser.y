@@ -148,8 +148,13 @@ array_value_list
 array_children_list
 	: children
 	{
-		$$ = new ::infofile::Node("", "");
-		$$->AddChild($1);
+		if( $1 ) {
+			$$ = new ::infofile::Node("", "");
+			$$->AddChild($1);
+		}
+		else {
+			$$ = NULL;
+		}
 	}
 	| array_children_list children
 	{
