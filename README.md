@@ -53,11 +53,4 @@ The parser is built using flex/bison and a good windows build is found at http:/
 Todo:
 =======
 
-* pretty printing
-* writing to file
-* python script parsing all example files
-* BNF documentation
-* verify newline and coloumn/character loading
-* replace the std::vector
-* unicode \escape support
-* tinyxml like handle class
+This is a not yet completed library. Please see the [issues](https://github.com/madeso/infofile/issues?q=is%3Aopen+is%3Aissue).
