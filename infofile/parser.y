@@ -169,10 +169,10 @@ array_children_list
 
 children
 	: STRUCT_BEGIN struct_list STRUCT_END { $$ = $2; }
-	| STRUCT_BEGIN STRUCT_END { $$ = new infofile::Node(); }
+	| STRUCT_BEGIN STRUCT_END { $$ = NULL; }
 	| ARRAY_BEGIN array_value_list ARRAY_END  { $$ = $2; }
 	| ARRAY_BEGIN array_children_list ARRAY_END  { $$ = $2; }
-	| ARRAY_BEGIN ARRAY_END { $$ = new infofile::Node(); }
+	| ARRAY_BEGIN ARRAY_END { $$ = NULL; }
 	;
 
 optional_assign
