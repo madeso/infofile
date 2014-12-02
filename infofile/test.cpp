@@ -775,7 +775,6 @@ namespace test
 
 	GTEST(test_empty_struct)
 	{
-		std::cout << "-------------------\n";
 		std::vector<std::string> errors;
 		std::string src = "dog {}";
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
@@ -787,7 +786,8 @@ namespace test
 
 		EXPECT_EQ("dog", val->name());
 		EXPECT_EQ("", val->value());
-		EXPECT_EQ(0, val->children->GetSibblingCount());
+		EXPECT_EQ(0, val->GetChildCount());
+		ASSERT_TRUE(val->children == NULL);
 
 		delete val;
 
@@ -808,7 +808,7 @@ namespace test
 
 		EXPECT_EQ("dog", val->name());
 		EXPECT_EQ("", val->value());
-		EXPECT_EQ(0, val->children->GetSibblingCount());
+		EXPECT_EQ(0, val->GetChildCount());
 
 		delete val;
 
