@@ -201,7 +201,7 @@ pair
 	| idents[K] children[C] optional_sep
 	{
 		::infofile::Node* n = NULL;
-		if( $K && $C ) {
+		if( $K ) {
 			n = new ::infofile::Node(*$K);
 			n->children = $C;
 		}
@@ -214,7 +214,7 @@ pair
 	| idents[K] optional_assign idents[V] children[C] optional_sep
 	{
 		::infofile::Node* n = NULL;
-		if( $K && $V && $C ) {
+		if( $K && $V ) {
 			n = new ::infofile::Node(*$K, *$V);
 			n->children = $C;
 		}
