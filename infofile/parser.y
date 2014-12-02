@@ -148,12 +148,15 @@ array_value_list
 array_children_list
 	: children
 	{
-		$$ = $1;
+		$$ = new ::infofile::Node("", "");
+		$$->AddChild($1);
 	}
 	| array_children_list children
 	{
 		if( $1 && $2 ) {
-			$1->SetEndChild($2);
+			::infofile::Node* node = new ::infofile::Node();
+			node->AddChild($2);
+			$1->SetEndChild(node);
 		}
 		$$ = $1;
 	}
