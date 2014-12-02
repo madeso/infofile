@@ -17,17 +17,21 @@ namespace infofile {
 	Node::Node() : children(NULL), next(NULL) {
 		assert(this);
 		++active_node;
+
+		// std::cout << "Node\n";
 	}
 
 	Node::Node(const String& name) : name_(name), value_(""), children(NULL), next(NULL) {
 		assert(this);
 		++active_node;
+		//std::cout << "Node:" << name << "\n";
 	}
 
 	Node::Node(const String& name, const String& value) : name_(name)
 		, value_(value), children(NULL), next(NULL) {
 		assert(this);
 		++active_node;
+		//std::cout << "Node:" << name << "/" << value << "\n";
 	}
 
 	Node::~Node(){
@@ -85,6 +89,7 @@ namespace infofile {
 	}
 
 	unsigned int Node::GetSibblingCount() {
+		assert(this);
 		unsigned int count = 1; // start at 1 sincew we include this in the calculation
 		Node* n = next;
 		while (n) {
