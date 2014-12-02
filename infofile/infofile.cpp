@@ -124,7 +124,7 @@ namespace infofile {
 
 	void PrintString(std::stringstream& ss, const String& str) {
 		String::size_type index = str.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-		if (index == -1) {
+		if (index == -1 && str.empty()==false) {
 			ss << str;
 		}
 		else {
