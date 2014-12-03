@@ -973,6 +973,87 @@ namespace test
 #endif
 	}
 
+	GTEST(test_advanced_struct)
+	{
+		std::vector<std::string> errors;
+		std::string src = "key value {a b}";
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		EXPECT_EQ("key", val->name());
+		EXPECT_EQ("value", val->value());
+		EXPECT_EQ(1, val->GetChildCount());
+		ASSERT_TRUE(val->children != NULL);
+
+		EXPECT_EQ("a", val->children->name());
+		EXPECT_EQ("b", val->children->value());
+
+		delete val;
+
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
+	GTEST(test_advanced_struct_with_assign)
+	{
+		std::vector<std::string> errors;
+		std::string src = "key : value := {a b}";
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		EXPECT_EQ("key", val->name());
+		EXPECT_EQ("value", val->value());
+		EXPECT_EQ(1, val->GetChildCount());
+		ASSERT_TRUE(val->children != NULL);
+
+		EXPECT_EQ("a", val->children->name());
+		EXPECT_EQ("b", val->children->value());
+
+		delete val;
+
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
+	/*
+	Possible bad typos could exist bc of this, probably shouldn't be allowed
+	GTEST(test_advanced_struct_with_assign_and_empty_value)
+	{
+		std::vector<std::string> errors;
+		std::string src = "key : := {a b}";
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		EXPECT_EQ("key", val->name());
+		EXPECT_EQ("", val->value());
+		EXPECT_EQ(1, val->GetChildCount());
+		ASSERT_TRUE(val->children != NULL);
+
+		EXPECT_EQ("a", val->children->name());
+		EXPECT_EQ("b", val->children->value());
+
+		delete val;
+
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+	*/
+
 	/*
 	// todo: implement unicode escape characters
 	// taken from here https://github.com/dropbox/json11/blob/master/test.cpp
