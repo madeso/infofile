@@ -113,6 +113,52 @@ namespace test
 #endif
 	}
 
+	GTEST(testparsing_array_sep_comma)
+	{
+		std::vector<std::string> errors;
+		infofile::Node* val = infofile::Parse("inline", "[value, v]", &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(2, val->GetSibblingCount());
+
+		EXPECT_EQ("", val->name());
+		EXPECT_EQ("value", val->value());
+
+		EXPECT_TRUE(val->next != NULL);
+		EXPECT_EQ("", val->next->name());
+		EXPECT_EQ("v", val->next->value());
+
+		delete val;
+
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
+	GTEST(testparsing_array_sep_semicolon)
+	{
+		std::vector<std::string> errors;
+		infofile::Node* val = infofile::Parse("inline", "[value; v;]", &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(2, val->GetSibblingCount());
+
+		EXPECT_EQ("", val->name());
+		EXPECT_EQ("value", val->value());
+
+		EXPECT_TRUE(val->next != NULL);
+		EXPECT_EQ("", val->next->name());
+		EXPECT_EQ("v", val->next->value());
+
+		delete val;
+
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
 	GTEST(testparsing_subkey)
 	{
 		std::vector<std::string> errors;
@@ -133,6 +179,108 @@ namespace test
 
 		EXPECT_EQ("key", v->name());
 		EXPECT_EQ("value", v->value());
+
+		delete val;
+
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
+	GTEST(testparsing_subkey_multiple)
+	{
+		std::vector<std::string> errors;
+		infofile::Node* val = infofile::Parse("inline", "[{a aa} {b bb}]", &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		ASSERT_TRUE(val != NULL);
+		Node* n = val;
+
+		EXPECT_EQ("", n->name());
+		EXPECT_EQ("", n->value());
+		
+		ASSERT_EQ(2, n->GetChildCount());
+
+		EXPECT_TRUE(n->children != NULL);
+		infofile::Node* v = n->children;
+
+		EXPECT_EQ("a", v->name());
+		EXPECT_EQ("aa", v->value());
+
+		EXPECT_TRUE(v->next!= NULL);
+		EXPECT_EQ("b", v->next->name());
+		EXPECT_EQ("bb", v->next->value());
+
+		delete val;
+
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
+	GTEST(testparsing_subkey_multiple_comma)
+	{
+		std::vector<std::string> errors;
+		infofile::Node* val = infofile::Parse("inline", "[{a aa}, {b bb}]", &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		ASSERT_TRUE(val != NULL);
+		Node* n = val;
+
+		EXPECT_EQ("", n->name());
+		EXPECT_EQ("", n->value());
+
+		ASSERT_EQ(2, n->GetChildCount());
+
+		EXPECT_TRUE(n->children != NULL);
+		infofile::Node* v = n->children;
+
+		EXPECT_EQ("a", v->name());
+		EXPECT_EQ("aa", v->value());
+
+		EXPECT_TRUE(v->next != NULL);
+		EXPECT_EQ("b", v->next->name());
+		EXPECT_EQ("bb", v->next->value());
+
+		delete val;
+
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
+	GTEST(testparsing_subkey_multiple_semicolon)
+	{
+		std::vector<std::string> errors;
+		infofile::Node* val = infofile::Parse("inline", "[{a aa}; {b bb};]", &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		ASSERT_TRUE(val != NULL);
+		Node* n = val;
+
+		EXPECT_EQ("", n->name());
+		EXPECT_EQ("", n->value());
+
+		ASSERT_EQ(2, n->GetChildCount());
+
+		EXPECT_TRUE(n->children != NULL);
+		infofile::Node* v = n->children;
+
+		EXPECT_EQ("a", v->name());
+		EXPECT_EQ("aa", v->value());
+
+		EXPECT_TRUE(v->next != NULL);
+		EXPECT_EQ("b", v->next->name());
+		EXPECT_EQ("bb", v->next->value());
 
 		delete val;
 
