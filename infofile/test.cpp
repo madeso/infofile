@@ -194,25 +194,27 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		ASSERT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetSibblingCount());
+		ASSERT_EQ(2, val->GetSibblingCount());
 
+		Node* n;
+		
+		n = val;
 		ASSERT_TRUE(val != NULL);
-		Node* n = val;
-
 		EXPECT_EQ("", n->name());
 		EXPECT_EQ("", n->value());
-		
-		ASSERT_EQ(2, n->GetChildCount());
-
+		ASSERT_EQ(1, n->GetChildCount());
 		EXPECT_TRUE(n->children != NULL);
-		infofile::Node* v = n->children;
+		EXPECT_EQ("a", n->children->name());
+		EXPECT_EQ("aa", n->children->value());
 
-		EXPECT_EQ("a", v->name());
-		EXPECT_EQ("aa", v->value());
-
-		EXPECT_TRUE(v->next!= NULL);
-		EXPECT_EQ("b", v->next->name());
-		EXPECT_EQ("bb", v->next->value());
+		n = val->next;
+		ASSERT_TRUE(val->next != NULL);
+		EXPECT_EQ("", n->name());
+		EXPECT_EQ("", n->value());
+		ASSERT_EQ(1, n->GetChildCount());
+		EXPECT_TRUE(n->children != NULL);
+		EXPECT_EQ("b", n->children->name());
+		EXPECT_EQ("bb", n->children->value());
 
 		delete val;
 
@@ -228,25 +230,27 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		ASSERT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetSibblingCount());
+		ASSERT_EQ(2, val->GetSibblingCount());
 
+		Node* n;
+
+		n = val;
 		ASSERT_TRUE(val != NULL);
-		Node* n = val;
-
 		EXPECT_EQ("", n->name());
 		EXPECT_EQ("", n->value());
-
-		ASSERT_EQ(2, n->GetChildCount());
-
+		ASSERT_EQ(1, n->GetChildCount());
 		EXPECT_TRUE(n->children != NULL);
-		infofile::Node* v = n->children;
+		EXPECT_EQ("a", n->children->name());
+		EXPECT_EQ("aa", n->children->value());
 
-		EXPECT_EQ("a", v->name());
-		EXPECT_EQ("aa", v->value());
-
-		EXPECT_TRUE(v->next != NULL);
-		EXPECT_EQ("b", v->next->name());
-		EXPECT_EQ("bb", v->next->value());
+		n = val->next;
+		ASSERT_TRUE(val->next != NULL);
+		EXPECT_EQ("", n->name());
+		EXPECT_EQ("", n->value());
+		ASSERT_EQ(1, n->GetChildCount());
+		EXPECT_TRUE(n->children != NULL);
+		EXPECT_EQ("b", n->children->name());
+		EXPECT_EQ("bb", n->children->value());
 
 		delete val;
 
@@ -262,25 +266,27 @@ namespace test
 
 		ASSERT_THAT(errors, testing::IsEmpty());
 		ASSERT_TRUE(val != NULL);
-		ASSERT_EQ(1, val->GetSibblingCount());
+		ASSERT_EQ(2, val->GetSibblingCount());
 
+		Node* n;
+
+		n = val;
 		ASSERT_TRUE(val != NULL);
-		Node* n = val;
-
 		EXPECT_EQ("", n->name());
 		EXPECT_EQ("", n->value());
-
-		ASSERT_EQ(2, n->GetChildCount());
-
+		ASSERT_EQ(1, n->GetChildCount());
 		EXPECT_TRUE(n->children != NULL);
-		infofile::Node* v = n->children;
+		EXPECT_EQ("a", n->children->name());
+		EXPECT_EQ("aa", n->children->value());
 
-		EXPECT_EQ("a", v->name());
-		EXPECT_EQ("aa", v->value());
-
-		EXPECT_TRUE(v->next != NULL);
-		EXPECT_EQ("b", v->next->name());
-		EXPECT_EQ("bb", v->next->value());
+		n = val->next;
+		ASSERT_TRUE(val->next != NULL);
+		EXPECT_EQ("", n->name());
+		EXPECT_EQ("", n->value());
+		ASSERT_EQ(1, n->GetChildCount());
+		EXPECT_TRUE(n->children != NULL);
+		EXPECT_EQ("b", n->children->name());
+		EXPECT_EQ("bb", n->children->value());
 
 		delete val;
 
