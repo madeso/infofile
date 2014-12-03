@@ -18,7 +18,7 @@ namespace infofile {
 		assert(this);
 		++active_node;
 
-		// std::cout << "Node\n";
+		//std::cout << "Node\n";
 	}
 
 	Node::Node(const String& name) : name_(name), value_(""), children(NULL), next(NULL) {
@@ -37,6 +37,7 @@ namespace infofile {
 	Node::~Node(){
 		assert(this);
 		--active_node;
+		//std::cout << "Delete:" << name_ << "/" << value_ << "\n";
 		Clear();
 	}
 

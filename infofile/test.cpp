@@ -115,6 +115,7 @@ namespace test
 
 	GTEST(testparsing_array_sep_comma)
 	{
+		std::cout << "------------------------\n";
 		std::vector<std::string> errors;
 		infofile::Node* val = infofile::Parse("inline", "[value, v]", &errors);
 
@@ -138,6 +139,7 @@ namespace test
 
 	GTEST(testparsing_array_sep_semicolon)
 	{
+		std::cout << "------------------------\n";
 		std::vector<std::string> errors;
 		infofile::Node* val = infofile::Parse("inline", "[value; v;]", &errors);
 
