@@ -123,7 +123,7 @@ struct_list
 	;
 
 array_value_list
-	: idents
+	: idents optional_sep
 	{
 		if( $1 ) {
 			$$ = new ::infofile::Node("", *$1 );
@@ -133,7 +133,7 @@ array_value_list
 			$$ = NULL;
 		}
 	}
-	| array_value_list idents
+	| array_value_list idents optional_sep
 	{
 		if( $1 && $2 ) {
 			$1->SetEndChild(new ::infofile::Node("", *$2 ));
@@ -146,7 +146,7 @@ array_value_list
 	;
 
 array_children_list
-	: children
+	: children optional_sep
 	{
 		if( $1 ) {
 			$$ = new ::infofile::Node("", "");
@@ -156,7 +156,7 @@ array_children_list
 			$$ = NULL;
 		}
 	}
-	| array_children_list children
+	| array_children_list children optional_sep
 	{
 		if( $1 && $2 ) {
 			::infofile::Node* node = new ::infofile::Node();
