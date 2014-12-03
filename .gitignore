@@ -82,3 +82,6 @@ infofile/parser.h
 infofile/parser.cpp
 infofile/lexer.h
 infofile/lexer.cpp
+
+#ignore example js files for now
+examples/*.js
