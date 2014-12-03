@@ -198,7 +198,7 @@ pair
 		if( $K ) delete $K;
 		if( $V ) delete $V;
 	}
-	| idents[K] children[C] optional_sep
+	| idents[K] optional_assign children[C] optional_sep
 	{
 		::infofile::Node* n = NULL;
 		if( $K ) {
@@ -211,7 +211,7 @@ pair
 		if( $K ) delete $K;
 		$$ = n;
 	}
-	| idents[K] optional_assign idents[V] children[C] optional_sep
+	| idents[K] optional_assign idents[V] optional_assign children[C] optional_sep
 	{
 		::infofile::Node* n = NULL;
 		if( $K && $V ) {
