@@ -872,7 +872,7 @@ namespace test
 	GTEST(test_negative_number_double)
 	{
 		std::vector<std::string> errors;
-		std::string src = "[ 25.6 ]";
+		std::string src = "[ -25.6 ]";
 		infofile::Node* val = infofile::Parse("inline", src, &errors);
 
 		ASSERT_THAT(errors, testing::IsEmpty());
