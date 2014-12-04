@@ -6,17 +6,31 @@ The general structure is inspired by json/xml but with a syntax inspired by C, C
 Introduction:
 ==============
 
-There are 2 elements of the info file. The string and the node. Everything else is syntactic sugar(and there is much sugar).
+There are 2 core elements of the info file. The string and the node. Everything else is syntactic sugar(and there is much sugar).
 
 One way of defining strings is the standard C/C++ like "hello world", another is the enchaned identifiers like myInt or nice_cat. 
 
 The node consists of a name, a value, and a list of child nodes. All are optional and can be empty. There are 3 ways to specify the child nodes. Structure, value-array and structure array.
 
+    name = "Gustav"; // a node without a structure
+
 Structures allow the most flexibility and let's you specify how it's children are specified, some may have a name and no value while some may have children.
+
+    developer { name: "Gustav"; } // a "struct node"
 
 Array are syntactic sugar for structures, and only allows you to specify one specific structure with less typing. Value-arrays only let's specify the values of children while structure-array only lets you specify structures.
 
-A info file has a single node, and neither name nor the value can be specified so it's per definition always empty.
+	ints = [42, 42, 42]; // a "value array"
+
+A info file has a single root node, and neither name nor the value can be specified so it's per definition always empty.
+
+    [ 1 2 3 ] // a array as a root node
+    { name: Gustav; "on github": yes } // a strucutre as a root node
+	
+Typing brackets as the root node is tiring, so for the root node they are optional
+
+    name: Gustav;
+	"on github": yes;
 
 Example files:
 ==============
