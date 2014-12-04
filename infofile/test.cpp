@@ -849,6 +849,80 @@ namespace test
 #endif
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+
+	GTEST(test_negative_number_basic)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ -12 ]";
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		EXPECT_EQ("-12", val->value());
+
+		delete val;
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
+	GTEST(test_negative_number_double)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ 25.6 ]";
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		EXPECT_EQ("-25.6", val->value());
+
+		delete val;
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
+	GTEST(test_negative_float)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ -35f ]";
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		EXPECT_EQ("-35f", val->value());
+
+		delete val;
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
+	GTEST(test_negative_float_with_decimalpoint)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ -12.3f ]";
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		EXPECT_EQ("-12.3f", val->value());
+
+		delete val;
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
 	GTEST(test_advanced_ident)
 	{
 		std::vector<std::string> errors;
