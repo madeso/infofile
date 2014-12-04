@@ -108,12 +108,19 @@ Strings can be specified in various ways:
 	test #0F0F0F
 	test 42
 	test 12.0f
+	
+Strings can be combined with the c like operator \ or the java/C# like +
+
+	test = "hello" + " world";
+	test = "hello" \ // no newline is necessary here but entered here on convenience.
+	       " world"
 
 Remember that it's all string, all the time, so the following nodes are equal:
 
     same "123"
 	same """123"""
 	same 123
+	same 1 + 2 + 3
 	
 But not the same as:
 
