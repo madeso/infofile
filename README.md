@@ -8,7 +8,7 @@ Introduction:
 
 There are 2 core elements of the info file. The string and the node. Everything else is syntactic sugar(and there is much sugar).
 
-One way of defining strings is the standard C/C++ like "hello world", another is the enchaned identifiers like myInt or nice_cat. 
+One way of defining strings is the standard C/C++ like *"hello world"*, another is the enchaned identifiers like *nice_cat* or *some.email.com*.
 
 The node consists of a name, a value, and a list of child nodes. All are optional and can be empty. There are 3 ways to specify the child nodes. Structure, value-array and structure array.
 
