@@ -187,7 +187,7 @@ number [0-9]
 }
 
 	/* regular number, both float and ints */
-{number}+(.{number}+)?[fF]? {
+-?{number}+(.{number}+)?[fF]? {
 	yylval->ident_value = new std::string(yytext);
 	AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext));
 	return IDENT;
