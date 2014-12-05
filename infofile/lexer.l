@@ -193,6 +193,20 @@ number [0-9]
 	return IDENT;
 }
 
+	/* hexadecimal */
+0x[0-9a-fA-F]+ {
+	yylval->ident_value = new std::string(yytext);
+	AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext));
+	return IDENT;
+}
+
+	/* hexadecimal */
+0b[01]+ {
+	yylval->ident_value = new std::string(yytext);
+	AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext));
+	return IDENT;
+}
+
 	/* heredoc parsing */
 "<<" {
 	int c;
