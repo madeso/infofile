@@ -1232,6 +1232,60 @@ namespace test
 #endif
 	}
 
+	GTEST(test_octal)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ 0042 ]";
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		EXPECT_EQ("0042", val->value());
+
+		delete val;
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
+	GTEST(test_hexadecimal)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ 0xaeF2 ]";
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		EXPECT_EQ("0xaeF2", val->value());
+
+		delete val;
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
+	GTEST(test_binary)
+	{
+		std::vector<std::string> errors;
+		std::string src = "[ 0b00010000 ]";
+		infofile::Node* val = infofile::Parse("inline", src, &errors);
+
+		ASSERT_THAT(errors, testing::IsEmpty());
+		ASSERT_TRUE(val != NULL);
+		ASSERT_EQ(1, val->GetSibblingCount());
+
+		EXPECT_EQ("0b00010000", val->value());
+
+		delete val;
+#if INFOFILE_USE_BASIC_MEMCHECK
+		EXPECT_EQ(0, Node::ActiveCount());
+#endif
+	}
+
 
 	/*
 	// todo: implement unicode escape characters
