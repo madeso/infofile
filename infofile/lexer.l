@@ -200,7 +200,7 @@ number [0-9]
 	return IDENT;
 }
 
-	/* hexadecimal */
+	/* binary */
 0b[01]+ {
 	yylval->ident_value = new std::string(yytext);
 	AdvanceCharacter(yyextra, yyextra->ch+=strlen(yytext));
