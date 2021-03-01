@@ -18,10 +18,10 @@ TEST_CASE("testparsing")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name());
-    CHECK("value" == val->value());
+    CHECK("key" == val->name);
+    CHECK("value" == val->value);
 }
 
 TEST_CASE("testparsing_opass")
@@ -31,10 +31,10 @@ TEST_CASE("testparsing_opass")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name());
-    CHECK("value" == val->value());
+    CHECK("key" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
 }
 
 TEST_CASE("testparsing_osep")
@@ -44,10 +44,10 @@ TEST_CASE("testparsing_osep")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name());
-    CHECK("value" == val->value());
+    CHECK("key" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
 }
 
 TEST_CASE("testparsing_twokeys")
@@ -57,15 +57,13 @@ TEST_CASE("testparsing_twokeys")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(2 == val->GetSibblingCount());
+    REQUIRE(2 == val->children.size());
 
-    CHECK("key" == val->name());
-    CHECK("value" == val->value());
+    CHECK("key" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
 
-    REQUIRE(val->next != nullptr);
-
-    CHECK("k" == val->next->name());
-    CHECK("v" == val->next->value());
+    CHECK("k" == val->children[1]->name);
+    CHECK("v" == val->children[1]->value);
 }
 
 TEST_CASE("testparsing_array")
@@ -75,14 +73,13 @@ TEST_CASE("testparsing_array")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(2 == val->GetSibblingCount());
+    REQUIRE(2 == val->children.size());
 
-    CHECK("" == val->name());
-    CHECK("value" == val->value());
+    CHECK("" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
 
-    REQUIRE(val->next != nullptr);
-    CHECK("" == val->next->name());
-    CHECK("v" == val->next->value());
+    CHECK("" == val->children[1]->name);
+    CHECK("v" == val->children[1]->value);
 }
 
 TEST_CASE("testparsing_array_sep_comma")
@@ -92,14 +89,13 @@ TEST_CASE("testparsing_array_sep_comma")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(2 == val->GetSibblingCount());
+    REQUIRE(2 == val->children.size());
 
-    CHECK("" == val->name());
-    CHECK("value" == val->value());
+    CHECK("" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
 
-    REQUIRE(val->next != nullptr);
-    CHECK("" == val->next->name());
-    CHECK("v" == val->next->value());
+    CHECK("" == val->children[1]->name);
+    CHECK("v" == val->children[1]->value);
 }
 
 TEST_CASE("testparsing_array_sep_semicolon")
@@ -109,14 +105,13 @@ TEST_CASE("testparsing_array_sep_semicolon")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(2 == val->GetSibblingCount());
+    REQUIRE(2 == val->children.size());
 
-    CHECK("" == val->name());
-    CHECK("value" == val->value());
+    CHECK("" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
 
-    REQUIRE(val->next != nullptr);
-    CHECK("" == val->next->name());
-    CHECK("v" == val->next->value());
+    CHECK("" == val->children[1]->name);
+    CHECK("v" == val->children[1]->value);
 }
 
 TEST_CASE("testparsing_subkey")
@@ -126,19 +121,17 @@ TEST_CASE("testparsing_subkey")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
     REQUIRE(val != nullptr);
-    std::shared_ptr<Node> n = val;
+    std::shared_ptr<Node> n = val->children[0];
 
-    CHECK("" == n->name());
-    CHECK("" == n->value());
-    REQUIRE(n->children != nullptr);
-    std::shared_ptr<infofile::Node> v = n->children;
-    REQUIRE(1 == v->GetSibblingCount());
+    CHECK("" == n->name);
+    CHECK("" == n->value);
+    REQUIRE(1 == n->children.size());
 
-    CHECK("key" == v->name());
-    CHECK("value" == v->value());
+    CHECK("key" == n->children[0]->name);
+    CHECK("value" == n->children[0]->value);
 }
 
 TEST_CASE("testparsing_subkey_multiple")
@@ -148,27 +141,20 @@ TEST_CASE("testparsing_subkey_multiple")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(2 == val->GetSibblingCount());
+    REQUIRE(2 == val->children.size());
 
-    std::shared_ptr<Node> n;
-
-    n = val;
     REQUIRE(val != nullptr);
-    CHECK("" == n->name());
-    CHECK("" == n->value());
-    REQUIRE(1 == n->GetChildCount());
-    REQUIRE(n->children != nullptr);
-    CHECK("a" == n->children->name());
-    CHECK("aa" == n->children->value());
+    std::shared_ptr<Node> n = val->children[0];
 
-    n = val->next;
-    REQUIRE(val->next != nullptr);
-    CHECK("" == n->name());
-    CHECK("" == n->value());
-    REQUIRE(1 == n->GetChildCount());
-    REQUIRE(n->children != nullptr);
-    CHECK("b" == n->children->name());
-    CHECK("bb" == n->children->value());
+    CHECK("" == n->name);
+    CHECK("" == n->value);
+    REQUIRE(2 == n->children.size());
+
+    CHECK("a" == n->children[0]->name);
+    CHECK("aa" == n->children[0]->value);
+
+    CHECK("b" == n->children[1]->name);
+    CHECK("bb" == n->children[1]->value);
 }
 
 TEST_CASE("testparsing_subkey_multiple_comma")
@@ -178,27 +164,20 @@ TEST_CASE("testparsing_subkey_multiple_comma")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(2 == val->GetSibblingCount());
+    REQUIRE(2 == val->children.size());
 
-    std::shared_ptr<Node> n;
-
-    n = val;
     REQUIRE(val != nullptr);
-    CHECK("" == n->name());
-    CHECK("" == n->value());
-    REQUIRE(1 == n->GetChildCount());
-    REQUIRE(n->children != nullptr);
-    CHECK("a" == n->children->name());
-    CHECK("aa" == n->children->value());
+    std::shared_ptr<Node> n = val->children[0];
 
-    n = val->next;
-    REQUIRE(val->next != nullptr);
-    CHECK("" == n->name());
-    CHECK("" == n->value());
-    REQUIRE(1 == n->GetChildCount());
-    REQUIRE(n->children != nullptr);
-    CHECK("b" == n->children->name());
-    CHECK("bb" == n->children->value());
+    CHECK("" == n->name);
+    CHECK("" == n->value);
+    REQUIRE(2 == n->children.size());
+
+    CHECK("a" == n->children[0]->name);
+    CHECK("aa" == n->children[0]->value);
+
+    CHECK("b" == n->children[1]->name);
+    CHECK("bb" == n->children[1]->value);
 }
 
 TEST_CASE("testparsing_subkey_multiple_semicolon")
@@ -208,27 +187,20 @@ TEST_CASE("testparsing_subkey_multiple_semicolon")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(2 == val->GetSibblingCount());
+    REQUIRE(2 == val->children.size());
 
-    std::shared_ptr<Node> n;
-
-    n = val;
     REQUIRE(val != nullptr);
-    CHECK("" == n->name());
-    CHECK("" == n->value());
-    REQUIRE(1 == n->GetChildCount());
-    REQUIRE(n->children != nullptr);
-    CHECK("a" == n->children->name());
-    CHECK("aa" == n->children->value());
+    std::shared_ptr<Node> n = val->children[0];
 
-    n = val->next;
-    REQUIRE(val->next != nullptr);
-    CHECK("" == n->name());
-    CHECK("" == n->value());
-    REQUIRE(1 == n->GetChildCount());
-    REQUIRE(n->children != nullptr);
-    CHECK("b" == n->children->name());
-    CHECK("bb" == n->children->value());
+    CHECK("" == n->name);
+    CHECK("" == n->value);
+    REQUIRE(2 == n->children.size());
+
+    CHECK("a" == n->children[0]->name);
+    CHECK("aa" == n->children[0]->value);
+
+    CHECK("b" == n->children[1]->name);
+    CHECK("bb" == n->children[1]->value);
 }
 
 TEST_CASE("test_basic_string")
@@ -238,10 +210,10 @@ TEST_CASE("test_basic_string")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("'key'" == val->name());
-    CHECK("value" == val->value());
+    CHECK("'key'" == val->name);
+    CHECK("value" == val->value);
 }
 
 TEST_CASE("test_advanced_string")
@@ -251,10 +223,10 @@ TEST_CASE("test_advanced_string")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("key\n\t" == val->name());
-    CHECK("value\"" == val->value());
+    CHECK("key\n\t" == val->name);
+    CHECK("value\"" == val->value);
 }
 
 TEST_CASE("test_basic_string_single")
@@ -264,10 +236,10 @@ TEST_CASE("test_basic_string_single")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("\"key\"" == val->name());
-    CHECK("value is nice" == val->value());
+    CHECK("\"key\"" == val->name);
+    CHECK("value is nice" == val->value);
 }
 
 TEST_CASE("test_verbatim_string")
@@ -277,10 +249,10 @@ TEST_CASE("test_verbatim_string")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("path" == val->name());
-    CHECK("c:\\Docs\\Source\\a.txt" == val->value());
+    CHECK("path" == val->name);
+    CHECK("c:\\Docs\\Source\\a.txt" == val->value);
 }
 
 TEST_CASE("test_verbatim_string_tricky")
@@ -290,10 +262,10 @@ TEST_CASE("test_verbatim_string_tricky")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("path" == val->name());
-    CHECK("c:\\Docs\\Source\\" == val->value());
+    CHECK("path" == val->name);
+    CHECK("c:\\Docs\\Source\\" == val->value);
 }
 
 TEST_CASE("test_verbatim_double_quotes")
@@ -304,10 +276,10 @@ TEST_CASE("test_verbatim_double_quotes")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name());
-    CHECK("\"Ahoy!\" cried the captain." == val->value());
+    CHECK("line" == val->name);
+    CHECK("\"Ahoy!\" cried the captain." == val->value);
 }
 
 //
@@ -319,10 +291,10 @@ TEST_CASE("test_verbatim_char")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("path" == val->name());
-    CHECK("c:\\Docs\\Source\\a.txt" == val->value());
+    CHECK("path" == val->name);
+    CHECK("c:\\Docs\\Source\\a.txt" == val->value);
 }
 
 TEST_CASE("test_verbatim_char_tricky")
@@ -332,10 +304,10 @@ TEST_CASE("test_verbatim_char_tricky")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("path" == val->name());
-    CHECK("c:\\Docs\\Source\\" == val->value());
+    CHECK("path" == val->name);
+    CHECK("c:\\Docs\\Source\\" == val->value);
 }
 
 TEST_CASE("test_verbatim_char_double_quotes")
@@ -346,10 +318,10 @@ TEST_CASE("test_verbatim_char_double_quotes")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name());
-    CHECK("'Ahoy!' cried the captain." == val->value());
+    CHECK("line" == val->name);
+    CHECK("'Ahoy!' cried the captain." == val->value);
 }
 
 TEST_CASE("test_multiline_string_basic")
@@ -360,10 +332,10 @@ TEST_CASE("test_multiline_string_basic")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name());
-    CHECK("this is a long string" == val->value());
+    CHECK("line" == val->name);
+    CHECK("this is a long string" == val->value);
 }
 
 TEST_CASE("test_multiline_string_newlines")
@@ -374,10 +346,10 @@ TEST_CASE("test_multiline_string_newlines")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name());
-    CHECK("this\nis\na\nlong\nstring\tright?" == val->value());
+    CHECK("line" == val->name);
+    CHECK("this\nis\na\nlong\nstring\tright?" == val->value);
 }
 
 TEST_CASE("test_newline_in_string_error")
@@ -433,10 +405,10 @@ TEST_CASE("test_here_doc")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name());
-    CHECK("Hello world EOF\ncat" == val->value());
+    CHECK("line" == val->name);
+    CHECK("Hello world EOF\ncat" == val->value);
 }
 TEST_CASE("test_heredoc_error_eof")
 {
@@ -469,10 +441,10 @@ TEST_CASE("test_singleline_comment")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name());
-    CHECK("dog" == val->value());
+    CHECK("line" == val->children[0]->name);
+    CHECK("dog" == val->children[0]->value);
 }
 
 TEST_CASE("test_multiline_comment_simple")
@@ -483,10 +455,10 @@ TEST_CASE("test_multiline_comment_simple")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name());
-    CHECK("dog" == val->value());
+    CHECK("line" == val->children[0]->name);
+    CHECK("dog" == val->children[0]->value);
 }
 
 TEST_CASE("test_multiline_comment_complex")
@@ -497,10 +469,10 @@ TEST_CASE("test_multiline_comment_complex")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name());
-    CHECK("dog" == val->value());
+    CHECK("line" == val->children[0]->name);
+    CHECK("dog" == val->children[0]->value);
 }
 
 TEST_CASE("test_combine")
@@ -511,10 +483,10 @@ TEST_CASE("test_combine")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name());
-    CHECK("dog" == val->value());
+    CHECK("line" == val->children[0]->name);
+    CHECK("dog" == val->children[0]->value);
 }
 
 TEST_CASE("test_root_struct")
@@ -525,10 +497,10 @@ TEST_CASE("test_root_struct")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(0 == val->children.size());
 
-    CHECK("line" == val->name());
-    CHECK("dog" == val->value());
+    CHECK("line" == val->name);
+    CHECK("dog" == val->value);
 }
 
 TEST_CASE("test_unicode_characters")
@@ -539,10 +511,10 @@ TEST_CASE("test_unicode_characters")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(0 == val->children.size());
 
-    CHECK("ナ" == val->name());
-    CHECK("ㄅ" == val->value());
+    CHECK("ナ" == val->name);
+    CHECK("ㄅ" == val->value);
 }
 
 TEST_CASE("test_number_basic")
@@ -553,9 +525,9 @@ TEST_CASE("test_number_basic")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("12" == val->value());
+    CHECK("12" == val->children[0]->value);
 }
 
 TEST_CASE("test_number_double")
@@ -566,9 +538,9 @@ TEST_CASE("test_number_double")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("25.6" == val->value());
+    CHECK("25.6" == val->children[0]->value);
 }
 
 /*
@@ -582,9 +554,9 @@ TEST_CASE("test_double_start_with_dot")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetChildCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK(".42" == val->value());
+    CHECK(".42" == val->children[0]->value);
 
 }
 */
@@ -597,9 +569,9 @@ TEST_CASE("test_float")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("35f" == val->value());
+    CHECK("35f" == val->children[0]->value);
 }
 
 TEST_CASE("test_float_with_decimalpoint")
@@ -610,9 +582,9 @@ TEST_CASE("test_float_with_decimalpoint")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("12.3f" == val->value());
+    CHECK("12.3f" == val->children[0]->value);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -625,9 +597,9 @@ TEST_CASE("test_negative_number_basic")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("-12" == val->value());
+    CHECK("-12" == val->children[0]->value);
 }
 
 TEST_CASE("test_negative_number_double")
@@ -638,9 +610,9 @@ TEST_CASE("test_negative_number_double")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("-25.6" == val->value());
+    CHECK("-25.6" == val->children[0]->value);
 }
 
 TEST_CASE("test_negative_float")
@@ -651,9 +623,9 @@ TEST_CASE("test_negative_float")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("-35f" == val->value());
+    CHECK("-35f" == val->children[0]->value);
 }
 
 TEST_CASE("test_negative_float_with_decimalpoint")
@@ -664,9 +636,9 @@ TEST_CASE("test_negative_float_with_decimalpoint")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("-12.3f" == val->value());
+    CHECK("-12.3f" == val->children[0]->value);
 }
 
 TEST_CASE("test_advanced_ident")
@@ -677,10 +649,10 @@ TEST_CASE("test_advanced_ident")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(0 == val->children.size());
 
-    CHECK("jesus.opponent" == val->name());
-    CHECK("the.dude@gmail.com" == val->value());
+    CHECK("jesus.opponent" == val->name);
+    CHECK("the.dude@gmail.com" == val->value);
 }
 
 TEST_CASE("test_css_color")
@@ -691,10 +663,10 @@ TEST_CASE("test_css_color")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(0 == val->children.size());
 
-    CHECK("#000" == val->name());
-    CHECK("#12ffAA" == val->value());
+    CHECK("#000" == val->name);
+    CHECK("#12ffAA" == val->value);
 }
 
 TEST_CASE("test_underscore")
@@ -705,9 +677,9 @@ TEST_CASE("test_underscore")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("hello_world" == val->value());
+    CHECK("hello_world" == val->children[0]->value);
 }
 
 TEST_CASE("test_zero_escape")
@@ -718,11 +690,11 @@ TEST_CASE("test_zero_escape")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK(11 == val->value().size());
-    REQUIRE(0 == std::memcmp("hello\0world", val->value().data(), 11));
-    CHECK(std::string("hello\0world", 11) == val->value());
+    CHECK(11 == val->value.size());
+    REQUIRE(0 == std::memcmp("hello\0world", val->children[0]->value.data(), 11));
+    CHECK(std::string("hello\0world", 11) == val->children[0]->value);
 }
 
 TEST_CASE("test_empty_struct")
@@ -734,12 +706,9 @@ TEST_CASE("test_empty_struct")
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
 
-    REQUIRE(1 == val->GetSibblingCount());
-
-    CHECK("dog" == val->name());
-    CHECK("" == val->value());
-    CHECK(0 == val->GetChildCount());
-    REQUIRE(val->children == nullptr);
+    CHECK("dog" == val->name);
+    CHECK("" == val->value);
+    CHECK(0 == val->children.size());
 }
 
 TEST_CASE("test_empty_array")
@@ -750,11 +719,10 @@ TEST_CASE("test_empty_array")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
 
-    CHECK("dog" == val->name());
-    CHECK("" == val->value());
-    CHECK(0 == val->GetChildCount());
+    CHECK("dog" == val->name);
+    CHECK("" == val->value);
+    CHECK(0 == val->children.size());
 }
 
 TEST_CASE("test_advanced_struct")
@@ -766,15 +734,12 @@ TEST_CASE("test_advanced_struct")
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
 
-    REQUIRE(1 == val->GetSibblingCount());
+    CHECK("key" == val->name);
+    CHECK("value" == val->value);
+    CHECK(1 == val->children.size());
 
-    CHECK("key" == val->name());
-    CHECK("value" == val->value());
-    CHECK(1 == val->GetChildCount());
-    REQUIRE(val->children != nullptr);
-
-    CHECK("a" == val->children->name());
-    CHECK("b" == val->children->value());
+    CHECK("a" == val->children[0]->name);
+    CHECK("b" == val->children[0]->value);
 }
 
 TEST_CASE("test_advanced_struct_with_assign")
@@ -786,15 +751,14 @@ TEST_CASE("test_advanced_struct_with_assign")
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
 
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name());
-    CHECK("value" == val->value());
-    CHECK(1 == val->GetChildCount());
-    REQUIRE(val->children != nullptr);
+    CHECK("key" == val->name);
+    CHECK("value" == val->value);
+    CHECK(1 == val->children.size());
 
-    CHECK("a" == val->children->name());
-    CHECK("b" == val->children->value());
+    CHECK("a" == val->children[0]->name);
+    CHECK("b" == val->children[0]->value);
 }
 
 TEST_CASE("test_advanced_struct_with_assign_no_value")
@@ -806,15 +770,14 @@ TEST_CASE("test_advanced_struct_with_assign_no_value")
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
 
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name());
-    CHECK("" == val->value());
-    CHECK(1 == val->GetChildCount());
-    REQUIRE(val->children != nullptr);
+    CHECK("key" == val->name);
+    CHECK("" == val->value);
+    CHECK(1 == val->children.size());
 
-    CHECK("a" == val->children->name());
-    CHECK("b" == val->children->value());
+    CHECK("a" == val->children[0]->name);
+    CHECK("b" == val->children[0]->value);
 }
 
 /*
@@ -828,15 +791,15 @@ TEST_CASE("test_advanced_struct_with_assign_and_empty_value")
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
 
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name());
-    CHECK("" == val->value());
-    CHECK(1 == val->GetChildCount());
+    CHECK("key" == val->name);
+    CHECK("" == val->value);
+    CHECK(1 == val->children.size());
     REQUIRE(val->children != nullptr);
 
-    CHECK("a" == val->children->name());
-    CHECK("b" == val->children->value());
+    CHECK("a" == val->children->name);
+    CHECK("b" == val->children->value);
 
 
 }
@@ -851,15 +814,12 @@ TEST_CASE("test_advanced_array")
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
 
-    REQUIRE(1 == val->GetSibblingCount());
+    CHECK("key" == val->name);
+    CHECK("value" == val->value);
+    CHECK(1 == val->children.size());
 
-    CHECK("key" == val->name());
-    CHECK("value" == val->value());
-    CHECK(1 == val->GetChildCount());
-    REQUIRE(val->children != nullptr);
-
-    CHECK("" == val->children->name());
-    CHECK("a" == val->children->value());
+    CHECK("" == val->children[0]->name);
+    CHECK("a" == val->children[0]->value);
 }
 
 TEST_CASE("test_advanced_array_with_assign")
@@ -871,15 +831,14 @@ TEST_CASE("test_advanced_array_with_assign")
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
 
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name());
-    CHECK("value" == val->value());
-    CHECK(1 == val->GetChildCount());
-    REQUIRE(val->children != nullptr);
+    CHECK("key" == val->name);
+    CHECK("value" == val->value);
+    CHECK(1 == val->children.size());
 
-    CHECK("" == val->children->name());
-    CHECK("a" == val->children->value());
+    CHECK("" == val->children[0]->name);
+    CHECK("a" == val->children[0]->value);
 }
 
 TEST_CASE("test_advanced_array_with_assign_no_value")
@@ -891,15 +850,14 @@ TEST_CASE("test_advanced_array_with_assign_no_value")
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
 
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name());
-    CHECK("" == val->value());
-    CHECK(1 == val->GetChildCount());
-    REQUIRE(val->children != nullptr);
+    CHECK("key" == val->name);
+    CHECK("" == val->value);
+    CHECK(1 == val->children.size());
 
-    CHECK("" == val->children->name());
-    CHECK("a" == val->children->value());
+    CHECK("" == val->children[0]->name);
+    CHECK("a" == val->children[0]->value);
 }
 
 TEST_CASE("test_octal")
@@ -910,9 +868,9 @@ TEST_CASE("test_octal")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("0042" == val->value());
+    CHECK("0042" == val->children[0]->value);
 }
 
 TEST_CASE("test_hexadecimal")
@@ -923,9 +881,9 @@ TEST_CASE("test_hexadecimal")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("0xaeF2" == val->value());
+    CHECK("0xaeF2" == val->children[0]->value);
 }
 
 TEST_CASE("test_binary")
@@ -936,9 +894,9 @@ TEST_CASE("test_binary")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->GetSibblingCount());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("0b00010000" == val->value());
+    CHECK("0b00010000" == val->children[0]->value);
 }
 
 /*
@@ -955,7 +913,7 @@ TEST_CASE("test_unicode_escape")
 
     REQUIRE(IsEqual(errors, {}));
     REQUIRE(uni != nullptr);
-    REQUIRE(1 == uni->GetChildCount());
+    REQUIRE(1 == uni->children.size());
 
 }
 */

@@ -7,112 +7,19 @@
 namespace infofile
 {
     Node::Node()
-        : children(nullptr)
-        , next(nullptr)
     {
     }
 
     Node::Node(const std::string& name)
-        : name_(name)
-        , value_("")
-        , children(nullptr)
-        , next(nullptr)
+        : name(name)
+        , value("")
     {
     }
 
     Node::Node(const std::string& name, const std::string& value)
-        : name_(name)
-        , value_(value)
-        , children(nullptr)
-        , next(nullptr)
+        : name(name)
+        , value(value)
     {
-    }
-
-    Node::~Node()
-    {
-        Clear();
-    }
-
-    const std::string& Node::name() const
-    {
-        return name_;
-    }
-
-    void Node::set_name(const std::string& name)
-    {
-        name_ = name;
-    }
-
-    const std::string& Node::value() const
-    {
-        return value_;
-    }
-
-    void Node::set_value(const std::string& value)
-    {
-        value_ = value;
-    }
-
-    std::shared_ptr<Node> Node::GetFirstChild()
-    {
-        if (children == nullptr)
-            return nullptr;
-        return children;
-    }
-
-    void Node::AddChild(std::shared_ptr<Node> child)
-    {
-        assert(child);
-        if (children == nullptr)
-            children = child;
-        else
-            children->SetEndChild(child);
-    }
-
-    void Node::SetEndChild(std::shared_ptr<Node> child)
-    {
-        assert(child);
-        Node* self = this;
-        Node* n = self->next.get();
-        while (true)
-        {
-            if (n == nullptr)
-            {
-                self->next = child;
-                return;
-            }
-            self = n;
-            n = self->next.get();
-        }
-    }
-
-    unsigned int Node::GetSibblingCount()
-    {
-        unsigned int count = 1;  // start at 1 sincew we include this in the calculation
-        std::shared_ptr<Node> n = next;
-        while (n)
-        {
-            ++count;
-            n = n->next;
-        }
-
-        return count;
-    }
-
-    unsigned int Node::GetChildCount()
-    {
-        if (children == nullptr)
-            return 0;
-        else
-            return children->GetSibblingCount();
-    }
-
-    void Node::Clear()
-    {
-        children = nullptr;
-        next = nullptr;
-        set_name("");
-        set_value("");
     }
 
     Printer::~Printer()
@@ -148,15 +55,15 @@ namespace infofile
         }
         std::stringstream ss;
         ss << tab;
-        PrintString(ss, node->name());
+        PrintString(ss, node->name);
         ss << " ";
-        PrintString(ss, node->value());
-        if (node->children)
+        PrintString(ss, node->value);
+        if (node->children.empty() == false)
         {
             ss << " {" << po.newline;
             printer->Print(ss.str());
 
-            for (std::shared_ptr<Node> c = node->children; c; c = c->next)
+            for (std::shared_ptr<Node> c : node->children)
             {
                 PrintNode(printer, indent + 1, po, c);
             }
@@ -171,21 +78,18 @@ namespace infofile
 
     void Print(Printer* printer, const PrintOptions& po, std::shared_ptr<Node> node)
     {
-        for (std::shared_ptr<Node> c = node; c; c = c->next)
-        {
-            PrintNode(printer, 0, po, c);
-        }
+        PrintNode(printer, 0, po, node);
     }
 
-    class StdStringStreamPrinter : public Printer
+    struct StdStringStreamPrinter : public Printer
     {
-    public:
         std::stringstream ss;
         virtual void Print(const std::string& str)
         {
             ss << str;
         }
     };
+
     std::string PrintToString(const PrintOptions& po, std::shared_ptr<Node> node)
     {
         StdStringStreamPrinter ss;
@@ -193,9 +97,8 @@ namespace infofile
         return ss.ss.str();
     }
 
-    class CoutPrinter : public Printer
+    struct CoutPrinter : public Printer
     {
-    public:
         virtual void Print(const std::string& str)
         {
             std::cout << str;
