@@ -288,7 +288,7 @@ TEST_CASE("test_verbatim_char", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("path" == val->name);
+    CHECK("path" == val->children[0]->name);
     CHECK("c:\\Docs\\Source\\a.txt" == val->children[0]->value);
 }
 

@@ -140,6 +140,41 @@ namespace infofile
         return {TokenType::IDENT, ss.str()};
     }
 
+    Token Lexer::ReadVerbatimString(char type)
+    {
+        auto start = file->Read();
+        assert(start == type);
+
+        std::ostringstream ss;
+
+        while (file->Peek() != type && file->Peek() != 0)
+        {
+            switch (file->Peek())
+            {
+            case '\n':
+            case '\r':
+            case '\t':
+                file->Read();
+                ReportError("Invalid whitespace in string!");
+                return {TokenType::IDENT, ss.str()};
+            default:
+                ss << file->Read();
+                break;
+            }
+        }
+
+        if (file->Peek() == type)
+        {
+            file->Read();
+        }
+        else
+        {
+            ReportError(fmt::format("Missing {} at end of verbatim string", type));
+        }
+
+        return {TokenType::IDENT, ss.str()};
+    }
+
     Token Lexer::DoRead()
     {
         SkipWhitespace();
@@ -190,6 +225,19 @@ namespace infofile
             return ReadString('"');
         case '\'':
             return ReadString('\'');
+        case '@':
+            file->Read();
+            switch (file->Peek())
+            {
+            case '\'':
+                return ReadVerbatimString('\'');
+            case '"':
+                return ReadVerbatimString('"');
+            default:
+                ReportError(fmt::format("Invalid character followed by verbatinm string marker @ {}", file->Peek()));
+                file->Read();
+                break;
+            }
         default:
             if (IsIdentChar(c, true))
             {
