@@ -1,22 +1,17 @@
 #include <cstring>
 
 #include "catch.hpp"
+#include "catchy/stringeq.h"
 #include "infofile/infofile.h"
 
 using namespace infofile;
-
-bool IsEqual(const std::vector<std::string>& errors, const std::vector<std::string>& right)
-{
-    // todo(Gustav): use catchy here
-    return false;
-}
 
 TEST_CASE("testparsing")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{key=value;}", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -29,7 +24,7 @@ TEST_CASE("testparsing_opass")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{key value;}", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -42,7 +37,7 @@ TEST_CASE("testparsing_osep")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{key value}", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -55,7 +50,7 @@ TEST_CASE("testparsing_twokeys")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{key value k v}", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(2 == val->children.size());
 
@@ -71,7 +66,7 @@ TEST_CASE("testparsing_array")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[value v]", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(2 == val->children.size());
 
@@ -87,7 +82,7 @@ TEST_CASE("testparsing_array_sep_comma")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[value, v]", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(2 == val->children.size());
 
@@ -103,7 +98,7 @@ TEST_CASE("testparsing_array_sep_semicolon")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[value; v;]", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(2 == val->children.size());
 
@@ -119,7 +114,7 @@ TEST_CASE("testparsing_subkey")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[{key value}]", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -139,7 +134,7 @@ TEST_CASE("testparsing_subkey_multiple")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[{a aa} {b bb}]", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(2 == val->children.size());
 
@@ -162,7 +157,7 @@ TEST_CASE("testparsing_subkey_multiple_comma")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[{a aa}, {b bb}]", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(2 == val->children.size());
 
@@ -185,7 +180,7 @@ TEST_CASE("testparsing_subkey_multiple_semicolon")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[{a aa}; {b bb};]", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(2 == val->children.size());
 
@@ -208,7 +203,7 @@ TEST_CASE("test_basic_string")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{\"'key'\"=\"value\";}", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -221,7 +216,7 @@ TEST_CASE("test_advanced_string")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{\"key\\n\\t\"=\"value\\\"\";}", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -234,7 +229,7 @@ TEST_CASE("test_basic_string_single")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{'\"key\"'='value is nice';}", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -247,7 +242,7 @@ TEST_CASE("test_verbatim_string")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\a.txt\";}", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -260,7 +255,7 @@ TEST_CASE("test_verbatim_string_tricky")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\\";}", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -274,7 +269,7 @@ TEST_CASE("test_verbatim_double_quotes")
     std::string src = "{line @\"\"\"Ahoy!\"\" cried the captain.\";}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -289,7 +284,7 @@ TEST_CASE("test_verbatim_char")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\a.txt';}", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -302,7 +297,7 @@ TEST_CASE("test_verbatim_char_tricky")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\\';}", &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -316,7 +311,7 @@ TEST_CASE("test_verbatim_char_double_quotes")
     std::string src = "{line @'''Ahoy!'' cried the captain.';}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -330,7 +325,7 @@ TEST_CASE("test_multiline_string_basic")
     std::string src = "{line \"\"\"this is a long string\"\"\"}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -344,7 +339,7 @@ TEST_CASE("test_multiline_string_newlines")
     std::string src = "{line \"\"\"this\nis\na\nlong\nstring\tright?\"\"\"}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -403,7 +398,7 @@ TEST_CASE("test_here_doc")
     std::string src = "{line <<EOF dog\nHello world EOF\ncat\nEOF dog=cat\n}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -439,7 +434,7 @@ TEST_CASE("test_singleline_comment")
     std::string src = "{// this is a comment\nline dog}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -453,7 +448,7 @@ TEST_CASE("test_multiline_comment_simple")
     std::string src = "{line /*hello\nworld*/ dog}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -467,7 +462,7 @@ TEST_CASE("test_multiline_comment_complex")
     std::string src = "{line /***\nhello/* cat dog */\nworld ***/ dog}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -481,7 +476,7 @@ TEST_CASE("test_combine")
     std::string src = "{li + ne do \\ g}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -495,7 +490,7 @@ TEST_CASE("test_root_struct")
     std::string src = "line dog";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(0 == val->children.size());
 
@@ -509,7 +504,7 @@ TEST_CASE("test_unicode_characters")
     std::string src = "'ナ' 'ㄅ'";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(0 == val->children.size());
 
@@ -523,7 +518,7 @@ TEST_CASE("test_number_basic")
     std::string src = "[ 12 ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -536,7 +531,7 @@ TEST_CASE("test_number_double")
     std::string src = "[ 25.6 ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -552,7 +547,7 @@ TEST_CASE("test_double_start_with_dot")
     std::string src = "[ .42 ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -567,7 +562,7 @@ TEST_CASE("test_float")
     std::string src = "[ 35f ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -580,7 +575,7 @@ TEST_CASE("test_float_with_decimalpoint")
     std::string src = "[ 12.3f ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -595,7 +590,7 @@ TEST_CASE("test_negative_number_basic")
     std::string src = "[ -12 ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -608,7 +603,7 @@ TEST_CASE("test_negative_number_double")
     std::string src = "[ -25.6 ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -621,7 +616,7 @@ TEST_CASE("test_negative_float")
     std::string src = "[ -35f ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -634,7 +629,7 @@ TEST_CASE("test_negative_float_with_decimalpoint")
     std::string src = "[ -12.3f ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -647,7 +642,7 @@ TEST_CASE("test_advanced_ident")
     std::string src = "jesus.opponent the.dude@gmail.com";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(0 == val->children.size());
 
@@ -661,7 +656,7 @@ TEST_CASE("test_css_color")
     std::string src = "#000 #12ffAA";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(0 == val->children.size());
 
@@ -675,7 +670,7 @@ TEST_CASE("test_underscore")
     std::string src = "[hello_world]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -688,7 +683,7 @@ TEST_CASE("test_zero_escape")
     std::string src = "[\"hello\\0world\"]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -703,7 +698,7 @@ TEST_CASE("test_empty_struct")
     std::string src = "dog {}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
 
     CHECK("dog" == val->name);
@@ -717,7 +712,7 @@ TEST_CASE("test_empty_array")
     std::string src = "dog []";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
 
     CHECK("dog" == val->name);
@@ -731,7 +726,7 @@ TEST_CASE("test_advanced_struct")
     std::string src = "key value {a b}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
 
     CHECK("key" == val->name);
@@ -748,7 +743,7 @@ TEST_CASE("test_advanced_struct_with_assign")
     std::string src = "key : value := {a b}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
 
     REQUIRE(1 == val->children.size());
@@ -767,7 +762,7 @@ TEST_CASE("test_advanced_struct_with_assign_no_value")
     std::string src = "key := {a b}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
 
     REQUIRE(1 == val->children.size());
@@ -788,7 +783,7 @@ TEST_CASE("test_advanced_struct_with_assign_and_empty_value")
     std::string src = "key : := {a b}";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
 
     REQUIRE(1 == val->children.size());
@@ -811,7 +806,7 @@ TEST_CASE("test_advanced_array")
     std::string src = "key value [a]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
 
     CHECK("key" == val->name);
@@ -828,7 +823,7 @@ TEST_CASE("test_advanced_array_with_assign")
     std::string src = "key : value := [a]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
 
     REQUIRE(1 == val->children.size());
@@ -847,7 +842,7 @@ TEST_CASE("test_advanced_array_with_assign_no_value")
     std::string src = "key := [a]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
 
     REQUIRE(1 == val->children.size());
@@ -866,7 +861,7 @@ TEST_CASE("test_octal")
     std::string src = "[ 0042 ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -879,7 +874,7 @@ TEST_CASE("test_hexadecimal")
     std::string src = "[ 0xaeF2 ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -892,7 +887,7 @@ TEST_CASE("test_binary")
     std::string src = "[ 0b00010000 ]";
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
@@ -911,7 +906,7 @@ TEST_CASE("test_unicode_escape")
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> uni = infofile::Parse("inline", src, &errors);
 
-    REQUIRE(IsEqual(errors, {}));
+    REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(uni != nullptr);
     REQUIRE(1 == uni->children.size());
 
