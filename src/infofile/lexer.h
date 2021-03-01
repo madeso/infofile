@@ -38,6 +38,7 @@ namespace infofile
         Token ReadIdent();
         Token ReadString(char type);
         Token ReadVerbatimString(char type);
+        Token ReadHereDoc();
 
         Token DoRead();
         void ReportError(const std::string& error);

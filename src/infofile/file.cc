@@ -1,5 +1,7 @@
 #include "infofile/file.h"
 
+#include <cassert>
+
 namespace infofile
 {
     File::File(const std::string& fn)
@@ -11,7 +13,7 @@ namespace infofile
 
     char File::Read()
     {
-        if (next)
+        if (next.has_value())
         {
             auto r = *next;
             next = std::nullopt;
@@ -25,7 +27,7 @@ namespace infofile
 
     char File::Peek()
     {
-        if (next)
+        if (next.has_value())
         {
             return *next;
         }
@@ -34,6 +36,12 @@ namespace infofile
             next = DoRead();
             return *next;
         }
+    }
+
+    void File::Unput(char c)
+    {
+        assert(next.has_value() == false);
+        next = c;
     }
 
     char File::Count(char c)

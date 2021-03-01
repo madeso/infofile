@@ -14,6 +14,7 @@ namespace infofile
 
         char Read();
         char Peek();
+        void Unput(char c);
 
         char Count(char c);
 

@@ -235,6 +235,142 @@ namespace infofile
         return {TokenType::IDENT, ss.str()};
     }
 
+    Token Lexer::ReadHereDoc()
+    {
+        char first = file->Read();
+        assert(first == '<');
+        if (file->Peek() != '<')
+        {
+            ReportError(fmt::format("Expected < but found {} at the start of a here doc", file->Peek()));
+            return {TokenType::IDENT, ""};
+        }
+        file->Read();
+
+        char c;
+        std::string name;
+        int nameindex = -1;
+        std::string data;
+        std::string potential;
+        int mystate = 0;
+        bool done = false;
+        bool eof = false;
+        while (done == false)
+        {
+            if (done == false)
+            {
+                c = file->Read();
+            }
+            if (c == 0)
+            {
+                done = true;
+                eof = true;
+            }
+            if (done == false)
+            {
+                switch (mystate)
+                {
+                case 0:  // detect name
+                    if (c == ' ' || c == '\n' || c == '\t')
+                    {
+                        if (name.length() <= 0)
+                        {
+                            ReportError("EOF name is empty");
+                        }
+                        mystate = 1;
+                        file->Unput(c);
+                    }
+                    else
+                    {
+                        name += c;
+                    }
+                    break;
+                case 1:  // name detected, ignore until newline
+                    if (c == '\n')
+                    {
+                        mystate = 2;
+                    }
+                    else
+                    {
+                        // ignore
+                    }
+                    break;
+                case 2:  // parse heredoc
+                    if (nameindex == -1 && c == '\n')
+                    {
+                        nameindex = 0;
+                    }
+                    else if (nameindex >= 0 && name[nameindex] == c)
+                    {
+                        potential += c;
+                        ++nameindex;
+                        // static cast here to avoid compiler warning
+                        // this is probably safe as nameindex must be postive here
+                        assert(nameindex >= 0);
+                        if (static_cast<unsigned int>(nameindex) >= name.size())
+                        {
+                            // if the new index is beyond the string we have matched end string/name
+                            // can can continue to the last part and ignoring the end characters
+                            mystate = 3;
+                        }
+                    }
+                    else
+                    {
+                        if (nameindex >= 0)
+                        {
+                            data += "\n";
+                            data += potential;
+                            potential = "";
+                            nameindex = -1;
+                        }
+                        if (c == '\n')
+                        {
+                            nameindex = 0;
+                        }
+                        else
+                        {
+                            data += c;
+                        }
+                    }
+                    break;
+                case 3:
+                    if (c == '\n')
+                    {
+                        mystate = 4;
+                    }
+                    else
+                    {
+                        // ignore
+                    }
+                    break;
+                case 4:
+                    assert(0 && "shouldn't be here");
+                    break;
+                }
+            }
+
+            if (mystate > 3)
+            {
+                done = true;
+            }
+        }
+        if (mystate < 4)
+        {
+            if (eof)
+            {
+                ReportError("Found EOF before heredoc end");
+            }
+        }
+        if (eof)
+        {
+            // return {TokenType::IDENT, ""};
+            return {TokenType::IDENT, data};
+        }
+        else
+        {
+            return {TokenType::IDENT, data};
+        }
+    }
+
     Token Lexer::DoRead()
     {
         SkipWhitespace();
@@ -281,6 +417,8 @@ namespace infofile
             {
                 return {TokenType::ASSIGN, ":"};
             }
+        case '<':
+            return ReadHereDoc();
         case '"':
             return ReadString('"');
         case '\'':
