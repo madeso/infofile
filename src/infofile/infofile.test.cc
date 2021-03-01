@@ -273,7 +273,7 @@ TEST_CASE("test_verbatim_double_quotes", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name);
+    CHECK("line" == val->children[0]->name);
     CHECK("\"Ahoy!\" cried the captain." == val->children[0]->value);
 }
 

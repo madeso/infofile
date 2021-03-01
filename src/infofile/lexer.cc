@@ -147,8 +147,21 @@ namespace infofile
 
         std::ostringstream ss;
 
-        while (file->Peek() != type && file->Peek() != 0)
+        while (file->Peek() != 0)
         {
+            if (file->Peek() == type)
+            {
+                file->Read();
+                if (file->Peek() == type)
+                {
+                    ss << file->Read();
+                }
+                else
+                {
+                    return {TokenType::IDENT, ss.str()};
+                }
+            }
+
             switch (file->Peek())
             {
             case '\n':
@@ -163,15 +176,7 @@ namespace infofile
             }
         }
 
-        if (file->Peek() == type)
-        {
-            file->Read();
-        }
-        else
-        {
-            ReportError(fmt::format("Missing {} at end of verbatim string", type));
-        }
-
+        ReportError(fmt::format("Missing {} at end of verbatim string", type));
         return {TokenType::IDENT, ss.str()};
     }
 
