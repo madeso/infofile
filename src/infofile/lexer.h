@@ -36,6 +36,7 @@ namespace infofile
 
         void SkipWhitespace();
         Token ReadIdent();
+        Token ReadString(char type);
 
         Token DoRead();
         void ReportError(const std::string& error);

@@ -184,18 +184,18 @@ TEST_CASE("testparsing_subkey_multiple_semicolon", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(2 == val->children.size());
 
-    REQUIRE(val != nullptr);
-    std::shared_ptr<Node> n = val->children[0];
+    CHECK("" == val->name);
+    CHECK("" == val->value);
 
-    CHECK("" == n->name);
-    CHECK("" == n->value);
-    REQUIRE(2 == n->children.size());
+    // array 0 -> struct 0
+    REQUIRE(1 == val->children[0]->children.size());
+    CHECK("a" == val->children[0]->children[0]->name);
+    CHECK("aa" == val->children[0]->children[0]->value);
 
-    CHECK("a" == n->children[0]->name);
-    CHECK("aa" == n->children[0]->value);
-
-    CHECK("b" == n->children[1]->name);
-    CHECK("bb" == n->children[1]->value);
+    // array 1 -> struct 0
+    REQUIRE(1 == val->children[1]->children.size());
+    CHECK("b" == val->children[1]->children[0]->name);
+    CHECK("bb" == val->children[1]->children[0]->value);
 }
 
 TEST_CASE("test_basic_string", "[infofile]")
@@ -207,8 +207,8 @@ TEST_CASE("test_basic_string", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("'key'" == val->name);
-    CHECK("value" == val->value);
+    CHECK("'key'" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
 }
 
 TEST_CASE("test_advanced_string", "[infofile]")
@@ -220,8 +220,8 @@ TEST_CASE("test_advanced_string", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("key\n\t" == val->name);
-    CHECK("value\"" == val->value);
+    CHECK("key\n\t" == val->children[0]->name);
+    CHECK("value\"" == val->children[0]->value);
 }
 
 TEST_CASE("test_basic_string_single", "[infofile]")
@@ -233,8 +233,8 @@ TEST_CASE("test_basic_string_single", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("\"key\"" == val->name);
-    CHECK("value is nice" == val->value);
+    CHECK("\"key\"" == val->children[0]->name);
+    CHECK("value is nice" == val->children[0]->value);
 }
 
 TEST_CASE("test_verbatim_string", "[infofile]")
@@ -246,8 +246,8 @@ TEST_CASE("test_verbatim_string", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("path" == val->name);
-    CHECK("c:\\Docs\\Source\\a.txt" == val->value);
+    CHECK("path" == val->children[0]->name);
+    CHECK("c:\\Docs\\Source\\a.txt" == val->children[0]->value);
 }
 
 TEST_CASE("test_verbatim_string_tricky", "[infofile]")
@@ -259,8 +259,8 @@ TEST_CASE("test_verbatim_string_tricky", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("path" == val->name);
-    CHECK("c:\\Docs\\Source\\" == val->value);
+    CHECK("path" == val->children[0]->name);
+    CHECK("c:\\Docs\\Source\\" == val->children[0]->value);
 }
 
 TEST_CASE("test_verbatim_double_quotes", "[infofile]")
@@ -274,7 +274,7 @@ TEST_CASE("test_verbatim_double_quotes", "[infofile]")
     REQUIRE(1 == val->children.size());
 
     CHECK("line" == val->name);
-    CHECK("\"Ahoy!\" cried the captain." == val->value);
+    CHECK("\"Ahoy!\" cried the captain." == val->children[0]->value);
 }
 
 //
@@ -289,7 +289,7 @@ TEST_CASE("test_verbatim_char", "[infofile]")
     REQUIRE(1 == val->children.size());
 
     CHECK("path" == val->name);
-    CHECK("c:\\Docs\\Source\\a.txt" == val->value);
+    CHECK("c:\\Docs\\Source\\a.txt" == val->children[0]->value);
 }
 
 TEST_CASE("test_verbatim_char_tricky", "[infofile]")
@@ -301,8 +301,8 @@ TEST_CASE("test_verbatim_char_tricky", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("path" == val->name);
-    CHECK("c:\\Docs\\Source\\" == val->value);
+    CHECK("path" == val->children[0]->name);
+    CHECK("c:\\Docs\\Source\\" == val->children[0]->value);
 }
 
 TEST_CASE("test_verbatim_char_double_quotes", "[infofile]")
@@ -315,8 +315,8 @@ TEST_CASE("test_verbatim_char_double_quotes", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name);
-    CHECK("'Ahoy!' cried the captain." == val->value);
+    CHECK("line" == val->children[0]->name);
+    CHECK("'Ahoy!' cried the captain." == val->children[0]->value);
 }
 
 TEST_CASE("test_multiline_string_basic", "[infofile]")
@@ -329,8 +329,8 @@ TEST_CASE("test_multiline_string_basic", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name);
-    CHECK("this is a long string" == val->value);
+    CHECK("line" == val->children[0]->name);
+    CHECK("this is a long string" == val->children[0]->value);
 }
 
 TEST_CASE("test_multiline_string_newlines", "[infofile]")
@@ -343,8 +343,8 @@ TEST_CASE("test_multiline_string_newlines", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name);
-    CHECK("this\nis\na\nlong\nstring\tright?" == val->value);
+    CHECK("line" == val->children[0]->name);
+    CHECK("this\nis\na\nlong\nstring\tright?" == val->children[0]->value);
 }
 
 TEST_CASE("test_newline_in_string_error", "[infofile]")
@@ -402,8 +402,8 @@ TEST_CASE("test_here_doc", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name);
-    CHECK("Hello world EOF\ncat" == val->value);
+    CHECK("line" == val->children[0]->name);
+    CHECK("Hello world EOF\ncat" == val->children[0]->value);
 }
 TEST_CASE("test_heredoc_error_eof", "[infofile]")
 {
@@ -687,7 +687,7 @@ TEST_CASE("test_zero_escape", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK(11 == val->value.size());
+    CHECK(11 == val->children[0]->value.size());
     REQUIRE(0 == std::memcmp("hello\0world", val->children[0]->value.data(), 11));
     CHECK(std::string("hello\0world", 11) == val->children[0]->value);
 }

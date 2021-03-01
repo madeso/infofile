@@ -1,5 +1,6 @@
 #include "infofile/lexer.h"
 
+#include <cassert>
 #include <sstream>
 
 #include "fmt/core.h"
@@ -74,6 +75,71 @@ namespace infofile
         return {TokenType::IDENT, ss.str()};
     }
 
+    Token Lexer::ReadString(char type)
+    {
+        auto start = file->Read();
+        assert(start == type);
+
+        std::ostringstream ss;
+
+        while (file->Peek() != type && file->Peek() != 0)
+        {
+            switch (file->Peek())
+            {
+            case '\n':
+            case '\r':
+            case '\t':
+                file->Read();
+                ReportError("Invalid whitespace in string!");
+                return {TokenType::IDENT, ss.str()};
+            case '\\':
+                file->Read();
+                switch (file->Peek())
+                {
+                case 'n':
+                    file->Read();
+                    ss << '\n';
+                    break;
+                case 't':
+                    file->Read();
+                    ss << '\t';
+                    break;
+                case '0':
+                    file->Read();
+                    ss << 0;
+                    break;
+                case '"':
+                    file->Read();
+                    ss << '"';
+                    break;
+                case '\'':
+                    file->Read();
+                    ss << '\'';
+                    break;
+                default:
+                    ReportError(fmt::format("Invalid escape character {}", file->Peek()));
+                    ss << file->Read();
+                    break;
+                }
+                break;
+            default:
+                ss << file->Read();
+                break;
+            }
+        }
+
+        if (file->Peek() == type)
+        {
+            file->Read();
+        }
+        else
+        {
+            ReportError(fmt::format("Missing {} at end of string", type));
+        }
+
+        return {TokenType::IDENT, ss.str()};
+    }
+
     Token Lexer::DoRead()
     {
         SkipWhitespace();
@@ -120,6 +186,10 @@ namespace infofile
             {
                 return {TokenType::ASSIGN, ":"};
             }
+        case '"':
+            return ReadString('"');
+        case '\'':
+            return ReadString('\'');
         default:
             if (IsIdentChar(c, true))
             {
@@ -136,7 +206,7 @@ namespace infofile
 
     void Lexer::ReportError(const std::string& error)
     {
-        errors->emplace_back(error);
+        errors->emplace_back(fmt::format("{}({}:{}): {}", file->filename, file->line + 1, file->offset + 1, error));
     }
 
     Token Lexer::Read()

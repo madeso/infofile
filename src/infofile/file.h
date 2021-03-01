@@ -15,7 +15,11 @@ namespace infofile
         char Read();
         char Peek();
 
+        char Count(char c);
+
         std::string filename;
+        int line;
+        int offset;
         std::optional<char> next;
     };
 }

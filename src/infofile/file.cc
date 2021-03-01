@@ -4,6 +4,8 @@ namespace infofile
 {
     File::File(const std::string& fn)
         : filename(fn)
+        , line(0)
+        , offset(0)
     {
     }
 
@@ -13,11 +15,11 @@ namespace infofile
         {
             auto r = *next;
             next = std::nullopt;
-            return r;
+            return Count(r);
         }
         else
         {
-            return DoRead();
+            return Count(DoRead());
         }
     }
 
@@ -32,5 +34,20 @@ namespace infofile
             next = DoRead();
             return *next;
         }
+    }
+
+    char File::Count(char c)
+    {
+        if (c == '\n')
+        {
+            offset = 0;
+            line += 1;
+        }
+        else
+        {
+            offset += 1;
+        }
+
+        return c;
     }
 }
