@@ -32,7 +32,7 @@ namespace catchy
             if(first) first = false;
             else ss << ", " << newline;
             if(one_line == false) { ss << "  " << index << ": "; }
-            ss << '\'' << converter(s) << '\'';
+            ss << converter(s);
             index += 1;
         }
         if(!v.empty()) ss << newline;
