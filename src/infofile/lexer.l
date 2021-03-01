@@ -1,5 +1,5 @@
 %{
-#include "parser.h"
+#include "infofile/parser.h"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -22,7 +22,7 @@ std::string ReplaceString(std::string subject, const std::string& search,
 
 number [0-9]
 
-%option outfile="lexer.cpp"  header-file="lexer.h"
+%option outfile="infofile/lexer.cc"  header-file="infofile/lexer.h"
 %option warn nodefault
 %option reentrant noyywrap never-interactive nounistd
 %option bison-bridge

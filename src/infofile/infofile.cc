@@ -14,21 +14,21 @@ namespace infofile {
 
 	////////////////////////////////////////////////////////
 
-	Node::Node() : children(NULL), next(NULL) {
+	Node::Node() : children(nullptr), next(nullptr) {
 		assert(this);
 		++active_node;
 
 		//std::cout << "Node\n";
 	}
 
-	Node::Node(const String& name) : name_(name), value_(""), children(NULL), next(NULL) {
+	Node::Node(const std::string& name) : name_(name), value_(""), children(nullptr), next(nullptr) {
 		assert(this);
 		++active_node;
 		//std::cout << "Node:" << name << "\n";
 	}
 
-	Node::Node(const String& name, const String& value) : name_(name)
-		, value_(value), children(NULL), next(NULL) {
+	Node::Node(const std::string& name, const std::string& value) : name_(name)
+		, value_(value), children(nullptr), next(nullptr) {
 		assert(this);
 		++active_node;
 		//std::cout << "Node:" << name << "/" << value << "\n";
@@ -41,36 +41,36 @@ namespace infofile {
 		Clear();
 	}
 
-	const String& Node::name() const{
+	const std::string& Node::name() const{
 		assert(this);
 		return name_;
 	}
 
-	void Node::set_name(const String& name) {
+	void Node::set_name(const std::string& name) {
 		assert(this);
 		name_ = name;
 	}
 
-	const String& Node::value() const{
+	const std::string& Node::value() const{
 		assert(this);
 		return value_;
 	}
 
-	void Node::set_value(const String& value) {
+	void Node::set_value(const std::string& value) {
 		assert(this);
 		value_ = value;
 	}
 
 	Node* Node::GetFirstChild() {
 		assert(this);
-		if (children == NULL) return NULL;
+		if (children == nullptr) return nullptr;
 		return children;
 	}
 
 	void Node::AddChild(Node* child) {
 		assert(this);
 		assert(child);
-		if (children == NULL) children = child;
+		if (children == nullptr) children = child;
 		else children->SetEndChild(child);
 	}
 
@@ -80,7 +80,7 @@ namespace infofile {
 		Node* self = this;
 		Node* n = self->next;
 		while (true) {
-			if (n == NULL) {
+			if (n == nullptr) {
 				self->next = child;
 				return;
 			}
@@ -102,7 +102,7 @@ namespace infofile {
 	}
 
 	unsigned int Node::GetChildCount() {
-		if (children == NULL) return 0;
+		if (children == nullptr) return 0;
 		else return children->GetSibblingCount();
 	}
 
@@ -110,14 +110,14 @@ namespace infofile {
 		assert(this);
 		if (children) {
 			delete children;
-			children = NULL;
+			children = nullptr;
 		}
 		while (next) {
 			Node* t = next->next;;
 			delete next;
 			next = t;
 		}
-		next = NULL;
+		next = nullptr;
 		set_name("");
 		set_value("");
 	}
@@ -133,8 +133,8 @@ namespace infofile {
 	PrintOptions::PrintOptions() : tab("\t"), newline("\n"), term(";") {
 	}
 
-	void PrintString(std::stringstream& ss, const String& str) {
-		String::size_type index = str.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+	void PrintString(std::stringstream& ss, const std::string& str) {
+		std::string::size_type index = str.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 		if (index == -1 && str.empty()==false) {
 			ss << str;
 		}
@@ -144,7 +144,7 @@ namespace infofile {
 	}
 
 	void PrintNode(Printer* printer, int indent, const PrintOptions& po, Node* node) {
-		String tab;
+		std::string tab;
 		for (int i = 0; i < indent; ++i) {
 			tab += po.tab;
 		}
@@ -175,7 +175,7 @@ namespace infofile {
 	class StdStringStreamPrinter : public Printer {
 	public:
 		std::stringstream ss;
-		virtual void Print(const String& str) {
+		virtual void Print(const std::string& str) {
 			ss << str;
 		}
 	};
@@ -187,7 +187,7 @@ namespace infofile {
 
 	class CoutPrinter : public Printer {
 	public:
-		virtual void Print(const String& str) {
+		virtual void Print(const std::string& str) {
 			std::cout << str;
 		}
 	};
@@ -195,5 +195,17 @@ namespace infofile {
 	void PrintToConsole(const PrintOptions& po, Node* node) {
 		CoutPrinter ss;
 		Print(&ss, po, node);
+	}
+
+	Node* Parse(const std::string& filename, const std::string& data, std::vector<std::string>* errors)
+	{
+		// todo(Gustav): call parser
+		return nullptr;
+	}
+
+	Node* ReadFile(const std::string& filename, std::vector<std::string>* errors)
+	{
+		// todo(Gustav): call parser
+		return nullptr;
 	}
 }

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "infofile.h"
+#include "infofile/infofile.h"
 
 int main(int argc, char **argv)
 {
@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 		infofile::PrintToConsole(infofile::PrintOptions(), val);
 		delete val;
 	}
-	
+
 #if INFOFILE_USE_BASIC_MEMCHECK
 	std::cout << "Parsing complete: " << infofile::Node::ActiveCount();
 #endif

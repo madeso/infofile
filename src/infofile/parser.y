@@ -5,8 +5,8 @@
 #include <string>
 
 #include "infofile/infofile.h"
-#include "parser.h"
-#include "lexer.h"
+#include "infofile/parser.h"
+#include "infofile/lexer.h"
 #include <sstream>
 
 void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
@@ -42,19 +42,18 @@ void yyerror(ParserData* expression, yyscan_t scanner, const char *error);
 	#define YY_EXTRA_TYPE ParserData*
 }
 
-	/* any variable might be NULL, if so delete input and let NULL flow through */
+	/* any variable might be nullptr, if so delete input and let nullptr flow through */
 %union {
     ::std::string* ident_value;
     ::infofile::Node* node;
 	::infofile::Node* value;
 }
 
-%output  "parser.cpp"
-%defines "parser.h"
+%output  "infofile/parser.cc"
+%defines "infofile/parser.h"
 
 %define api.pure
-%error-verbose
-%pure-parser
+%define parse.error verbose
 
 %lex-param   { yyscan_t scanner }
 %parse-param { ParserData* expression }
@@ -95,16 +94,16 @@ idents
 		}
 		else {
 			delete $1;
-			$1 = NULL;
+			$1 = nullptr;
 		}
 		if( $3 ) {
 			delete $3;
-			$3 = NULL;
+			$3 = nullptr;
 		}
 		$$ = $1;
 	}
 	;
-	
+
 struct_list
 	: pair
 	{
@@ -130,7 +129,7 @@ array_value_list
 			delete $1;
 		}
 		else {
-			$$ = NULL;
+			$$ = nullptr;
 		}
 	}
 	| array_value_list idents optional_sep
@@ -153,7 +152,7 @@ array_children_list
 			$$->AddChild($1);
 		}
 		else {
-			$$ = NULL;
+			$$ = nullptr;
 		}
 	}
 	| array_children_list children optional_sep
@@ -169,10 +168,10 @@ array_children_list
 
 children
 	: STRUCT_BEGIN struct_list STRUCT_END { $$ = $2; }
-	| STRUCT_BEGIN STRUCT_END { $$ = NULL; }
+	| STRUCT_BEGIN STRUCT_END { $$ = nullptr; }
 	| ARRAY_BEGIN array_value_list ARRAY_END  { $$ = $2; }
 	| ARRAY_BEGIN array_children_list ARRAY_END  { $$ = $2; }
-	| ARRAY_BEGIN ARRAY_END { $$ = NULL; }
+	| ARRAY_BEGIN ARRAY_END { $$ = nullptr; }
 	;
 
 optional_assign
@@ -184,7 +183,7 @@ optional_sep
 	:
 	| SEP
 	;
-	
+
 
 pair
 	: idents[K] optional_assign idents[V] optional_sep
@@ -193,14 +192,14 @@ pair
 			$$ = new ::infofile::Node(*$K, *$V);
 		}
 		else {
-			$$ = NULL;
+			$$ = nullptr;
 		}
 		if( $K ) delete $K;
 		if( $V ) delete $V;
 	}
 	| idents[K] optional_assign children[C] optional_sep
 	{
-		::infofile::Node* n = NULL;
+		::infofile::Node* n = nullptr;
 		if( $K ) {
 			n = new ::infofile::Node(*$K);
 			n->children = $C;
@@ -213,7 +212,7 @@ pair
 	}
 	| idents[K] optional_assign idents[V] optional_assign children[C] optional_sep
 	{
-		::infofile::Node* n = NULL;
+		::infofile::Node* n = nullptr;
 		if( $K && $V ) {
 			n = new ::infofile::Node(*$K, *$V);
 			n->children = $C;
@@ -239,8 +238,8 @@ void ReportError(ParserData* data, const std::string& msg) {
 	data->errors.push_back(ss.str());
 }
 
- 
-::infofile::Node* ::infofile::Parse(const String& filename, const String& data, std::vector<std::string>* errors)
+
+::infofile::Node* ::infofile::Parse(const std::string& filename, const std::string& data, std::vector<std::string>* errors)
 {
     ParserData expression;
 	expression.line = 1;
@@ -250,32 +249,32 @@ void ReportError(ParserData* data, const std::string& msg) {
     yyscan_t scanner;
 	expression.scanner = &scanner;
     YY_BUFFER_STATE state;
- 
+
     if (yylex_init(&scanner)) {
 		errors->push_back("Couldn't initialize parser");
         return 0;
     }
 
 	::yyset_extra (&expression, scanner);
- 
+
     state = yy_scan_string(data.c_str(), scanner);
- 
+
     if (yyparse(&expression, scanner)) {
         *errors = expression.errors;
 		errors->push_back("Error parsing input");
         return 0;
     }
- 
+
     yy_delete_buffer(state, scanner);
- 
+
     yylex_destroy(scanner);
- 
+
 	*errors = expression.errors;
 
 	return expression.result;
 }
 
-::infofile::Node* ::infofile::ReadFile(const String& filename, std::vector<std::string>* errors)
+::infofile::Node* ::infofile::ReadFile(const std::string& filename, std::vector<std::string>* errors)
 {
     ParserData expression;
 	expression.line = 1;
@@ -285,7 +284,7 @@ void ReportError(ParserData* data, const std::string& msg) {
     yyscan_t scanner;
 	expression.scanner = &scanner;
     // YY_BUFFER_STATE state;
- 
+
     if (yylex_init(&scanner)) {
 		errors->push_back("Couldn't initialize parser");
         return 0;
@@ -298,23 +297,23 @@ void ReportError(ParserData* data, const std::string& msg) {
 		errors->push_back("Unable to open file " + filename);
 		return 0;
 	}
- 
+
     // YY_FLUSH_BUFFER;
 	// if(yyStringBufferActive) yy_delete_buffer(string_buffer);
 	yyrestart(f, scanner);
- 
+
     if (yyparse(&expression, scanner)) {
         *errors = expression.errors;
 		errors->push_back("Error parsing input");
 		fclose(f);
         return 0;
     }
- 
+
     // yy_delete_buffer(state, scanner);
 	fclose(f);
- 
+
     yylex_destroy(scanner);
- 
+
 	*errors = expression.errors;
 
 	return expression.result;
