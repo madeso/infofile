@@ -371,9 +371,51 @@ namespace infofile
         }
     }
 
+    void Lexer::EatLineComment()
+    {
+        while (file->Peek() != '\n' && file->Peek() != 0)
+        {
+            file->Read();
+        }
+    }
+
+    void Lexer::EatMultilineComment()
+    {
+        while (file->Peek() != 0)
+        {
+            auto c = file->Read();
+            if (c == '*' && file->Peek() == '/')
+            {
+                file->Read();
+                return;
+            }
+        }
+    }
+
     Token Lexer::DoRead()
     {
         SkipWhitespace();
+
+        while (file->Peek() == '/')
+        {
+            file->Read();
+            switch (file->Peek())
+            {
+            case '/':
+                file->Read();
+                EatLineComment();
+                break;
+            case '*':
+                file->Read();
+                EatMultilineComment();
+                break;
+            default:
+                ReportError(fmt::format("Found rougue / followed by invalid {}", file->Peek()));
+                break;
+            }
+            SkipWhitespace();
+        }
+
         const auto c = file->Peek();
         switch (c)
         {

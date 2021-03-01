@@ -40,6 +40,9 @@ namespace infofile
         Token ReadVerbatimString(char type);
         Token ReadHereDoc();
 
+        void EatLineComment();
+        void EatMultilineComment();
+
         Token DoRead();
         void ReportError(const std::string& error);
 
