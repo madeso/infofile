@@ -10,7 +10,6 @@ namespace infofile
         : children(nullptr)
         , next(nullptr)
     {
-        assert(this);
     }
 
     Node::Node(const std::string& name)
@@ -19,7 +18,6 @@ namespace infofile
         , children(nullptr)
         , next(nullptr)
     {
-        assert(this);
     }
 
     Node::Node(const std::string& name, const std::string& value)
@@ -28,42 +26,35 @@ namespace infofile
         , children(nullptr)
         , next(nullptr)
     {
-        assert(this);
     }
 
     Node::~Node()
     {
-        assert(this);
         Clear();
     }
 
     const std::string& Node::name() const
     {
-        assert(this);
         return name_;
     }
 
     void Node::set_name(const std::string& name)
     {
-        assert(this);
         name_ = name;
     }
 
     const std::string& Node::value() const
     {
-        assert(this);
         return value_;
     }
 
     void Node::set_value(const std::string& value)
     {
-        assert(this);
         value_ = value;
     }
 
     Node* Node::GetFirstChild()
     {
-        assert(this);
         if (children == nullptr)
             return nullptr;
         return children;
@@ -71,7 +62,6 @@ namespace infofile
 
     void Node::AddChild(Node* child)
     {
-        assert(this);
         assert(child);
         if (children == nullptr)
             children = child;
@@ -81,7 +71,6 @@ namespace infofile
 
     void Node::SetEndChild(Node* child)
     {
-        assert(this);
         assert(child);
         Node* self = this;
         Node* n = self->next;
@@ -99,7 +88,6 @@ namespace infofile
 
     unsigned int Node::GetSibblingCount()
     {
-        assert(this);
         unsigned int count = 1;  // start at 1 sincew we include this in the calculation
         Node* n = next;
         while (n)
@@ -121,7 +109,6 @@ namespace infofile
 
     void Node::Clear()
     {
-        assert(this);
         if (children)
         {
             delete children;
