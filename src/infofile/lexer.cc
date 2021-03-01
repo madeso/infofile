@@ -80,63 +80,118 @@ namespace infofile
         auto start = file->Read();
         assert(start == type);
 
-        std::ostringstream ss;
-
-        while (file->Peek() != type && file->Peek() != 0)
-        {
-            switch (file->Peek())
-            {
-            case '\n':
-            case '\r':
-            case '\t':
-                file->Read();
-                ReportError("Invalid whitespace in string!");
-                return {TokenType::IDENT, ss.str()};
-            case '\\':
-                file->Read();
-                switch (file->Peek())
-                {
-                case 'n':
-                    file->Read();
-                    ss << '\n';
-                    break;
-                case 't':
-                    file->Read();
-                    ss << '\t';
-                    break;
-                case '0':
-                    file->Read();
-                    ss << 0;
-                    break;
-                case '"':
-                    file->Read();
-                    ss << '"';
-                    break;
-                case '\'':
-                    file->Read();
-                    ss << '\'';
-                    break;
-                default:
-                    ReportError(fmt::format("Invalid escape character {}", file->Peek()));
-                    ss << file->Read();
-                    break;
-                }
-                break;
-            default:
-                ss << file->Read();
-                break;
-            }
-        }
-
+        bool multiline = false;
         if (file->Peek() == type)
         {
             file->Read();
-        }
-        else
-        {
-            ReportError(fmt::format("Missing {} at end of string", type));
+            if (file->Peek() == type)
+            {
+                file->Read();
+                multiline = true;
+            }
+            else
+            {
+                return {TokenType::IDENT, ""};
+            }
         }
 
+        std::ostringstream ss;
+
+        auto on_escape_char = [&]() {
+            file->Read();
+            switch (file->Peek())
+            {
+            case 'n':
+                file->Read();
+                ss << '\n';
+                break;
+            case 't':
+                file->Read();
+                ss << '\t';
+                break;
+            case '0':
+                file->Read();
+                ss << 0;
+                break;
+            case '"':
+                file->Read();
+                ss << '"';
+                break;
+            case '\'':
+                file->Read();
+                ss << '\'';
+                break;
+            default:
+                ReportError(fmt::format("Invalid escape character {}", file->Peek()));
+                ss << file->Read();
+                break;
+            }
+        };
+
+        while (file->Peek() != 0)
+        {
+            if (multiline)
+            {
+                if (file->Peek() == type)
+                {
+                    file->Read();
+                    if (file->Peek() == type)
+                    {
+                        file->Read();
+
+                        if (file->Peek() == type)
+                        {
+                            file->Read();
+                            return {TokenType::IDENT, ss.str()};
+                        }
+                        else
+                        {
+                            ss << type << type;
+                        }
+                    }
+                    else
+                    {
+                        ss << type;
+                    }
+                }
+
+                switch (file->Peek())
+                {
+                case '\\':
+                    on_escape_char();
+                    break;
+                default:
+                    ss << file->Read();
+                    break;
+                }
+            }
+            else
+            {
+                if (file->Peek() == type)
+                {
+                    file->Read();
+                    return {TokenType::IDENT, ss.str()};
+                }
+
+                switch (file->Peek())
+                {
+                case '\n':
+                case '\r':
+                case '\t':
+                    file->Read();
+                    ReportError("Invalid whitespace in string!");
+                    return {TokenType::IDENT, ss.str()};
+                case '\\':
+                    on_escape_char();
+                    break;
+                default:
+                    ss << file->Read();
+                    break;
+                }
+            }
+        }
+
+        ReportError(fmt::format("Missing {} at end of string", type));
         return {TokenType::IDENT, ss.str()};
     }
 
