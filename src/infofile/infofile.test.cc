@@ -1,8 +1,7 @@
-#include "infofile/infofile.h"
-#include "catch.hpp"
-
 #include <cstring>
 
+#include "catch.hpp"
+#include "infofile/infofile.h"
 
 using namespace infofile;
 
@@ -11,7 +10,6 @@ bool IsEqual(const std::vector<std::string>& errors, const std::vector<std::stri
     // todo(Gustav): use catchy here
     return false;
 }
-
 
 TEST_CASE("testparsing")
 {
@@ -524,7 +522,8 @@ TEST_CASE("test_newline_in_string_error")
     REQUIRE(errors.size() > ZERO);
     REQUIRE(val == nullptr);
 
-    if(val) delete val;
+    if (val)
+        delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
     CHECK(0 == Node::ActiveCount());
@@ -540,7 +539,8 @@ TEST_CASE("test_newline_in_char_error")
     REQUIRE(errors.size() > ZERO);
     REQUIRE(val == nullptr);
 
-    if (val) delete val;
+    if (val)
+        delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
     CHECK(0 == Node::ActiveCount());
@@ -557,7 +557,8 @@ TEST_CASE("test_newline_in_verbatim_string_error")
     REQUIRE(errors.size() > ZERO);
     REQUIRE(val == nullptr);
 
-    if (val) delete val;
+    if (val)
+        delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
     CHECK(0 == Node::ActiveCount());
@@ -573,7 +574,8 @@ TEST_CASE("test_newline_in_verbatim_char_error")
     REQUIRE(errors.size() > ZERO);
     REQUIRE(val == nullptr);
 
-    if (val) delete val;
+    if (val)
+        delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
     CHECK(0 == Node::ActiveCount());
@@ -613,7 +615,8 @@ TEST_CASE("test_heredoc_error_eof")
     REQUIRE(errors.size() > ZERO);
     REQUIRE(val == nullptr);
 
-    if (val) delete val;
+    if (val)
+        delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
     CHECK(0 == Node::ActiveCount());
@@ -630,7 +633,8 @@ TEST_CASE("test_heredoc_error_noname")
     REQUIRE(errors.size() > ZERO);
     REQUIRE(val == nullptr);
 
-    if (val) delete val;
+    if (val)
+        delete val;
 
 #if INFOFILE_USE_BASIC_MEMCHECK
     CHECK(0 == Node::ActiveCount());
@@ -995,7 +999,7 @@ TEST_CASE("test_zero_escape")
     REQUIRE(1 == val->GetSibblingCount());
 
     CHECK(11 == val->value().size());
-    REQUIRE(0==std::memcmp("hello\0world", val->value().data(), 11));
+    REQUIRE(0 == std::memcmp("hello\0world", val->value().data(), 11));
     CHECK(std::string("hello\0world", 11) == val->value());
 
     delete val;
@@ -1287,7 +1291,6 @@ TEST_CASE("test_binary")
     CHECK(0 == Node::ActiveCount());
 #endif
 }
-
 
 /*
 // todo: implement unicode escape characters
