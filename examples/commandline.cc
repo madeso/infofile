@@ -22,9 +22,5 @@ int main(int argc, char** argv)
         delete val;
     }
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    std::cout << "Parsing complete: " << infofile::Node::ActiveCount();
-#endif
-
     return 0;
 }

@@ -25,9 +25,6 @@ TEST_CASE("testparsing")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("testparsing_opass")
@@ -44,9 +41,6 @@ TEST_CASE("testparsing_opass")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("testparsing_osep")
@@ -63,9 +57,6 @@ TEST_CASE("testparsing_osep")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("testparsing_twokeys")
@@ -87,9 +78,6 @@ TEST_CASE("testparsing_twokeys")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("testparsing_array")
@@ -110,9 +98,6 @@ TEST_CASE("testparsing_array")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("testparsing_array_sep_comma")
@@ -133,9 +118,6 @@ TEST_CASE("testparsing_array_sep_comma")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("testparsing_array_sep_semicolon")
@@ -156,9 +138,6 @@ TEST_CASE("testparsing_array_sep_semicolon")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("testparsing_subkey")
@@ -184,9 +163,6 @@ TEST_CASE("testparsing_subkey")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("testparsing_subkey_multiple")
@@ -220,9 +196,6 @@ TEST_CASE("testparsing_subkey_multiple")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("testparsing_subkey_multiple_comma")
@@ -256,9 +229,6 @@ TEST_CASE("testparsing_subkey_multiple_comma")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("testparsing_subkey_multiple_semicolon")
@@ -292,9 +262,6 @@ TEST_CASE("testparsing_subkey_multiple_semicolon")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_basic_string")
@@ -311,9 +278,6 @@ TEST_CASE("test_basic_string")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_advanced_string")
@@ -330,9 +294,6 @@ TEST_CASE("test_advanced_string")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_basic_string_single")
@@ -349,9 +310,6 @@ TEST_CASE("test_basic_string_single")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_verbatim_string")
@@ -368,9 +326,6 @@ TEST_CASE("test_verbatim_string")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_verbatim_string_tricky")
@@ -387,9 +342,6 @@ TEST_CASE("test_verbatim_string_tricky")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_verbatim_double_quotes")
@@ -407,9 +359,6 @@ TEST_CASE("test_verbatim_double_quotes")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 //
@@ -428,9 +377,6 @@ TEST_CASE("test_verbatim_char")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_verbatim_char_tricky")
@@ -447,9 +393,6 @@ TEST_CASE("test_verbatim_char_tricky")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_verbatim_char_double_quotes")
@@ -467,9 +410,6 @@ TEST_CASE("test_verbatim_char_double_quotes")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_multiline_string_basic")
@@ -487,9 +427,6 @@ TEST_CASE("test_multiline_string_basic")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_multiline_string_newlines")
@@ -507,9 +444,6 @@ TEST_CASE("test_multiline_string_newlines")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_newline_in_string_error")
@@ -525,9 +459,6 @@ TEST_CASE("test_newline_in_string_error")
     if (val)
         delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 TEST_CASE("test_newline_in_char_error")
 {
@@ -542,9 +473,6 @@ TEST_CASE("test_newline_in_char_error")
     if (val)
         delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_newline_in_verbatim_string_error")
@@ -560,9 +488,6 @@ TEST_CASE("test_newline_in_verbatim_string_error")
     if (val)
         delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 TEST_CASE("test_newline_in_verbatim_char_error")
 {
@@ -577,9 +502,6 @@ TEST_CASE("test_newline_in_verbatim_char_error")
     if (val)
         delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_here_doc")
@@ -600,9 +522,6 @@ TEST_CASE("test_here_doc")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 TEST_CASE("test_heredoc_error_eof")
 {
@@ -618,9 +537,6 @@ TEST_CASE("test_heredoc_error_eof")
     if (val)
         delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 TEST_CASE("test_heredoc_error_noname")
 {
@@ -636,9 +552,6 @@ TEST_CASE("test_heredoc_error_noname")
     if (val)
         delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_singleline_comment")
@@ -656,9 +569,6 @@ TEST_CASE("test_singleline_comment")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_multiline_comment_simple")
@@ -676,9 +586,6 @@ TEST_CASE("test_multiline_comment_simple")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_multiline_comment_complex")
@@ -696,9 +603,6 @@ TEST_CASE("test_multiline_comment_complex")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_combine")
@@ -716,9 +620,6 @@ TEST_CASE("test_combine")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_root_struct")
@@ -736,9 +637,6 @@ TEST_CASE("test_root_struct")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_unicode_characters")
@@ -756,9 +654,6 @@ TEST_CASE("test_unicode_characters")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_number_basic")
@@ -774,9 +669,6 @@ TEST_CASE("test_number_basic")
     CHECK("12" == val->value());
 
     delete val;
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_number_double")
@@ -792,9 +684,6 @@ TEST_CASE("test_number_double")
     CHECK("25.6" == val->value());
 
     delete val;
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 /*
@@ -813,9 +702,6 @@ TEST_CASE("test_double_start_with_dot")
     CHECK(".42" == val->value());
 
     delete val;
-    #if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-    #endif
 }
 */
 
@@ -832,9 +718,6 @@ TEST_CASE("test_float")
     CHECK("35f" == val->value());
 
     delete val;
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_float_with_decimalpoint")
@@ -850,9 +733,6 @@ TEST_CASE("test_float_with_decimalpoint")
     CHECK("12.3f" == val->value());
 
     delete val;
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -870,9 +750,6 @@ TEST_CASE("test_negative_number_basic")
     CHECK("-12" == val->value());
 
     delete val;
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_negative_number_double")
@@ -888,9 +765,6 @@ TEST_CASE("test_negative_number_double")
     CHECK("-25.6" == val->value());
 
     delete val;
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_negative_float")
@@ -906,9 +780,6 @@ TEST_CASE("test_negative_float")
     CHECK("-35f" == val->value());
 
     delete val;
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_negative_float_with_decimalpoint")
@@ -924,9 +795,6 @@ TEST_CASE("test_negative_float_with_decimalpoint")
     CHECK("-12.3f" == val->value());
 
     delete val;
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_advanced_ident")
@@ -944,9 +812,6 @@ TEST_CASE("test_advanced_ident")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_css_color")
@@ -964,9 +829,6 @@ TEST_CASE("test_css_color")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_underscore")
@@ -983,9 +845,6 @@ TEST_CASE("test_underscore")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_zero_escape")
@@ -1004,9 +863,6 @@ TEST_CASE("test_zero_escape")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_empty_struct")
@@ -1027,9 +883,6 @@ TEST_CASE("test_empty_struct")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_empty_array")
@@ -1048,9 +901,6 @@ TEST_CASE("test_empty_array")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_advanced_struct")
@@ -1074,9 +924,6 @@ TEST_CASE("test_advanced_struct")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_advanced_struct_with_assign")
@@ -1100,9 +947,6 @@ TEST_CASE("test_advanced_struct_with_assign")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_advanced_struct_with_assign_no_value")
@@ -1126,9 +970,6 @@ TEST_CASE("test_advanced_struct_with_assign_no_value")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 /*
@@ -1154,9 +995,6 @@ TEST_CASE("test_advanced_struct_with_assign_and_empty_value")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 */
 
@@ -1181,9 +1019,6 @@ TEST_CASE("test_advanced_array")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_advanced_array_with_assign")
@@ -1207,9 +1042,6 @@ TEST_CASE("test_advanced_array_with_assign")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_advanced_array_with_assign_no_value")
@@ -1233,9 +1065,6 @@ TEST_CASE("test_advanced_array_with_assign_no_value")
 
     delete val;
 
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_octal")
@@ -1251,9 +1080,6 @@ TEST_CASE("test_octal")
     CHECK("0042" == val->value());
 
     delete val;
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_hexadecimal")
@@ -1269,9 +1095,6 @@ TEST_CASE("test_hexadecimal")
     CHECK("0xaeF2" == val->value());
 
     delete val;
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 TEST_CASE("test_binary")
@@ -1287,9 +1110,6 @@ TEST_CASE("test_binary")
     CHECK("0b00010000" == val->value());
 
     delete val;
-#if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-#endif
 }
 
 /*
@@ -1308,8 +1128,5 @@ TEST_CASE("test_unicode_escape")
     REQUIRE(uni != nullptr);
     REQUIRE(1 == uni->GetChildCount());
 
-    #if INFOFILE_USE_BASIC_MEMCHECK
-    CHECK(0 == Node::ActiveCount());
-    #endif
 }
 */

@@ -6,23 +6,11 @@
 
 namespace infofile
 {
-#if INFOFILE_USE_BASIC_MEMCHECK
-    namespace
-    {
-        int active_node = 0;
-    }
-#endif
-
-    ////////////////////////////////////////////////////////
-
     Node::Node()
         : children(nullptr)
         , next(nullptr)
     {
         assert(this);
-        ++active_node;
-
-        //std::cout << "Node\n";
     }
 
     Node::Node(const std::string& name)
@@ -32,8 +20,6 @@ namespace infofile
         , next(nullptr)
     {
         assert(this);
-        ++active_node;
-        //std::cout << "Node:" << name << "\n";
     }
 
     Node::Node(const std::string& name, const std::string& value)
@@ -43,15 +29,11 @@ namespace infofile
         , next(nullptr)
     {
         assert(this);
-        ++active_node;
-        //std::cout << "Node:" << name << "/" << value << "\n";
     }
 
     Node::~Node()
     {
         assert(this);
-        --active_node;
-        //std::cout << "Delete:" << name_ << "/" << value_ << "\n";
         Clear();
     }
 
@@ -156,13 +138,6 @@ namespace infofile
         set_name("");
         set_value("");
     }
-
-#if INFOFILE_USE_BASIC_MEMCHECK
-    int Node::ActiveCount()
-    {
-        return active_node;
-    }
-#endif
 
     Printer::~Printer()
     {

@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-#include "configuration.h"
-
 namespace infofile
 {
     /** A Node in the info file.
@@ -34,10 +32,6 @@ namespace infofile
         unsigned int GetChildCount();
 
         void Clear();
-
-#if INFOFILE_USE_BASIC_MEMCHECK
-        static int ActiveCount();
-#endif
 
     private:
         std::string name_;

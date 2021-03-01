@@ -2,7 +2,6 @@ set(src
     infofile/infofile.cc infofile/infofile.h
     infofile/parser.cc infofile/parser.h
     infofile/lexer.cc infofile/lexer.h
-    infofile/configuration.h
 )
 
 add_library(infofile STATIC ${src})
