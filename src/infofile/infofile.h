@@ -1,13 +1,14 @@
 #ifndef INFOFILE_INFOFILE_H
 #define INFOFILE_INFOFILE_H
 
+#include <memory>
 #include <string>
 #include <vector>
 
 namespace infofile
 {
     /** A Node in the info file.
- */
+    */
     class Node
     {
     public:
@@ -22,12 +23,12 @@ namespace infofile
         const std::string& value() const;
         void set_value(const std::string& value);
 
-        Node* children;  // first child
-        Node* next;      // next child
+        std::shared_ptr<Node> children;  // first child
+        std::shared_ptr<Node> next;      // next child
 
-        Node* GetFirstChild();
-        void AddChild(Node* child);
-        void SetEndChild(Node* child);
+        std::shared_ptr<Node> GetFirstChild();
+        void AddChild(std::shared_ptr<Node> child);
+        void SetEndChild(std::shared_ptr<Node> child);
         unsigned int GetSibblingCount();
         unsigned int GetChildCount();
 
@@ -54,11 +55,11 @@ namespace infofile
         std::string term;
     };
 
-    void Print(Printer* printer, const PrintOptions& po, Node* node);
-    std::string PrintToString(const PrintOptions& po, Node* node);
-    void PrintToConsole(const PrintOptions& po, Node* node);
-    Node* Parse(const std::string& filename, const std::string& data, std::vector<std::string>* errors);
-    Node* ReadFile(const std::string& filename, std::vector<std::string>* errors);
+    void Print(Printer* printer, const PrintOptions& po, std::shared_ptr<Node> node);
+    std::string PrintToString(const PrintOptions& po, std::shared_ptr<Node> node);
+    void PrintToConsole(const PrintOptions& po, std::shared_ptr<Node> node);
+    std::shared_ptr<Node> Parse(const std::string& filename, const std::string& data, std::vector<std::string>* errors);
+    std::shared_ptr<Node> ReadFile(const std::string& filename, std::vector<std::string>* errors);
 
 }
 

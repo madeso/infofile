@@ -11,7 +11,7 @@ int main(int argc, char** argv)
     }
 
     std::vector<std::string> errors;
-    infofile::Node* val = infofile::ReadFile(argv[1], &errors);
+    std::shared_ptr<infofile::Node> val = infofile::ReadFile(argv[1], &errors);
     for (std::vector<std::string>::iterator i = errors.begin(); i != errors.end(); ++i)
     {
         std::cerr << *i << "\n";
@@ -19,7 +19,6 @@ int main(int argc, char** argv)
     if (val != 0)
     {
         infofile::PrintToConsole(infofile::PrintOptions(), val);
-        delete val;
     }
 
     return 0;

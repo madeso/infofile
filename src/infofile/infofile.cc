@@ -53,14 +53,14 @@ namespace infofile
         value_ = value;
     }
 
-    Node* Node::GetFirstChild()
+    std::shared_ptr<Node> Node::GetFirstChild()
     {
         if (children == nullptr)
             return nullptr;
         return children;
     }
 
-    void Node::AddChild(Node* child)
+    void Node::AddChild(std::shared_ptr<Node> child)
     {
         assert(child);
         if (children == nullptr)
@@ -69,11 +69,11 @@ namespace infofile
             children->SetEndChild(child);
     }
 
-    void Node::SetEndChild(Node* child)
+    void Node::SetEndChild(std::shared_ptr<Node> child)
     {
         assert(child);
         Node* self = this;
-        Node* n = self->next;
+        Node* n = self->next.get();
         while (true)
         {
             if (n == nullptr)
@@ -82,14 +82,14 @@ namespace infofile
                 return;
             }
             self = n;
-            n = self->next;
+            n = self->next.get();
         }
     }
 
     unsigned int Node::GetSibblingCount()
     {
         unsigned int count = 1;  // start at 1 sincew we include this in the calculation
-        Node* n = next;
+        std::shared_ptr<Node> n = next;
         while (n)
         {
             ++count;
@@ -109,18 +109,7 @@ namespace infofile
 
     void Node::Clear()
     {
-        if (children)
-        {
-            delete children;
-            children = nullptr;
-        }
-        while (next)
-        {
-            Node* t = next->next;
-            ;
-            delete next;
-            next = t;
-        }
+        children = nullptr;
         next = nullptr;
         set_name("");
         set_value("");
@@ -150,7 +139,7 @@ namespace infofile
         }
     }
 
-    void PrintNode(Printer* printer, int indent, const PrintOptions& po, Node* node)
+    void PrintNode(Printer* printer, int indent, const PrintOptions& po, std::shared_ptr<Node> node)
     {
         std::string tab;
         for (int i = 0; i < indent; ++i)
@@ -167,7 +156,7 @@ namespace infofile
             ss << " {" << po.newline;
             printer->Print(ss.str());
 
-            for (Node* c = node->children; c; c = c->next)
+            for (std::shared_ptr<Node> c = node->children; c; c = c->next)
             {
                 PrintNode(printer, indent + 1, po, c);
             }
@@ -180,9 +169,9 @@ namespace infofile
         printer->Print(ss.str());
     }
 
-    void Print(Printer* printer, const PrintOptions& po, Node* node)
+    void Print(Printer* printer, const PrintOptions& po, std::shared_ptr<Node> node)
     {
-        for (Node* c = node; c; c = c->next)
+        for (std::shared_ptr<Node> c = node; c; c = c->next)
         {
             PrintNode(printer, 0, po, c);
         }
@@ -197,7 +186,7 @@ namespace infofile
             ss << str;
         }
     };
-    std::string PrintToString(const PrintOptions& po, Node* node)
+    std::string PrintToString(const PrintOptions& po, std::shared_ptr<Node> node)
     {
         StdStringStreamPrinter ss;
         Print(&ss, po, node);
@@ -213,19 +202,19 @@ namespace infofile
         }
     };
 
-    void PrintToConsole(const PrintOptions& po, Node* node)
+    void PrintToConsole(const PrintOptions& po, std::shared_ptr<Node> node)
     {
         CoutPrinter ss;
         Print(&ss, po, node);
     }
 
-    Node* Parse(const std::string& filename, const std::string& data, std::vector<std::string>* errors)
+    std::shared_ptr<Node> Parse(const std::string& filename, const std::string& data, std::vector<std::string>* errors)
     {
         // todo(Gustav): call parser
         return nullptr;
     }
 
-    Node* ReadFile(const std::string& filename, std::vector<std::string>* errors)
+    std::shared_ptr<Node> ReadFile(const std::string& filename, std::vector<std::string>* errors)
     {
         // todo(Gustav): call parser
         return nullptr;
