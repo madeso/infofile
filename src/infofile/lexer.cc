@@ -381,13 +381,26 @@ namespace infofile
 
     void Lexer::EatMultilineComment()
     {
+        int inside = 0;
         while (file->Peek() != 0)
         {
             auto c = file->Read();
             if (c == '*' && file->Peek() == '/')
             {
                 file->Read();
-                return;
+                if (inside == 0)
+                {
+                    return;
+                }
+                else
+                {
+                    inside -= 1;
+                }
+            }
+            else if (c == '/' && file->Peek() == '*')
+            {
+                file->Read();
+                inside += 1;
             }
         }
     }
