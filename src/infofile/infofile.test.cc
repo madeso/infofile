@@ -138,18 +138,18 @@ TEST_CASE("testparsing_subkey_multiple", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(2 == val->children.size());
 
-    REQUIRE(val != nullptr);
-    std::shared_ptr<Node> n = val->children[0];
+    CHECK("" == val->name);
+    CHECK("" == val->value);
 
-    CHECK("" == n->name);
-    CHECK("" == n->value);
-    REQUIRE(2 == n->children.size());
+    // array 0 -> struct 0
+    REQUIRE(1 == val->children[0]->children.size());
+    CHECK("a" == val->children[0]->children[0]->name);
+    CHECK("aa" == val->children[0]->children[0]->value);
 
-    CHECK("a" == n->children[0]->name);
-    CHECK("aa" == n->children[0]->value);
-
-    CHECK("b" == n->children[1]->name);
-    CHECK("bb" == n->children[1]->value);
+    // array 1 -> struct 0
+    REQUIRE(1 == val->children[1]->children.size());
+    CHECK("b" == val->children[1]->children[0]->name);
+    CHECK("bb" == val->children[1]->children[0]->value);
 }
 
 TEST_CASE("testparsing_subkey_multiple_comma", "[infofile]")
@@ -161,18 +161,18 @@ TEST_CASE("testparsing_subkey_multiple_comma", "[infofile]")
     REQUIRE(val != nullptr);
     REQUIRE(2 == val->children.size());
 
-    REQUIRE(val != nullptr);
-    std::shared_ptr<Node> n = val->children[0];
+    CHECK("" == val->name);
+    CHECK("" == val->value);
 
-    CHECK("" == n->name);
-    CHECK("" == n->value);
-    REQUIRE(2 == n->children.size());
+    // array 0 -> struct 0
+    REQUIRE(1 == val->children[0]->children.size());
+    CHECK("a" == val->children[0]->children[0]->name);
+    CHECK("aa" == val->children[0]->children[0]->value);
 
-    CHECK("a" == n->children[0]->name);
-    CHECK("aa" == n->children[0]->value);
-
-    CHECK("b" == n->children[1]->name);
-    CHECK("bb" == n->children[1]->value);
+    // array 1 -> struct 0
+    REQUIRE(1 == val->children[1]->children.size());
+    CHECK("b" == val->children[1]->children[0]->name);
+    CHECK("bb" == val->children[1]->children[0]->value);
 }
 
 TEST_CASE("testparsing_subkey_multiple_semicolon", "[infofile]")

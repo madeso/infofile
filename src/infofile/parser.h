@@ -14,6 +14,7 @@ namespace infofile
         explicit Parser(Lexer* l);
 
         std::shared_ptr<Node> ReadNode();
+        std::shared_ptr<Node> ReadValue();
 
         void ParseArray(std::shared_ptr<Node> root);
         void ParseStruct(std::shared_ptr<Node> root);

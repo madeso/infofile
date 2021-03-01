@@ -8,6 +8,22 @@
 
 namespace infofile
 {
+    namespace
+    {
+        bool IsOneOf(TokenType self, std::vector<TokenType> tt)
+        {
+            for (const auto t : tt)
+            {
+                if (t == self)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
     Parser::Parser(Lexer* l)
         : lexer(l)
     {
@@ -53,8 +69,6 @@ namespace infofile
             return node;
         case TokenType::STRUCT_END:
             return node;
-        case TokenType::ARRAY_END:
-            return node;
         case TokenType::IDENT:
             return node;
         case TokenType::SEP:
@@ -65,21 +79,60 @@ namespace infofile
         return nullptr;
     }
 
-    void Parser::ParseArray(std::shared_ptr<Node> root)
+    std::shared_ptr<Node> Parser::ReadValue()
     {
+        const auto next = lexer->Peek();
+        switch (next.type)
+        {
+        case TokenType::ARRAY_BEGIN:
+        {
+            auto node = std::make_shared<Node>("", "");
+            ParseArray(node);
+            return node;
+        }
+        case TokenType::STRUCT_BEGIN:
+        {
+            auto node = std::make_shared<Node>("", "");
+            ParseStruct(node);
+            return node;
+        }
+        case TokenType::IDENT:
+            return std::make_shared<Node>("", lexer->Read().value);
+        default:
+            lexer->ReportError(fmt::format("Invalid token {} in array value, could either be [ or a {{", next.value));
+            return nullptr;
+        }
     }
 
-    bool IsOneOf(TokenType self, std::vector<TokenType> tt)
+    void Parser::ParseArray(std::shared_ptr<Node> root)
     {
-        for (const auto t : tt)
+        auto start = lexer->Read();
+        assert(start.type == TokenType::ARRAY_BEGIN);
+
+        while (!IsOneOf(lexer->Peek().type, {TokenType::ARRAY_END, TokenType::ENDOFFILE}))
         {
-            if (t == self)
+            auto node = ReadValue();
+            if (!node)
             {
-                return true;
+                return;
+            }
+
+            root->children.emplace_back(node);
+
+            if (lexer->Peek().type == TokenType::SEP)
+            {
+                lexer->Read();
             }
         }
 
-        return false;
+        if (lexer->Peek().type == TokenType::ARRAY_END)
+        {
+            lexer->Read();
+        }
+        else
+        {
+            lexer->ReportError(fmt::format("Expected ] but found {}", lexer->Peek().value));
+        }
     }
 
     void Parser::ParseStruct(std::shared_ptr<Node> root)
