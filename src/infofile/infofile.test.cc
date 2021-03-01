@@ -6,7 +6,7 @@
 
 using namespace infofile;
 
-TEST_CASE("testparsing")
+TEST_CASE("testparsing", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{key=value;}", &errors);
@@ -15,11 +15,11 @@ TEST_CASE("testparsing")
     REQUIRE(val != nullptr);
     REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name);
-    CHECK("value" == val->value);
+    CHECK("key" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
 }
 
-TEST_CASE("testparsing_opass")
+TEST_CASE("testparsing_opass", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{key value;}", &errors);
@@ -32,7 +32,7 @@ TEST_CASE("testparsing_opass")
     CHECK("value" == val->children[0]->value);
 }
 
-TEST_CASE("testparsing_osep")
+TEST_CASE("testparsing_osep", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{key value}", &errors);
@@ -45,7 +45,7 @@ TEST_CASE("testparsing_osep")
     CHECK("value" == val->children[0]->value);
 }
 
-TEST_CASE("testparsing_twokeys")
+TEST_CASE("testparsing_twokeys", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{key value k v}", &errors);
@@ -61,7 +61,7 @@ TEST_CASE("testparsing_twokeys")
     CHECK("v" == val->children[1]->value);
 }
 
-TEST_CASE("testparsing_array")
+TEST_CASE("testparsing_array", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[value v]", &errors);
@@ -77,7 +77,7 @@ TEST_CASE("testparsing_array")
     CHECK("v" == val->children[1]->value);
 }
 
-TEST_CASE("testparsing_array_sep_comma")
+TEST_CASE("testparsing_array_sep_comma", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[value, v]", &errors);
@@ -93,7 +93,7 @@ TEST_CASE("testparsing_array_sep_comma")
     CHECK("v" == val->children[1]->value);
 }
 
-TEST_CASE("testparsing_array_sep_semicolon")
+TEST_CASE("testparsing_array_sep_semicolon", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[value; v;]", &errors);
@@ -109,7 +109,7 @@ TEST_CASE("testparsing_array_sep_semicolon")
     CHECK("v" == val->children[1]->value);
 }
 
-TEST_CASE("testparsing_subkey")
+TEST_CASE("testparsing_subkey", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[{key value}]", &errors);
@@ -129,7 +129,7 @@ TEST_CASE("testparsing_subkey")
     CHECK("value" == n->children[0]->value);
 }
 
-TEST_CASE("testparsing_subkey_multiple")
+TEST_CASE("testparsing_subkey_multiple", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[{a aa} {b bb}]", &errors);
@@ -152,7 +152,7 @@ TEST_CASE("testparsing_subkey_multiple")
     CHECK("bb" == n->children[1]->value);
 }
 
-TEST_CASE("testparsing_subkey_multiple_comma")
+TEST_CASE("testparsing_subkey_multiple_comma", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[{a aa}, {b bb}]", &errors);
@@ -175,7 +175,7 @@ TEST_CASE("testparsing_subkey_multiple_comma")
     CHECK("bb" == n->children[1]->value);
 }
 
-TEST_CASE("testparsing_subkey_multiple_semicolon")
+TEST_CASE("testparsing_subkey_multiple_semicolon", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "[{a aa}; {b bb};]", &errors);
@@ -198,7 +198,7 @@ TEST_CASE("testparsing_subkey_multiple_semicolon")
     CHECK("bb" == n->children[1]->value);
 }
 
-TEST_CASE("test_basic_string")
+TEST_CASE("test_basic_string", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{\"'key'\"=\"value\";}", &errors);
@@ -211,7 +211,7 @@ TEST_CASE("test_basic_string")
     CHECK("value" == val->value);
 }
 
-TEST_CASE("test_advanced_string")
+TEST_CASE("test_advanced_string", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{\"key\\n\\t\"=\"value\\\"\";}", &errors);
@@ -224,7 +224,7 @@ TEST_CASE("test_advanced_string")
     CHECK("value\"" == val->value);
 }
 
-TEST_CASE("test_basic_string_single")
+TEST_CASE("test_basic_string_single", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{'\"key\"'='value is nice';}", &errors);
@@ -237,7 +237,7 @@ TEST_CASE("test_basic_string_single")
     CHECK("value is nice" == val->value);
 }
 
-TEST_CASE("test_verbatim_string")
+TEST_CASE("test_verbatim_string", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\a.txt\";}", &errors);
@@ -250,7 +250,7 @@ TEST_CASE("test_verbatim_string")
     CHECK("c:\\Docs\\Source\\a.txt" == val->value);
 }
 
-TEST_CASE("test_verbatim_string_tricky")
+TEST_CASE("test_verbatim_string_tricky", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{path @\"c:\\Docs\\Source\\\";}", &errors);
@@ -263,7 +263,7 @@ TEST_CASE("test_verbatim_string_tricky")
     CHECK("c:\\Docs\\Source\\" == val->value);
 }
 
-TEST_CASE("test_verbatim_double_quotes")
+TEST_CASE("test_verbatim_double_quotes", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{line @\"\"\"Ahoy!\"\" cried the captain.\";}";
@@ -279,7 +279,7 @@ TEST_CASE("test_verbatim_double_quotes")
 
 //
 
-TEST_CASE("test_verbatim_char")
+TEST_CASE("test_verbatim_char", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\a.txt';}", &errors);
@@ -292,7 +292,7 @@ TEST_CASE("test_verbatim_char")
     CHECK("c:\\Docs\\Source\\a.txt" == val->value);
 }
 
-TEST_CASE("test_verbatim_char_tricky")
+TEST_CASE("test_verbatim_char_tricky", "[infofile]")
 {
     std::vector<std::string> errors;
     std::shared_ptr<infofile::Node> val = infofile::Parse("inline", "{path @'c:\\Docs\\Source\\\';}", &errors);
@@ -305,7 +305,7 @@ TEST_CASE("test_verbatim_char_tricky")
     CHECK("c:\\Docs\\Source\\" == val->value);
 }
 
-TEST_CASE("test_verbatim_char_double_quotes")
+TEST_CASE("test_verbatim_char_double_quotes", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{line @'''Ahoy!'' cried the captain.';}";
@@ -319,7 +319,7 @@ TEST_CASE("test_verbatim_char_double_quotes")
     CHECK("'Ahoy!' cried the captain." == val->value);
 }
 
-TEST_CASE("test_multiline_string_basic")
+TEST_CASE("test_multiline_string_basic", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{line \"\"\"this is a long string\"\"\"}";
@@ -333,7 +333,7 @@ TEST_CASE("test_multiline_string_basic")
     CHECK("this is a long string" == val->value);
 }
 
-TEST_CASE("test_multiline_string_newlines")
+TEST_CASE("test_multiline_string_newlines", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{line \"\"\"this\nis\na\nlong\nstring\tright?\"\"\"}";
@@ -347,7 +347,7 @@ TEST_CASE("test_multiline_string_newlines")
     CHECK("this\nis\na\nlong\nstring\tright?" == val->value);
 }
 
-TEST_CASE("test_newline_in_string_error")
+TEST_CASE("test_newline_in_string_error", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{line \"hello\nworld\"}";
@@ -357,7 +357,7 @@ TEST_CASE("test_newline_in_string_error")
     REQUIRE(errors.size() > ZERO);
     REQUIRE(val == nullptr);
 }
-TEST_CASE("test_newline_in_char_error")
+TEST_CASE("test_newline_in_char_error", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{line 'hello\nworld'}";
@@ -368,7 +368,7 @@ TEST_CASE("test_newline_in_char_error")
     REQUIRE(val == nullptr);
 }
 
-TEST_CASE("test_newline_in_verbatim_string_error")
+TEST_CASE("test_newline_in_verbatim_string_error", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{line @\"hello\nworld\"}";
@@ -378,7 +378,7 @@ TEST_CASE("test_newline_in_verbatim_string_error")
     REQUIRE(errors.size() > ZERO);
     REQUIRE(val == nullptr);
 }
-TEST_CASE("test_newline_in_verbatim_char_error")
+TEST_CASE("test_newline_in_verbatim_char_error", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{line @'hello\nworld'}";
@@ -389,7 +389,7 @@ TEST_CASE("test_newline_in_verbatim_char_error")
     REQUIRE(val == nullptr);
 }
 
-TEST_CASE("test_here_doc")
+TEST_CASE("test_here_doc", "[infofile]")
 {
     std::vector<std::string> errors;
     // when heredoc ends they ignore everything to the newline, therefore
@@ -405,7 +405,7 @@ TEST_CASE("test_here_doc")
     CHECK("line" == val->name);
     CHECK("Hello world EOF\ncat" == val->value);
 }
-TEST_CASE("test_heredoc_error_eof")
+TEST_CASE("test_heredoc_error_eof", "[infofile]")
 {
     std::vector<std::string> errors;
 
@@ -416,7 +416,7 @@ TEST_CASE("test_heredoc_error_eof")
     REQUIRE(errors.size() > ZERO);
     REQUIRE(val == nullptr);
 }
-TEST_CASE("test_heredoc_error_noname")
+TEST_CASE("test_heredoc_error_noname", "[infofile]")
 {
     std::vector<std::string> errors;
 
@@ -428,7 +428,7 @@ TEST_CASE("test_heredoc_error_noname")
     REQUIRE(val == nullptr);
 }
 
-TEST_CASE("test_singleline_comment")
+TEST_CASE("test_singleline_comment", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{// this is a comment\nline dog}";
@@ -442,7 +442,7 @@ TEST_CASE("test_singleline_comment")
     CHECK("dog" == val->children[0]->value);
 }
 
-TEST_CASE("test_multiline_comment_simple")
+TEST_CASE("test_multiline_comment_simple", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{line /*hello\nworld*/ dog}";
@@ -456,7 +456,7 @@ TEST_CASE("test_multiline_comment_simple")
     CHECK("dog" == val->children[0]->value);
 }
 
-TEST_CASE("test_multiline_comment_complex")
+TEST_CASE("test_multiline_comment_complex", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{line /***\nhello/* cat dog */\nworld ***/ dog}";
@@ -470,7 +470,7 @@ TEST_CASE("test_multiline_comment_complex")
     CHECK("dog" == val->children[0]->value);
 }
 
-TEST_CASE("test_combine")
+TEST_CASE("test_combine", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "{li + ne do \\ g}";
@@ -484,7 +484,7 @@ TEST_CASE("test_combine")
     CHECK("dog" == val->children[0]->value);
 }
 
-TEST_CASE("test_root_struct")
+TEST_CASE("test_root_struct", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "line dog";
@@ -498,7 +498,7 @@ TEST_CASE("test_root_struct")
     CHECK("dog" == val->value);
 }
 
-TEST_CASE("test_unicode_characters")
+TEST_CASE("test_unicode_characters", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "'ナ' 'ㄅ'";
@@ -512,7 +512,7 @@ TEST_CASE("test_unicode_characters")
     CHECK("ㄅ" == val->value);
 }
 
-TEST_CASE("test_number_basic")
+TEST_CASE("test_number_basic", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ 12 ]";
@@ -525,7 +525,7 @@ TEST_CASE("test_number_basic")
     CHECK("12" == val->children[0]->value);
 }
 
-TEST_CASE("test_number_double")
+TEST_CASE("test_number_double", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ 25.6 ]";
@@ -541,7 +541,7 @@ TEST_CASE("test_number_double")
 /*
 Will have to investigate if we want to specify numbers this way, as it
 // seems that parsing might be harder if we do
-TEST_CASE("test_double_start_with_dot")
+TEST_CASE("test_double_start_with_dot", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ .42 ]";
@@ -556,7 +556,7 @@ TEST_CASE("test_double_start_with_dot")
 }
 */
 
-TEST_CASE("test_float")
+TEST_CASE("test_float", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ 35f ]";
@@ -569,7 +569,7 @@ TEST_CASE("test_float")
     CHECK("35f" == val->children[0]->value);
 }
 
-TEST_CASE("test_float_with_decimalpoint")
+TEST_CASE("test_float_with_decimalpoint", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ 12.3f ]";
@@ -584,7 +584,7 @@ TEST_CASE("test_float_with_decimalpoint")
 
 //////////////////////////////////////////////////////////////////////////
 
-TEST_CASE("test_negative_number_basic")
+TEST_CASE("test_negative_number_basic", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ -12 ]";
@@ -597,7 +597,7 @@ TEST_CASE("test_negative_number_basic")
     CHECK("-12" == val->children[0]->value);
 }
 
-TEST_CASE("test_negative_number_double")
+TEST_CASE("test_negative_number_double", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ -25.6 ]";
@@ -610,7 +610,7 @@ TEST_CASE("test_negative_number_double")
     CHECK("-25.6" == val->children[0]->value);
 }
 
-TEST_CASE("test_negative_float")
+TEST_CASE("test_negative_float", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ -35f ]";
@@ -623,7 +623,7 @@ TEST_CASE("test_negative_float")
     CHECK("-35f" == val->children[0]->value);
 }
 
-TEST_CASE("test_negative_float_with_decimalpoint")
+TEST_CASE("test_negative_float_with_decimalpoint", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ -12.3f ]";
@@ -636,7 +636,7 @@ TEST_CASE("test_negative_float_with_decimalpoint")
     CHECK("-12.3f" == val->children[0]->value);
 }
 
-TEST_CASE("test_advanced_ident")
+TEST_CASE("test_advanced_ident", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "jesus.opponent the.dude@gmail.com";
@@ -650,7 +650,7 @@ TEST_CASE("test_advanced_ident")
     CHECK("the.dude@gmail.com" == val->value);
 }
 
-TEST_CASE("test_css_color")
+TEST_CASE("test_css_color", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "#000 #12ffAA";
@@ -664,7 +664,7 @@ TEST_CASE("test_css_color")
     CHECK("#12ffAA" == val->value);
 }
 
-TEST_CASE("test_underscore")
+TEST_CASE("test_underscore", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[hello_world]";
@@ -677,7 +677,7 @@ TEST_CASE("test_underscore")
     CHECK("hello_world" == val->children[0]->value);
 }
 
-TEST_CASE("test_zero_escape")
+TEST_CASE("test_zero_escape", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[\"hello\\0world\"]";
@@ -692,7 +692,7 @@ TEST_CASE("test_zero_escape")
     CHECK(std::string("hello\0world", 11) == val->children[0]->value);
 }
 
-TEST_CASE("test_empty_struct")
+TEST_CASE("test_empty_struct", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "dog {}";
@@ -706,7 +706,7 @@ TEST_CASE("test_empty_struct")
     CHECK(0 == val->children.size());
 }
 
-TEST_CASE("test_empty_array")
+TEST_CASE("test_empty_array", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "dog []";
@@ -720,7 +720,7 @@ TEST_CASE("test_empty_array")
     CHECK(0 == val->children.size());
 }
 
-TEST_CASE("test_advanced_struct")
+TEST_CASE("test_advanced_struct", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "key value {a b}";
@@ -737,7 +737,7 @@ TEST_CASE("test_advanced_struct")
     CHECK("b" == val->children[0]->value);
 }
 
-TEST_CASE("test_advanced_struct_with_assign")
+TEST_CASE("test_advanced_struct_with_assign", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "key : value := {a b}";
@@ -756,7 +756,7 @@ TEST_CASE("test_advanced_struct_with_assign")
     CHECK("b" == val->children[0]->value);
 }
 
-TEST_CASE("test_advanced_struct_with_assign_no_value")
+TEST_CASE("test_advanced_struct_with_assign_no_value", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "key := {a b}";
@@ -777,7 +777,7 @@ TEST_CASE("test_advanced_struct_with_assign_no_value")
 
 /*
 Possible bad typos could exist bc of this, probably shouldn't be allowed
-TEST_CASE("test_advanced_struct_with_assign_and_empty_value")
+TEST_CASE("test_advanced_struct_with_assign_and_empty_value", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "key : := {a b}";
@@ -800,7 +800,7 @@ TEST_CASE("test_advanced_struct_with_assign_and_empty_value")
 }
 */
 
-TEST_CASE("test_advanced_array")
+TEST_CASE("test_advanced_array", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "key value [a]";
@@ -817,7 +817,7 @@ TEST_CASE("test_advanced_array")
     CHECK("a" == val->children[0]->value);
 }
 
-TEST_CASE("test_advanced_array_with_assign")
+TEST_CASE("test_advanced_array_with_assign", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "key : value := [a]";
@@ -836,7 +836,7 @@ TEST_CASE("test_advanced_array_with_assign")
     CHECK("a" == val->children[0]->value);
 }
 
-TEST_CASE("test_advanced_array_with_assign_no_value")
+TEST_CASE("test_advanced_array_with_assign_no_value", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "key := [a]";
@@ -855,7 +855,7 @@ TEST_CASE("test_advanced_array_with_assign_no_value")
     CHECK("a" == val->children[0]->value);
 }
 
-TEST_CASE("test_octal")
+TEST_CASE("test_octal", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ 0042 ]";
@@ -868,7 +868,7 @@ TEST_CASE("test_octal")
     CHECK("0042" == val->children[0]->value);
 }
 
-TEST_CASE("test_hexadecimal")
+TEST_CASE("test_hexadecimal", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ 0xaeF2 ]";
@@ -881,7 +881,7 @@ TEST_CASE("test_hexadecimal")
     CHECK("0xaeF2" == val->children[0]->value);
 }
 
-TEST_CASE("test_binary")
+TEST_CASE("test_binary", "[infofile]")
 {
     std::vector<std::string> errors;
     std::string src = "[ 0b00010000 ]";
@@ -897,7 +897,7 @@ TEST_CASE("test_binary")
 /*
 // todo: implement unicode escape characters
 // taken from here https://github.com/dropbox/json11/blob/master/test.cpp
-TEST_CASE("test_unicode_escape")
+TEST_CASE("test_unicode_escape", "[infofile]")
 {
     const std::string src =
         R"([ "blah\ud83d\udca9blah\ud83dblah\udca9blah\u0000blah\u1234" ])";

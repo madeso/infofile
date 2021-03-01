@@ -1,8 +1,15 @@
 #include "infofile/infofile.h"
 
 #include <cassert>
+#include <fstream>
 #include <iostream>
 #include <sstream>
+
+#include "fmt/core.h"
+#include "infofile/file.h"
+#include "infofile/lexer.h"
+#include "infofile/parser.h"
+#include "infofile/reader.h"
 
 namespace infofile
 {
@@ -111,15 +118,27 @@ namespace infofile
         Print(&ss, po, node);
     }
 
+    std::shared_ptr<Node> ParseFromFile(File* file, std::vector<std::string>* errors)
+    {
+        auto lexer = Lexer(file, errors);
+        auto parser = Parser(&lexer);
+        auto parsed = parser.ReadNode();
+        if (lexer.Peek().type != TokenType::ENDOFFILE)
+        {
+            lexer.ReportError(fmt::format("Expected EOF after node but found {} instead", lexer.Peek().value));
+        }
+        return parsed;
+    }
+
     std::shared_ptr<Node> Parse(const std::string& filename, const std::string& data, std::vector<std::string>* errors)
     {
-        // todo(Gustav): call parser
-        return nullptr;
+        auto reader = StringReader{filename, data};
+        return ParseFromFile(&reader, errors);
     }
 
     std::shared_ptr<Node> ReadFile(const std::string& filename, std::vector<std::string>* errors)
     {
-        // todo(Gustav): call parser
-        return nullptr;
+        auto reader = FileReader{filename};
+        return ParseFromFile(&reader, errors);
     }
 }
