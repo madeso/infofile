@@ -28,7 +28,7 @@ set(src_test
 )
 add_executable(tests ${src_test})
 target_link_libraries(tests
-    PUBLIC catch infofile catchy
+    PUBLIC catch infofile catchy fmt::fmt
     PRIVATE project_options project_warnings
 )
 
