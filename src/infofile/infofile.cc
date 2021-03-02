@@ -9,6 +9,7 @@
 #include "infofile/file.h"
 #include "infofile/lexer.h"
 #include "infofile/parser.h"
+#include "infofile/printstring.h"
 #include "infofile/reader.h"
 
 namespace infofile
@@ -42,15 +43,7 @@ namespace infofile
 
     void PrintString(std::stringstream& ss, const std::string& str)
     {
-        std::string::size_type index = str.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        if (index == -1 && str.empty() == false)
-        {
-            ss << str;
-        }
-        else
-        {
-            ss << "\"" << str << "\"";
-        }
+        ss << PrintString(str);
     }
 
     void PrintNode(Printer* printer, int indent, const PrintOptions& po, std::shared_ptr<Node> node)

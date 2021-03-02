@@ -5,6 +5,7 @@ set(src
     infofile/file.cc infofile/file.h
     infofile/node.cc infofile/node.h
     infofile/reader.cc infofile/reader.h
+    infofile/printstring.cc infofile/printstring.h
 )
 
 add_library(infofile STATIC ${src})
@@ -21,6 +22,7 @@ source_group("" FILES ${src})
 set(src_test
     infofile/infofile.test.cc
     infofile/lexer.test.cc
+    infofile/printstring.test.cc
     ../external/catch/main.cc
 )
 add_executable(test ${src_test})
