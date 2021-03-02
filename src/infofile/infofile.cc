@@ -34,7 +34,7 @@ namespace infofile
     }
 
     PrintOptions::PrintOptions()
-        : tab("\t")
+        : tab("  ")
         , newline("\n")
         , term(";")
     {
