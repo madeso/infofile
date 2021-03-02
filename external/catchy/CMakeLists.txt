@@ -31,7 +31,7 @@ add_library(catchy STATIC ${catchy_src})
 
 target_compile_features(catchy PUBLIC cxx_std_17)
 target_include_directories(catchy
-    PUBLIC
+    PUBLIC fmt::fmt
     ${CMAKE_CURRENT_SOURCE_DIR}
     external
 )
