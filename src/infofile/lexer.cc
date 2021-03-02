@@ -36,6 +36,18 @@ namespace infofile
             }
         }
 
+        bool IsNumber(char c)
+        {
+            return '0' <= c && c <= '9';
+        }
+
+        bool IsAlpha(char c)
+        {
+            const auto lower = 'a' <= c && c <= 'z';
+            const auto upper = 'A' <= c && c <= 'Z';
+            return upper || lower;
+        }
+
         bool IsIdentChar(char c, bool first)
         {
             if (first)
@@ -46,10 +58,23 @@ namespace infofile
             }
             else
             {
-                const auto number = '0' <= c && c <= '9';
+                const auto number = IsNumber(c);
                 const auto special = c == '.' || c == '@';
                 return IsIdentChar(c, true) || number || special;
             }
+        }
+
+        bool IsHex(char c)
+        {
+            const auto number = IsNumber(c);
+            const auto lower = 'a' <= c && c <= 'f';
+            const auto upper = 'A' <= c && c <= 'F';
+            return number || lower || upper;
+        }
+
+        bool IsBinary(char c)
+        {
+            return c == '0' || c == '1';
         }
     }
 
@@ -371,6 +396,132 @@ namespace infofile
         }
     }
 
+    Token Lexer::ReadZeroBasedNumber()
+    {
+        auto zero = file->Read();
+        assert(zero == '0');
+
+        std::ostringstream mem;
+        mem << zero;
+        bool read = false;
+
+        switch (file->Peek())
+        {
+        case 'x':
+            mem << file->Read();
+            while (IsHex(file->Peek()))
+            {
+                read = true;
+                mem << file->Read();
+            }
+            if (!read)
+            {
+                ReportError("Unexpected end in hexadecimal number");
+            }
+            return {TokenType::IDENT, mem.str()};
+        case 'b':
+            mem << file->Read();
+            while (IsBinary(file->Peek()))
+            {
+                read = true;
+                mem << file->Read();
+            }
+            if (!read)
+            {
+                ReportError("Unexpected end in hexadecimal number");
+            }
+            return {TokenType::IDENT, mem.str()};
+        default:
+            return ReadNumber(true);
+        }
+    }
+
+    Token Lexer::ReadNumber(bool zero_start)
+    {
+        std::ostringstream mem;
+        bool valid_number = false;
+
+        if (zero_start)
+        {
+            mem << '0';
+            valid_number = true;
+        }
+        else
+        {
+            switch (file->Peek())
+            {
+            case '-':
+                mem << file->Read();
+                break;
+            }
+        }
+
+        while (IsNumber(file->Peek()))
+        {
+            valid_number = true;
+            mem << file->Read();
+        }
+
+        if (valid_number == false)
+        {
+            ReportError("Invalid number, needs atleast one number");
+            return {TokenType::IDENT, mem.str()};
+        }
+
+        if (file->Peek() != '.')
+        {
+            return {TokenType::IDENT, mem.str()};
+        }
+
+        mem << file->Read();
+        valid_number = false;
+
+        while (IsNumber(file->Peek()))
+        {
+            valid_number = true;
+            mem << file->Read();
+        }
+
+        if (valid_number == false)
+        {
+            ReportError("Invalid number, needs atleast one number after decimal place");
+            return {TokenType::IDENT, mem.str()};
+        }
+
+        switch (file->Peek())
+        {
+        case 'f':
+        case 'F':
+            mem << file->Read();
+            break;
+        }
+        return {TokenType::IDENT, mem.str()};
+    }
+
+    Token Lexer::ReadColor()
+    {
+        const auto hash = file->Read();
+        assert(hash == '#');
+
+        std::ostringstream mem;
+        mem << hash;
+        while (IsHex(file->Peek()))
+        {
+            mem << file->Read();
+        }
+
+        const auto str = mem.str();
+        switch (str.size())
+        {
+        case 4:
+        case 7:
+            return {TokenType::IDENT, str};
+        default:
+            ReportError(fmt::format("Invalid color definition({}), needs to be eiter 3 or 6 hexes long", str));
+            return {TokenType::IDENT, str};
+        }
+    }
+
     void Lexer::EatLineComment()
     {
         while (file->Peek() != '\n' && file->Peek() != 0)
@@ -458,6 +609,8 @@ namespace infofile
         case '+':
             file->Read();
             return {TokenType::COMBINE, "+"};
+        case '-':
+            return ReadNumber(false);
         case '\\':
             file->Read();
             return {TokenType::COMBINE, "\\"};
@@ -478,6 +631,8 @@ namespace infofile
             return ReadString('"');
         case '\'':
             return ReadString('\'');
+        case '#':
+            return ReadColor();
         case '@':
             file->Read();
             switch (file->Peek())
@@ -491,10 +646,16 @@ namespace infofile
                 file->Read();
                 break;
             }
+        case '0':
+            return ReadZeroBasedNumber();
         default:
             if (IsIdentChar(c, true))
             {
                 return ReadIdent();
+            }
+            else if (IsNumber(c))
+            {
+                return ReadNumber(false);
             }
             else
             {

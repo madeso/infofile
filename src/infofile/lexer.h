@@ -39,6 +39,9 @@ namespace infofile
         Token ReadString(char type);
         Token ReadVerbatimString(char type);
         Token ReadHereDoc();
+        Token ReadZeroBasedNumber();
+        Token ReadNumber(bool zero_start);
+        Token ReadColor();
 
         void EatLineComment();
         void EatMultilineComment();
