@@ -6,6 +6,7 @@
 #include "fmt/format.h"
 #include "infofile/lexer.h"
 #include "infofile/node.h"
+#include "infofile/printstring.h"
 
 namespace infofile
 {
@@ -95,7 +96,7 @@ namespace infofile
         case TokenType::ENDOFFILE:
             return node;
         default:
-            lexer->ReportError(fmt::format("Invalid token {} in Node({} = {}), could either be [ or a {{", next.value, key, value));
+            lexer->ReportError(fmt::format("Invalid token {} in Node({} = {}), could either be [ or a {{", next.ValueForPrint(), PrintString(key), PrintString(value)));
         }
         return nullptr;
     }
@@ -120,7 +121,7 @@ namespace infofile
         case TokenType::IDENT:
             return std::make_shared<Node>("", ReadIdent());
         default:
-            lexer->ReportError(fmt::format("Invalid token {} in array value, could either be [ or a {{", next.value));
+            lexer->ReportError(fmt::format("Invalid token {} in array value, could either be [ or a {{", next.ValueForPrint()));
             return nullptr;
         }
     }
@@ -140,7 +141,7 @@ namespace infofile
 
             if (lexer->Peek().type != TokenType::IDENT)
             {
-                lexer->ReportError(fmt::format("Expecting ident after {} but found {}", combine.value, lexer->Peek().value));
+                lexer->ReportError(fmt::format("Expecting ident after {} but found {}", combine.value, lexer->Peek().ValueForPrint()));
                 return ret.str();
             }
 
@@ -179,7 +180,7 @@ namespace infofile
         }
         else
         {
-            lexer->ReportError(fmt::format("Expected ] but found {}", lexer->Peek().value));
+            lexer->ReportError(fmt::format("Expected ] but found {}", lexer->Peek().ValueForPrint()));
         }
     }
 
@@ -196,7 +197,7 @@ namespace infofile
         }
         else
         {
-            lexer->ReportError(fmt::format("Expected }} but found {}", lexer->Peek().value));
+            lexer->ReportError(fmt::format("Expected }} but found {}", lexer->Peek().ValueForPrint()));
         }
     }
 

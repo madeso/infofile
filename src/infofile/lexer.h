@@ -28,6 +28,8 @@ namespace infofile
         std::string value;
 
         Token(TokenType t, const std::string& v);
+
+        std::string ValueForPrint() const;
     };
 
     struct Lexer

@@ -5,6 +5,7 @@
 
 #include "fmt/core.h"
 #include "infofile/file.h"
+#include "infofile/printstring.h"
 
 namespace infofile
 {
@@ -12,6 +13,18 @@ namespace infofile
         : type(t)
         , value(v)
     {
+    }
+
+    std::string Token::ValueForPrint() const
+    {
+        if (type == TokenType::IDENT)
+        {
+            return PrintString(value);
+        }
+        else
+        {
+            return value;
+        }
     }
 
     Lexer::Lexer(File* f, std::vector<std::string>* e)
@@ -581,7 +594,7 @@ namespace infofile
                 EatMultilineComment();
                 break;
             default:
-                ReportError(fmt::format("Found rougue / followed by invalid {}", file->Peek()));
+                ReportError(fmt::format("Found rougue / followed by invalid {} when parsing comments", file->Peek()));
                 break;
             }
             SkipWhitespace();
@@ -649,7 +662,7 @@ namespace infofile
             case '"':
                 return ReadVerbatimString('"');
             default:
-                ReportError(fmt::format("Invalid character followed by verbatinm string marker @ {}", file->Peek()));
+                ReportError(fmt::format("Invalid character followed by verbatinm string marker @: {}", file->Peek()));
                 file->Read();
                 break;
             }
