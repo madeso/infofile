@@ -62,7 +62,7 @@ namespace infofile
         {
             std::ostringstream ss;
             ss << "\"";
-            for (auto i = 0; i < str.size(); i += 1)
+            for (std::size_t i = 0; i < str.size(); i += 1)
             {
                 const char c = str[i];
                 ss << CharToCharInString(c);

@@ -280,7 +280,7 @@ namespace infofile
                     {
                         nameindex = 0;
                     }
-                    else if (nameindex >= 0 && name[nameindex] == c)
+                    else if (nameindex >= 0 && name[static_cast<size_t>(nameindex)] == c)
                     {
                         potential += c;
                         ++nameindex;
