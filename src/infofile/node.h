@@ -11,8 +11,8 @@ namespace infofile
     struct Node
     {
         Node();
-        explicit Node(const std::string& name);
-        Node(const std::string& name, const std::string& value);
+        explicit Node(const std::string& n);
+        Node(const std::string& n, const std::string& v);
 
         std::string name;
         std::string value;

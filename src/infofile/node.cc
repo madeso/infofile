@@ -6,15 +6,15 @@ namespace infofile
     {
     }
 
-    Node::Node(const std::string& name)
-        : name(name)
+    Node::Node(const std::string& n)
+        : name(n)
         , value("")
     {
     }
 
-    Node::Node(const std::string& name, const std::string& value)
-        : name(name)
-        , value(value)
+    Node::Node(const std::string& n, const std::string& v)
+        : name(n)
+        , value(v)
     {
     }
 }

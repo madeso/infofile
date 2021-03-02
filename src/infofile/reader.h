@@ -12,7 +12,7 @@ namespace infofile
     {
         std::ifstream stream;
 
-        FileReader(const std::string& filename);
+        FileReader(const std::string& fn);
 
         char DoRead() override;
     };
@@ -21,7 +21,7 @@ namespace infofile
     {
         std::istringstream stream;
 
-        StringReader(const std::string& filename, const std::string& data);
+        StringReader(const std::string& fn, const std::string& data);
 
         char DoRead() override;
     };

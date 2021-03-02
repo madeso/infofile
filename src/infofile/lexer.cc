@@ -606,8 +606,7 @@ namespace infofile
                 return ReadVerbatimString('"');
             default:
                 ReportError(fmt::format("Invalid character followed by verbatinm string marker @: {}", file->Peek()));
-                file->Read();
-                break;
+                return {TokenType::IDENT, fmt::format("{}", file->Read())};
             }
         case '0':
             return ReadZeroBasedNumber();

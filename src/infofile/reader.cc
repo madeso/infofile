@@ -24,9 +24,9 @@ namespace infofile
         }
     }
 
-    FileReader::FileReader(const std::string& filename)
-        : File(filename)
-        , stream(filename, std::ios::binary)
+    FileReader::FileReader(const std::string& fn)
+        : File(fn)
+        , stream(fn, std::ios::binary)
     {
     }
 
@@ -35,8 +35,8 @@ namespace infofile
         return PleaseRead(stream);
     }
 
-    StringReader::StringReader(const std::string& filename, const std::string& data)
-        : File(filename)
+    StringReader::StringReader(const std::string& fn, const std::string& data)
+        : File(fn)
         , stream(data)
     {
     }
