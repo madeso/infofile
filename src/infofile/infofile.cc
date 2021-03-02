@@ -122,7 +122,7 @@ namespace infofile
     {
         auto lexer = Lexer(file, errors);
         auto parser = Parser(&lexer);
-        auto parsed = parser.ReadNode();
+        auto parsed = parser.ReadRootNode();
         if (lexer.Peek().type != TokenType::ENDOFFILE)
         {
             lexer.ReportError(fmt::format("Expected EOF after node but found {} instead", lexer.Peek().value));

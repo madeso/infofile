@@ -500,10 +500,10 @@ TEST_CASE("test_root_struct", "[infofile]")
 
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(0 == val->children.size());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("line" == val->name);
-    CHECK("dog" == val->value);
+    CHECK("line" == val->children[0]->name);
+    CHECK("dog" == val->children[0]->value);
 }
 
 TEST_CASE("test_unicode_characters", "[infofile]")
@@ -514,10 +514,10 @@ TEST_CASE("test_unicode_characters", "[infofile]")
 
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(0 == val->children.size());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("ナ" == val->name);
-    CHECK("ㄅ" == val->value);
+    CHECK("ナ" == val->children[0]->name);
+    CHECK("ㄅ" == val->children[0]->value);
 }
 
 TEST_CASE("test_number_basic", "[infofile]")
@@ -652,10 +652,10 @@ TEST_CASE("test_advanced_ident", "[infofile]")
 
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(0 == val->children.size());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("jesus.opponent" == val->name);
-    CHECK("the.dude@gmail.com" == val->value);
+    CHECK("jesus.opponent" == val->children[0]->name);
+    CHECK("the.dude@gmail.com" == val->children[0]->value);
 }
 
 TEST_CASE("test_css_color", "[infofile]")
@@ -666,10 +666,10 @@ TEST_CASE("test_css_color", "[infofile]")
 
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(0 == val->children.size());
+    REQUIRE(1 == val->children.size());
 
-    CHECK("#000" == val->name);
-    CHECK("#12ffAA" == val->value);
+    CHECK("#000" == val->children[0]->name);
+    CHECK("#12ffAA" == val->children[0]->value);
 }
 
 TEST_CASE("test_underscore", "[infofile]")
@@ -696,8 +696,8 @@ TEST_CASE("test_zero_escape", "[infofile]")
     REQUIRE(1 == val->children.size());
 
     CHECK(11 == val->children[0]->value.size());
-    REQUIRE(0 == std::memcmp("hello\0world", val->children[0]->value.data(), 11));
-    CHECK(std::string("hello\0world", 11) == val->children[0]->value);
+    // REQUIRE(0 == std::memcmp("hello\0world", val->children[0]->value.data(), 11));
+    CHECK(catchy::StringEq(std::string("hello\0world", 11), val->children[0]->value));
 }
 
 TEST_CASE("test_empty_struct", "[infofile]")
@@ -708,10 +708,11 @@ TEST_CASE("test_empty_struct", "[infofile]")
 
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
+    REQUIRE(1 == val->children.size());
 
-    CHECK("dog" == val->name);
-    CHECK("" == val->value);
-    CHECK(0 == val->children.size());
+    CHECK("dog" == val->children[0]->name);
+    CHECK("" == val->children[0]->value);
+    CHECK(0 == val->children[0]->children.size());
 }
 
 TEST_CASE("test_empty_array", "[infofile]")
@@ -722,10 +723,11 @@ TEST_CASE("test_empty_array", "[infofile]")
 
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
+    REQUIRE(1 == val->children.size());
 
-    CHECK("dog" == val->name);
-    CHECK("" == val->value);
-    CHECK(0 == val->children.size());
+    CHECK("dog" == val->children[0]->name);
+    CHECK("" == val->children[0]->value);
+    CHECK(0 == val->children[0]->children.size());
 }
 
 TEST_CASE("test_advanced_struct", "[infofile]")
@@ -736,13 +738,14 @@ TEST_CASE("test_advanced_struct", "[infofile]")
 
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
+    REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name);
-    CHECK("value" == val->value);
-    CHECK(1 == val->children.size());
+    CHECK("key" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
+    CHECK(1 == val->children[0]->children.size());
 
-    CHECK("a" == val->children[0]->name);
-    CHECK("b" == val->children[0]->value);
+    CHECK("a" == val->children[0]->children[0]->name);
+    CHECK("b" == val->children[0]->children[0]->value);
 }
 
 TEST_CASE("test_advanced_struct_with_assign", "[infofile]")
@@ -753,15 +756,14 @@ TEST_CASE("test_advanced_struct_with_assign", "[infofile]")
 
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
-
     REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name);
-    CHECK("value" == val->value);
-    CHECK(1 == val->children.size());
+    CHECK("key" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
 
-    CHECK("a" == val->children[0]->name);
-    CHECK("b" == val->children[0]->value);
+    CHECK(1 == val->children[0]->children.size());
+    CHECK("a" == val->children[0]->children[0]->name);
+    CHECK("b" == val->children[0]->children[0]->value);
 }
 
 TEST_CASE("test_advanced_struct_with_assign_no_value", "[infofile]")
@@ -775,12 +777,12 @@ TEST_CASE("test_advanced_struct_with_assign_no_value", "[infofile]")
 
     REQUIRE(1 == val->children.size());
 
-    CHECK("key" == val->name);
-    CHECK("" == val->value);
-    CHECK(1 == val->children.size());
+    CHECK("key" == val->children[0]->name);
+    CHECK("" == val->children[0]->value);
+    CHECK(1 == val->children[0]->children.size());
 
-    CHECK("a" == val->children[0]->name);
-    CHECK("b" == val->children[0]->value);
+    CHECK("a" == val->children[0]->children[0]->name);
+    CHECK("b" == val->children[0]->children[0]->value);
 }
 
 /*
@@ -817,12 +819,13 @@ TEST_CASE("test_advanced_array", "[infofile]")
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
 
-    CHECK("key" == val->name);
-    CHECK("value" == val->value);
-    CHECK(1 == val->children.size());
+    REQUIRE(1 == val->children[0]->children.size());
+    CHECK("key" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
 
-    CHECK("" == val->children[0]->name);
-    CHECK("a" == val->children[0]->value);
+    CHECK(1 == val->children[0]->children.size());
+    CHECK("" == val->children[0]->children[0]->name);
+    CHECK("a" == val->children[0]->children[0]->value);
 }
 
 TEST_CASE("test_advanced_array_with_assign", "[infofile]")
@@ -835,13 +838,12 @@ TEST_CASE("test_advanced_array_with_assign", "[infofile]")
     REQUIRE(val != nullptr);
 
     REQUIRE(1 == val->children.size());
+    CHECK("key" == val->children[0]->name);
+    CHECK("value" == val->children[0]->value);
 
-    CHECK("key" == val->name);
-    CHECK("value" == val->value);
-    CHECK(1 == val->children.size());
-
-    CHECK("" == val->children[0]->name);
-    CHECK("a" == val->children[0]->value);
+    CHECK(1 == val->children[0]->children.size());
+    CHECK("" == val->children[0]->children[0]->name);
+    CHECK("a" == val->children[0]->children[0]->value);
 }
 
 TEST_CASE("test_advanced_array_with_assign_no_value", "[infofile]")
@@ -854,13 +856,12 @@ TEST_CASE("test_advanced_array_with_assign_no_value", "[infofile]")
     REQUIRE(val != nullptr);
 
     REQUIRE(1 == val->children.size());
+    CHECK("key" == val->children[0]->name);
+    CHECK("" == val->children[0]->value);
 
-    CHECK("key" == val->name);
-    CHECK("" == val->value);
-    CHECK(1 == val->children.size());
-
-    CHECK("" == val->children[0]->name);
-    CHECK("a" == val->children[0]->value);
+    CHECK(1 == val->children[0]->children.size());
+    CHECK("" == val->children[0]->children[0]->name);
+    CHECK("a" == val->children[0]->children[0]->value);
 }
 
 TEST_CASE("test_octal", "[infofile]")
@@ -871,8 +872,8 @@ TEST_CASE("test_octal", "[infofile]")
 
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->children.size());
 
+    REQUIRE(1 == val->children.size());
     CHECK("0042" == val->children[0]->value);
 }
 
@@ -884,8 +885,8 @@ TEST_CASE("test_hexadecimal", "[infofile]")
 
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->children.size());
 
+    REQUIRE(1 == val->children.size());
     CHECK("0xaeF2" == val->children[0]->value);
 }
 
@@ -897,8 +898,8 @@ TEST_CASE("test_binary", "[infofile]")
 
     REQUIRE(catchy::StringEq(errors, {}));
     REQUIRE(val != nullptr);
-    REQUIRE(1 == val->children.size());
 
+    REQUIRE(1 == val->children.size());
     CHECK("0b00010000" == val->children[0]->value);
 }
 

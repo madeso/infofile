@@ -136,7 +136,7 @@ namespace infofile
                 break;
             case '0':
                 file->Read();
-                ss << 0;
+                ss << '\0';
                 break;
             case '"':
                 file->Read();
@@ -470,6 +470,13 @@ namespace infofile
 
         if (file->Peek() != '.')
         {
+            switch (file->Peek())
+            {
+            case 'f':
+            case 'F':
+                mem << file->Read();
+                break;
+            }
             return {TokenType::IDENT, mem.str()};
         }
 

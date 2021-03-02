@@ -1,6 +1,7 @@
 #include "infofile/parser.h"
 
 #include <cassert>
+#include <sstream>
 
 #include "fmt/format.h"
 #include "infofile/lexer.h"
@@ -29,11 +30,29 @@ namespace infofile
     {
     }
 
+    std::shared_ptr<Node> Parser::ReadRootNode()
+    {
+        auto first_token = lexer->Peek();
+        auto node = std::make_shared<Node>();
+        switch (first_token.type)
+        {
+        case TokenType::ARRAY_BEGIN:
+            ParseArray(node);
+            return node;
+        case TokenType::STRUCT_BEGIN:
+            ParseStruct(node);
+            return node;
+        default:
+            ParseStructMembers(node);
+            return node;
+        }
+    }
+
     std::shared_ptr<Node> Parser::ReadNode()
     {
         const auto key_token = lexer->Peek();
         const auto has_key = key_token.type == TokenType::IDENT;
-        const auto key = has_key ? lexer->Read().value : "";
+        const auto key = has_key ? ReadIdent() : "";
         std::string value;
         if (has_key)
         {
@@ -44,16 +63,16 @@ namespace infofile
             }
             const auto has_value = lexer->Peek().type == TokenType::IDENT;
 
-            if (has_assign && !has_value)
-            {
-                lexer->ReportError(fmt::format("Expected value but found {}", lexer->Peek().value));
-            }
+            value = has_value ? ReadIdent() : "";
 
-            value = has_value ? lexer->Read().value : "";
+            if (has_value && lexer->Peek().type == TokenType::ASSIGN)
+            {
+                lexer->Read();
+            }
         }
         else
         {
-            value = lexer->Peek().type == TokenType::IDENT ? lexer->Read().value : "";
+            value = lexer->Peek().type == TokenType::IDENT ? ReadIdent() : "";
         }
 
         auto node = std::make_shared<Node>(key, value);
@@ -72,6 +91,8 @@ namespace infofile
         case TokenType::IDENT:
             return node;
         case TokenType::SEP:
+            return node;
+        case TokenType::ENDOFFILE:
             return node;
         default:
             lexer->ReportError(fmt::format("Invalid token {} in Node({} = {}), could either be [ or a {{", next.value, key, value));
@@ -97,11 +118,38 @@ namespace infofile
             return node;
         }
         case TokenType::IDENT:
-            return std::make_shared<Node>("", lexer->Read().value);
+            return std::make_shared<Node>("", ReadIdent());
         default:
             lexer->ReportError(fmt::format("Invalid token {} in array value, could either be [ or a {{", next.value));
             return nullptr;
         }
+    }
+
+    std::string Parser::ReadIdent()
+    {
+        const auto read = lexer->Read();
+        assert(read.type == TokenType::IDENT);
+
+        std::ostringstream ret;
+        ret << read.value;
+
+        while (lexer->Peek().type == TokenType::COMBINE && lexer->Peek().type != TokenType::ENDOFFILE)
+        {
+            const auto combine = lexer->Read();
+            assert(combine.type == TokenType::COMBINE);
+
+            if (lexer->Peek().type != TokenType::IDENT)
+            {
+                lexer->ReportError(fmt::format("Expecting ident after {} but found {}", combine.value, lexer->Peek().value));
+                return ret.str();
+            }
+
+            const auto ident = lexer->Read();
+            assert(ident.type == TokenType::IDENT);
+            ret << ident.value;
+        }
+
+        return ret.str();
     }
 
     void Parser::ParseArray(std::shared_ptr<Node> root)
@@ -140,6 +188,20 @@ namespace infofile
         auto start = lexer->Read();
         assert(start.type == TokenType::STRUCT_BEGIN);
 
+        ParseStructMembers(root);
+
+        if (lexer->Peek().type == TokenType::STRUCT_END)
+        {
+            lexer->Read();
+        }
+        else
+        {
+            lexer->ReportError(fmt::format("Expected }} but found {}", lexer->Peek().value));
+        }
+    }
+
+    void Parser::ParseStructMembers(std::shared_ptr<Node> root)
+    {
         while (!IsOneOf(lexer->Peek().type, {TokenType::STRUCT_END, TokenType::ENDOFFILE}))
         {
             auto node = ReadNode();
@@ -154,15 +216,6 @@ namespace infofile
             {
                 lexer->Read();
             }
-        }
-
-        if (lexer->Peek().type == TokenType::STRUCT_END)
-        {
-            lexer->Read();
-        }
-        else
-        {
-            lexer->ReportError(fmt::format("Expected }} but found {}", lexer->Peek().value));
         }
     }
 }
