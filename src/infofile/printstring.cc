@@ -3,39 +3,12 @@
 #include <sstream>
 
 #include "fmt/core.h"
+#include "infofile/chars.h"
 
 namespace infofile
 {
     namespace
     {
-        bool IsNumber(char c)
-        {
-            return '0' <= c && c <= '9';
-        }
-
-        bool IsAlpha(char c)
-        {
-            const auto lower = 'a' <= c && c <= 'z';
-            const auto upper = 'A' <= c && c <= 'Z';
-            return upper || lower;
-        }
-
-        bool IsIdentChar(char c, bool first)
-        {
-            if (first)
-            {
-                const auto lower = 'a' <= c && c <= 'z';
-                const auto upper = 'A' <= c && c <= 'Z';
-                return lower || upper || c == '_';
-            }
-            else
-            {
-                const auto number = IsNumber(c);
-                const auto special = c == '.' || c == '@';
-                return IsIdentChar(c, true) || number || special;
-            }
-        }
-
         bool IsIdent(const std::string& str)
         {
             if (str.empty())

@@ -1,5 +1,6 @@
 set(src
     infofile/infofile.cc infofile/infofile.h
+    infofile/chars.cc infofile/chars.h
     infofile/parser.cc infofile/parser.h
     infofile/lexer.cc infofile/lexer.h
     infofile/file.cc infofile/file.h
