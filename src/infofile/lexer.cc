@@ -58,7 +58,7 @@ namespace infofile
 
     Token Lexer::ReadString(char type)
     {
-        auto start = file->Read();
+        [[maybe_unused]] auto start = file->Read();
         assert(start == type);
 
         bool multiline = false;
@@ -178,7 +178,7 @@ namespace infofile
 
     Token Lexer::ReadVerbatimString(char type)
     {
-        auto start = file->Read();
+        [[maybe_unused]] auto start = file->Read();
         assert(start == type);
 
         std::ostringstream ss;
@@ -218,7 +218,7 @@ namespace infofile
 
     Token Lexer::ReadHereDoc()
     {
-        char first = file->Read();
+        [[maybe_unused]] char first = file->Read();
         assert(first == '<');
         if (file->Peek() != '<')
         {
