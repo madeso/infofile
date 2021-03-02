@@ -16,6 +16,16 @@ endif ()
 
 project(catchy CXX)
 
+add_subdirectory(external/fmt-7.1.1)
+
+add_library(catch INTERFACE)
+target_include_directories(catch
+    INTERFACE
+        external/catch
+)
+include(external/catch/Catch.cmake)
+
+
 set(catchy_src
     catchy/approx.cc catchy/approx.h
     catchy/stringeq.cc catchy/stringeq.h
@@ -24,15 +34,9 @@ set(catchy_src
     catchy/catch_utils.h
     catchy/vectortostring.h
 )
-
 source_group("" FILES ${catchy_src})
-
 add_library(catchy STATIC ${catchy_src})
-
 target_compile_features(catchy PUBLIC cxx_std_17)
-target_include_directories(catchy
-    PUBLIC fmt::fmt
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    external
-)
+target_include_directories(catchy PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(catchy PUBLIC fmt::fmt catch)
 

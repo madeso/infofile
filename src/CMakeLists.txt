@@ -24,7 +24,7 @@ set(src_test
     infofile/infofile.test.cc
     infofile/lexer.test.cc
     infofile/printstring.test.cc
-    ../external/catch/main.cc
+    ../external/catch_main.cc
 )
 add_executable(tests ${src_test})
 target_link_libraries(tests

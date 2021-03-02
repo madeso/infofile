@@ -75,3 +75,15 @@ VectorEquals(const std::vector<unsigned int> lhs, const std::vector<unsigned int
 
 CHECK(VectorEquals(lhs, rhs));
 ```
+
+## map equals
+
+Uses false strings, compares std::map
+
+```cpp
+using namespace catchy;
+
+FalseString MapEq(lhs, rhs, compare_function);
+// compare_function is FalseString (Value lhs, Value rhs);
+```
+

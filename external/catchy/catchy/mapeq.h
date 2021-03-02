@@ -6,7 +6,7 @@
 #include <string>
 #include <sstream>
 
-#include "fmt/core.h"
+#include "fmt/format.h"
 
 #include "catchy/falsestring.h"
 
@@ -57,7 +57,7 @@ MapEq(const std::map<K, V>& lhs, const std::map<K, V>& rhs, const C& compare)
         else ss << "\n";
         ss << s;
     }
-
+    
     return catchy::FalseString::False(ss.str());
 };
 
