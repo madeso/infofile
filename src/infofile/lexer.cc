@@ -227,7 +227,7 @@ namespace infofile
         }
         file->Read();
 
-        char c;
+        char c = '\0';
         std::string name;
         int nameindex = -1;
         std::string data;
