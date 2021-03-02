@@ -3,7 +3,7 @@
 #include <cassert>
 #include <sstream>
 
-#include "fmt/format.h"
+#include "fmt/core.h"
 #include "infofile/lexer.h"
 #include "infofile/node.h"
 #include "infofile/printstring.h"

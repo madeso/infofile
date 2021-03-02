@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "catchy/stringeq.h"
 #include "catchy/vectorequals.h"
-#include "fmt/format.h"
+#include "fmt/core.h"
 #include "infofile/lexer.h"
 #include "infofile/reader.h"
 
