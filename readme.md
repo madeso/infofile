@@ -112,7 +112,7 @@ Strings:
 
 Strings can be specified in various ways:
 
-```python
+```
 test ident
 test "c string"
 test 'python string'
