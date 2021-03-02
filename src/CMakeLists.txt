@@ -26,9 +26,10 @@ set(src_test
     infofile/printstring.test.cc
     ../external/catch/main.cc
 )
-add_executable(test ${src_test})
-target_link_libraries(test
+add_executable(tests ${src_test})
+target_link_libraries(tests
     PUBLIC catch infofile catchy
     PRIVATE project_options project_warnings
 )
 
+catch_discover_tests(tests)

@@ -3,6 +3,9 @@ set_property(GLOBAL PROPERTY USE_FOLDERS OFF)
 project(infofile CXX)
 # set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
+include(CTest)
+include(external/catch/Catch.cmake)
+
 include(cmake/StandardProjectSettings.cmake)
 include(cmake/CompilerWarnings.cmake)
 include(cmake/Sanitizers.cmake)
@@ -17,4 +20,3 @@ enable_sanitizers(project_options)
 add_subdirectory(external)
 add_subdirectory(src)
 add_subdirectory(examples)
-
